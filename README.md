@@ -1,1 +1,2 @@
+[![Waffle.io - Issues in progress](https://badge.waffle.io/nadcock/CSC478-SOC-Game.png?label=in%20progress&title=In%20Progress)](https://waffle.io/nadcock/CSC478-SOC-Game?utm_source=badge)
 # CSC478-SOC-Game
