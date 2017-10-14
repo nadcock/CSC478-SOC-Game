@@ -1,0 +1,5 @@
+      [paste.app_factory]
+      main = cos:main
+      [console_scripts]
+      initialize_cos_db = cos.scripts.initializedb:main
+      
