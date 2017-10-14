@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>SOCTest</title>
+    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var game = new Phaser.Game(1000, 660, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+    function preload() {
+
+        game.load.image('board', 'assets/board.png');
+        game.load.image('piece', 'assets/piece.png');
+        game.load.image('city', 'assets/city.png');
+        game.load.spritesheet('button', 'assets/button.png', 49, 30);
+        game.load.image('prompt', 'assets/prompt.png');
+
+    }
+
+    var city1;
+    var piece1;
+    var button1;
+    var prompt1;
+
+    var wheatCountBox;
+
+    var cityStartX = 397;
+    var cityStartY  =600;
+
+    function create() {
+
+        game.stage.backgroundColor = "#87CEEB";
+
+        game.add.sprite(0,0, 'board');
+
+        game.add.sprite(397,600, 'city');
+
+        city1 =game.add.sprite(cityStartX,cityStartY, 'city');
+
+        piece1 = game.add.sprite(397,275,'piece');
+
+        city1.inputEnabled = true;
+
+        city1.input.enableDrag(true);
+
+        piece1.inputEnabled = true;
+
+        piece1.input.enableDrag(true);
+
+        wheatCountBox = game.add.text(700,200, "Wheat Count: 0");
+
+        wheatCountBox.inputEnabled =true;
+
+    }
+
+    function update() {
+       city1.events.onDragStop.add(placeCity, this);
+       wheatCountBox.events.onInputUp.add(changeCount, this);
+    }
+
+    function placeCity(city1) {
+       game.add.sprite(city1.x, city1.y, 'city');
+       prompt1 = game.add.sprite(200, 200, 'prompt');
+       button1 = game.add.button(400, 300, 'button', actionOnClick, this, 0, 0, 0);
+       city1.x = cityStartX;
+       city1.y = cityStartY;
+
+    }
+
+    function changeCount(){
+
+        var count = prompt("Enter new value", "0");
+        localStorage.setItem("newCount", count);
+        wheatCountBox.text = "Wheat Count: " + localStorage.getItem("newCount");
+    }
+
+    function actionOnClick() {
+        prompt1.destroy();
+        button1.destroy();
+    }
+</script>
+
+</body>
+</html>
