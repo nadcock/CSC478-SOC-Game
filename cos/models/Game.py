@@ -25,6 +25,18 @@ class Game(object):
         self.__players.append(new_player)
         return new_player
 
+class Games(object):
+    def __init__(self):
+        self.__games = {}
+
+    def addGame(self, game):
+        self.__games[game.getGameId()] = game
+
+    def printGames(self):
+        for id in self.__games:
+            print "ID: " + id + " First Player: " + self.__games[id].getFirstPlayer().getPlayerId()
+
+
 
 
 
