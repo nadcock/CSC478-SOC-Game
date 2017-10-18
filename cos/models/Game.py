@@ -33,8 +33,11 @@ class Games(object):
         self.__games[game.getGameId()] = game
 
     def printGames(self):
+        print "Current Games List:"
         for id in self.__games:
-            print "ID: " + id + " First Player: " + self.__games[id].getFirstPlayer().getPlayerId()
+            print "'Game ID': " + id + "   'First Player': " + self.__games[id].getFirstPlayer().getPlayerId()
+
+        print ""
 
 
 
