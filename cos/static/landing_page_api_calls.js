@@ -7,9 +7,7 @@ function create_game() {
         type    :   'GET',
         dataType:   'json',
         success :   function (data) {
-            var game_data = JSON.parse(data);
-            console.log(data)
-            window.location.href = '/game/' + game_data.game.game_id;
+            window.location.href = '/game/' + data.game.game_id;
         }
     });
 }
