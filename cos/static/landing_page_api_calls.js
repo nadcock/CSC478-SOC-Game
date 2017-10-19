@@ -4,7 +4,7 @@
 function create_game() {
     $.ajax({
         url     :   '/api/game/createGame',
-        type    :   'GET',
+        type    :   'POST',
         dataType:   'json',
         success :   function (data) {
             window.location.href = '/game/' + data.game.game_id;
