@@ -2,11 +2,11 @@
 
 window.onload = function() {
 
-// Get the modal
-    var modal = document.getElementById('myModal');
+// Get the new game modal
+    var modal = document.getElementById('newGame');
 
-// Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
+// Get the button that opens the new game modal
+    var btn = document.getElementById("newGameBtn");
 
 // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
@@ -27,4 +27,12 @@ window.onload = function() {
             modal.style.display = "none";
         }
     }
+
+    $('newGame').on('show', function () {
+        $(this).find('.modal-content').css({
+            width:'300px',
+            height:'300px',
+            'max-height':'100%'
+        });
+    });
 };

@@ -21,6 +21,7 @@
       <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="{{request.static_url('cos:static/modal.js')}}"></script>
+
   </head>
 
   <body>
@@ -33,27 +34,12 @@
           </div>
           <div class="col-md-10">
             {{ "Click link below to enter game" }}
-                <p>Game is 3-4 Players</p>
-              <li ><a href="/game">Start the Game</a></li >
-          </div>
+            <p>3-4 Players required</p>
+            <p><a href="/game">Temporary link to game board</a></p >
             <!-- Trigger/Open The Modal -->
-            <button id="myBtn">Start New Game</button>
-                <!-- The Modal -->
-                <div id="myModal" class="modal">
-                <!-- Modal content -->
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>Enter your name and age to start a game...</p>
-                        <div class="col-md-10">
-                            <form>First name:<br>
-                                <input type="text" name="firstname"><br>
-                                    Age:<br>
-                                <input type="text" name="age">
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <button id="newGameBtn">Start New Game</button>
             </div>
+        </div>
         <div class="row">
           <div class="links">
             <ul>
@@ -68,7 +54,34 @@
         </div>
       </div>
     </div>
-
+    <!-- New Game Modal -->
+    <div id="newGame" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h3 style="bold" align="center">Start a new game</h3>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-body">
+                    <form>
+                        <label><b>Game name</b></label><br>
+                        <input type="text" placeholder="my game" name="gamename" required><br>
+                        <label><b>First name</b></label><br>
+                        <input type="text" placeholder="your name" name="playername" required><br>
+                        <label><b>Age</b></label><br>
+                        <input type="number" min="5" max="120" placeholder="99" name="playerage" required>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="gamestartbutton">
+                        <br>
+                        <button type="startgame" class="startbtn">Start Game</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
