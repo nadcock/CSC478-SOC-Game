@@ -118,6 +118,7 @@ def add_player_to_game(request):
                                 {
                                     "player_id":        String
                                     "player_name":      String
+                                    "player_color":     String
                                 }
 
     """
@@ -131,8 +132,9 @@ def add_player_to_game(request):
                        {'player_count': str(game.get_player_count()),
                         'game_is_full': str(game.is_game_full())},
                        'player':
-                       {'player_id': str(player.id),
-                        'player_name': str(player.name)}
+                       {'player_id': player.id,
+                        'player_name': player.name,
+                        'player_color': player.color}
                        }
     else:
         return_data = {'Error': "Player not created, game is full"}
@@ -158,8 +160,9 @@ def get_players_in_game(request):
         Json object containing: "Players": [
                                     "Player": 
                                     {
-                                        "player_id"
-                                        "player_name"
+                                        "player_id": String
+                                        "player_name": String
+                                        "player_color": String
                                     } ...
                                 ]
 
@@ -170,8 +173,10 @@ def get_players_in_game(request):
     players = []
     for player in game.players:
         players.append({'Player':
-                        {'player_id': str(player.id),
-                         'player_name': str(player.name)}})
+                        {'player_id': player.id,
+                         'player_name': player.name,
+                         'player_color': player.color
+                         }})
     return_data = {'Players': players}
     json_return = json.dumps(return_data)
     return Response(

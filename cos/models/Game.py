@@ -20,6 +20,8 @@ class Game(object):
 
     # Maximum Players allowed in the game
     PLAYER_MAX = 4
+    # Options for player colors
+    PLAYER_COLORS = ["white", "blue", "orange", "red"]
 
     def __init__(self):
         """ Constructor for Game class:
@@ -29,7 +31,7 @@ class Game(object):
         """
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
-        self.players = [Player(name="Player 1")]
+        self.players = [Player(name="Player 1", color=self.PLAYER_COLORS[0])]
 
     def get_player_count(self):
         """ returns number of players currently added to game """
@@ -61,7 +63,8 @@ class Game(object):
             print "Player maximum has already been reached."
             return None
         else:
-            new_player = Player(name="Player " + str(self.get_player_count() + 1))
+            new_player = Player(name="Player " + str(self.get_player_count() + 1),
+                                color=self.PLAYER_COLORS[self.get_player_count()])
             self.players.append(new_player)
             return new_player
 
@@ -76,8 +79,9 @@ class Games(object):
         
         Methods
         -------
-        addGame(Game)
-        getGamesByID(String)
+        add_game(Game)
+        get_game_by_id(String)
+        print_games()
     """
 
     def __init__(self):

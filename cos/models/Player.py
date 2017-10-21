@@ -8,14 +8,16 @@ class Player(object):
             ------------------
             id: String
             name: String
+            color: String
 
             Methods
             -------
             None
 
         """
-    def __init__(self, name):
+    def __init__(self, name, color):
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.name = name
+        self.color = color
 
