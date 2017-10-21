@@ -7,7 +7,7 @@ from cos.models.Player import Player
 import json
 
 
-@view_config(route_name='home', renderer='templates/mytemplate.jinja2')
+@view_config(route_name='home', renderer='templates/landingpage.jinja2')
 def my_view(request):
     return {'project': 'Catan Board'}
 

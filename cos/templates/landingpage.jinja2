@@ -21,6 +21,7 @@
       <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="{{request.static_url('cos:static/modal.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
 
   </head>
 
@@ -37,8 +38,8 @@
                 <p>3-4 Players required</p>
                 <!-- Trigger/Open The Modal -->
                   <button id="newGameBtn">Start New Game</button><br><br>
-                  <p><a href="/game?gamename=TestGame&playername=David&playerage=99">Skip new game modal and go directly to game board with following params:</a></p >
-                  <label>"?gamename=TestGame&playername=David&playerage=99"</label>
+                  <label>Skip new game modal and call creategame() directly:</label><br>
+                  <button onclick="create_game()">Create Game</button>
               </div>
             </div>
             <div class="row">
@@ -66,15 +67,15 @@
             </div>
             <div class="col-md-12">
                 <div class="modal-body">
-                    <form action="/game">
+                    <form action="/api/game/createGame">
                         <label><b>Game name</b></label><br>
-                        <input type="text" placeholder="my game" name="gamename" required><br>
+                        <input type="text" placeholder="my game" name="game_name" required><br>
                         <label><b>First name</b></label><br>
-                        <input type="text" placeholder="your name" name="playername" required><br>
+                        <input type="text" placeholder="your name" name="player_name" required><br>
                         <label><b>Age</b></label><br>
-                        <input type="number" min="5" max="120" placeholder="99" name="playerage" required>
+                        <input type="number" min="5" max="120" placeholder="99" name="player_age" required>
                         <div class="modal-footer">
-                            <input type="submit" class="startbtn" value="Start Game">
+                            <input type="submit" onclick="create_game()" class="startbtn" value="Start Game">
                         </div>
                     </form>
                 </div>
