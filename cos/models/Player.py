@@ -1,10 +1,23 @@
 import random
 
-class Player(object):
-    def __init__(self, name):
-        self.player_name = name
-        id = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
-        self.__player_id = id
 
-    def getPlayerId(self):
-        return self.__player_id
+class Player(object):
+    """ Class for defining a Player Object 
+
+            Current Attributes
+            ------------------
+            id: String
+            name: String
+            color: String
+
+            Methods
+            -------
+            None
+
+        """
+    def __init__(self, name, color):
+        id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
+        self.id = id_string
+        self.name = name
+        self.color = color
+
