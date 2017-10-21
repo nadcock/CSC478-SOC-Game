@@ -20,4 +20,12 @@ class Player(object):
         self.id = id_string
         self.name = name
         self.color = color
+        self.settlements = []
+
+    def add_settlement(self, settlement):
+        # type: (Settlement) -> None
+        settlement.ownedBy = self
+        settlement.color = self.color
+        self.settlements.append(settlement)
+
 

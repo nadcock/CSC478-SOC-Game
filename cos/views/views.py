@@ -184,6 +184,26 @@ def get_players_in_game(request):
         body=json_return
     )
 
+@view_config(route_name='buySettlement', renderer='json')
+def buy_settlement(request):
+    json_body = request.json_body
+    game_id = json_body['game_id']
+    game = request.registry.games.games[game_id]
+    player_id = json_body['player_id']
+    settlement_id = json_body['settlement_id']
+    game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
+    player = game.players[player_id]
+    return_data = {'status': 'success',
+                   'settlement':
+                       {'settlement_id': player.settlements[settlement_id].id,
+                        'settlement_color': player.settlements[settlement_id].color},
+                   'player':
+                       {'player_id': player.id,
+                        'player_name': player.name,
+                        'player_color': player.color}
+                   }
+
+
 # @view_config(route_name='generate_ajax_data', renderer='json')
 # def my_ajax_view(request):
 #     return {'message': 'Hello World'}
