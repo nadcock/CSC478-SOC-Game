@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html lang="{{request.locale_name}}">
   <head>
+      <!-- Bootstrap core CSS -->
+      <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- Custom styles for this scaffold -->
+      <link href="{{request.static_url('cos:static/sandstone.css')}}" rel="stylesheet">
+
       <script type="text/javascript" src="{{request.static_url('cos:static/jquery-3.2.0.min.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
+      <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
 
   </head>
   <body>
     <h1>{{project}}</h1>
     <div id = "container"></div>
-    <script>build_board()</script>
+    <script>build_board()</script>d
 
-    <button onclick="do_some_ajax()">Do some ajax</button>
+    <!--Game stats tables -->
+    <h3 id = "score"></h3>
+    <script>display_score()</script>
+    <span id = "resources"></span>
+    <script>display_resources()</script>
+    <span id = "players"></span>
+    <script>display_players()</script>
+    <span id = "devcards"></span>
+    <script>display_devcards()</script>
+    <span id = "road_and_army"></span>
+    <script>display_road_and_army()</script>
   </body>
 </html>
