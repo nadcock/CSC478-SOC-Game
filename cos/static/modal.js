@@ -27,12 +27,12 @@ window.onload = function() {
             modal.style.display = "none";
         }
     }
-
+/*
     $('newGame').on('show', function () {
         $(this).find('.modal-content').css({
             width:'300px',
             height:'300px',
             'max-height':'100%'
         });
-    });
+    });*/
 };

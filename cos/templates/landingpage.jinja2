@@ -25,34 +25,36 @@
   </head>
 
   <body>
-    <h1>{{project}}</h1>
     <div class="starter-template">
-      <div class="container">
+        <div class="container">
+            <div class="row">
+                <h1>{{project}}</h1>
+            </div>
         <div class="row">
-          <div class="col-md-2">
-            <img class="logo img-responsive" src="{{request.static_url('cos:static/pyramid.png')}}" alt="pyramid web framework">
-          </div>
-          <div class="col-md-10">
-            {{ "Click link below to enter game" }}
-            <p>3-4 Players required</p>
-            <p><a href="/game">Temporary link to game board</a></p >
-            <!-- Trigger/Open The Modal -->
-            <button id="newGameBtn">Start New Game</button>
+            <div class="row">
+              <div class="col-md-6">
+                {{ "Network multiplayer turn based strategy game." }}
+                <p>3-4 Players required</p>
+                <!-- Trigger/Open The Modal -->
+                  <button id="newGameBtn">Start New Game</button><br><br>
+                  <p><a href="/game?gamename=TestGame&playername=David&playerage=99">Skip new game modal and go directly to game board with following params:</a></p >
+                  <label>"?gamename=TestGame&playername=David&playerage=99"</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="links">
+                <ul>
+                  <li><i class="glyphicon glyphicon-cog icon-muted"></i><a href="https://github.com/nadcock/CSC478-SOC-Game">Github Project</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="copyright">
+                UIS CSC 478 Class Project
+              </div>
             </div>
         </div>
-        <div class="row">
-          <div class="links">
-            <ul>
-              <li><i class="glyphicon glyphicon-cog icon-muted"></i><a href="https://github.com/nadcock/CSC478-SOC-Game">Github Project</a></li>
-            </ul>
-          </div>
         </div>
-        <div class="row">
-          <div class="copyright">
-            UIS CSC 478 Class Project
-          </div>
-        </div>
-      </div>
     </div>
     <!-- New Game Modal -->
     <div id="newGame" class="modal">
@@ -64,20 +66,17 @@
             </div>
             <div class="col-md-12">
                 <div class="modal-body">
-                    <form>
+                    <form action="/game">
                         <label><b>Game name</b></label><br>
                         <input type="text" placeholder="my game" name="gamename" required><br>
                         <label><b>First name</b></label><br>
                         <input type="text" placeholder="your name" name="playername" required><br>
                         <label><b>Age</b></label><br>
                         <input type="number" min="5" max="120" placeholder="99" name="playerage" required>
+                        <div class="modal-footer">
+                            <input type="submit" class="startbtn" value="Start Game">
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="gamestartbutton">
-                        <br>
-                        <button type="startgame" class="startbtn">Start Game</button>
-                    </div>
                 </div>
             </div>
         </div>
