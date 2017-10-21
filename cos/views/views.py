@@ -19,10 +19,10 @@ def game_view(request):
 @view_config(route_name='createGame', renderer='json')
 def create_game_view(request):
     new_game = Game()
-    request.registry.games.addGame(new_game)
-    request.registry.games.printGames()
-    return_data = {'game': {'game_id': new_game.getGameId(),
-                   'player_id': new_game.getFirstPlayer().getPlayerId()}}
+    request.registry.games.add_game(new_game)
+    request.registry.games.print_games()
+    return_data = {'game': {'game_id': new_game.id(),
+                   'player_id': new_game.players[0].id()}}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
