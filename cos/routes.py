@@ -7,5 +7,5 @@ def includeme(config):
     config.add_route('getPlayersInGame', '/api/game/getPlayersInGame')
     config.add_route('addPlayerToGame', '/api/game/addPlayerToGame')
     config.add_route('buySettlement', '/api/player/buySettlement')
-
+    config.add_route('rollDice', 'api/game/rollDice')
 

@@ -253,7 +253,7 @@ def buy_settlement(request):
                                             "settlement_id": String
                                             "settlement_color": String
                                         }
-        """
+    """
     json_body = request.json_body
     if 'game_id' in json_body:
         game_id = json_body['game_id']
@@ -301,6 +301,59 @@ def buy_settlement(request):
                         'player_age:': player.age,
                         'player_color': player.color}
                    }
+    json_return = json.dumps(return_data)
+    return Response(
+        content_type='json',
+        body=json_return
+    )
+
+@view_config(route_name='rollDice', renderer='json')
+def roll_dice(request):
+    """ Returns two dice rolls and their total
+
+            Parameters
+            ----------
+            request: Request 
+                - required JSON parameters: "game_id": String, "player_id": String
+
+            Returns
+            -------
+
+            Json object containing: "Roll": {
+                                        "dice_one": "2",
+                                        "dice_total": "5",
+                                        "dice_two": "3"
+                                    }
+        """
+    json_body = request.json_body
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    if 'player_id' in json_body:
+        player_id = json_body['player_id']
+    else:
+        request.response.status = 400
+        return {'error': "'player_id' is a required parameter for this request"}
+
+    if player_id not in game.players:
+        request.response.status = 400
+        return {'error': "Requested Player with id '%s' does not exist in this Game." % player_id}
+
+    roll = game.roll_dice(player_id)
+
+    return_data = {"Roll": {
+                        "dice_one": str(roll[0]),
+                        "dice_two": str(roll[1]),
+                        "dice_total": str(roll[0] + roll[1])
+                   }}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',

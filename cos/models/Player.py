@@ -23,6 +23,7 @@ class Player(object):
         self.color = color
         self.settlements = {}
         self.age = age
+        self.current_roll = 0
 
     def add_settlement(self, settlement):
         """

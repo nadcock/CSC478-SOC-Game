@@ -78,24 +78,46 @@ class Game(object):
 
     def buy_settlement(self, player_id, settlement_id):
         """
-                    If the players maximum has not been reached, a Player object is created and added to
-                    the list of players, then that player object is returned. Otherwise, None is returned. 
+            If the players maximum has not been reached, a Player object is created and added to
+            the list of players, then that player object is returned. Otherwise, None is returned. 
 
-                    Parameters
-                    ----------
-                    player_id : String
-                        id string of player object
-                    settlement_id : String
-                        id string of settlement object
+            Parameters
+            ----------
+            player_id : String
+                id string of player object
+            settlement_id : String
+                id string of settlement object
 
-                    Returns
-                    -------
-                    None
-
-                """
+            Returns
+            -------
+            None
+        """
         buying_player = self.players[player_id]
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
         buying_player.add_settlement(buying_settlement)
+
+    def roll_dice(self, player_id):
+        """
+            Rolls 2 "dice" and then assigns the total to the current_roll attribute of the player, then returns
+             a tuple of the dice rolls
+
+            Parameters
+            ----------
+            player_id : String
+                id string of player object
+
+            Returns
+            -------
+            (Integer, Integer)
+        """
+        dice_one = self.roll()
+        dice_two = self.roll()
+        self.players[player_id].current_roll = dice_one + dice_two
+        return dice_one, dice_two
+
+    @staticmethod
+    def roll():
+        return random.choice(range(1, 7))
 
 
 class Games(object):
