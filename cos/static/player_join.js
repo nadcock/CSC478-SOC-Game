@@ -7,7 +7,7 @@
  * This function displays a modal notifying the player that the game is full
  * and they are unable to join.
   */
-function full_game(doc) {
+function get_player_count(doc) {
     window.alert("Hi from full game!");
     var modal = document.createElement("modal");
 }
@@ -32,5 +32,5 @@ function player_join() {
 
     var playerJoin = document.getElementById("player_join_prompt");
 
-    full_game(playerJoin);
+    get_player_count(playerJoin);
 }
