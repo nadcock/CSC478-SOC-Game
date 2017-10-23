@@ -9,6 +9,7 @@ class Game(object):
         Current Attributes
         ------------------
         id: String
+        name: String
         players: [Player]
         
         Methods
@@ -24,7 +25,7 @@ class Game(object):
     # Options for player colors
     PLAYER_COLORS = ["white", "blue", "orange", "red"]
 
-    def __init__(self):
+    def __init__(self, name):
         """ Constructor for Game class:
                 - no required params
                 - sets private attributes of game_id (random string of alpaha-numeric chars and
@@ -33,12 +34,15 @@ class Game(object):
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.game_board = Board()
-        first_player = Player(name="Player 1", color=self.PLAYER_COLORS[0])
-        self.players = {first_player.id: first_player}
+        self.players = {}
+        self.name = name
 
     def get_player_count(self):
         """ returns number of players currently added to game """
-        return len(self.players)
+        if self.players:
+            return len(self.players)
+        else:
+            return 0
 
     def is_game_full(self):
         """ returns True if game has reached the maximum, otherwise returns False """
@@ -47,7 +51,7 @@ class Game(object):
         else:
             return True
 
-    def add_player(self, name):
+    def add_player(self, name, age):
         """
             If the players maximum has not been reached, a Player object is created and added to
             the list of players, then that player object is returned. Otherwise, None is returned. 
@@ -66,8 +70,9 @@ class Game(object):
             print "Player maximum has already been reached."
             return None
         else:
-            new_player = Player(name="Player " + str(self.get_player_count() + 1),
-                                color=self.PLAYER_COLORS[self.get_player_count()])
+            new_player = Player(name=name,
+                                color=self.PLAYER_COLORS[self.get_player_count()],
+                                age=age)
             self.players[new_player.id] = new_player
             return new_player
 
@@ -148,7 +153,7 @@ class Games(object):
         """ Prints the current list of games to the console. Used for debugging """
         print "Current Games List:"
         for id in self.games:
-            print "'Game ID': " + id + "   'First Player': " + self.games[id].players.itervalues().next().id
+            print "Game ID: %s, Game Name: %s" % (id, self.games[id].name)
         print ""
 
 

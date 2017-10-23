@@ -9,18 +9,20 @@ class Player(object):
             id: String
             name: String
             color: String
+            settlements: {settlement_id: Settlement}
 
             Methods
             -------
             add_settlement(Settlement)
 
         """
-    def __init__(self, name, color):
+    def __init__(self, name, color, age):
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.name = name
         self.color = color
         self.settlements = {}
+        self.age = age
 
     def add_settlement(self, settlement):
         """
