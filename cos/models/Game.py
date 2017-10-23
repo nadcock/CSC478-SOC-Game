@@ -72,6 +72,22 @@ class Game(object):
             return new_player
 
     def buy_settlement(self, player_id, settlement_id):
+        """
+                    If the players maximum has not been reached, a Player object is created and added to
+                    the list of players, then that player object is returned. Otherwise, None is returned. 
+
+                    Parameters
+                    ----------
+                    player_id : String
+                        id string of player object
+                    settlement_id : String
+                        id string of settlement object
+
+                    Returns
+                    -------
+                    None
+
+                """
         buying_player = self.players[player_id]
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
         buying_player.add_settlement(buying_settlement)
@@ -132,7 +148,7 @@ class Games(object):
         """ Prints the current list of games to the console. Used for debugging """
         print "Current Games List:"
         for id in self.games:
-            print "'Game ID': " + id + "   'First Player': " + self.games[id].players[0].id
+            print "'Game ID': " + id + "   'First Player': " + self.games[id].players.itervalues().next().id
         print ""
 
 

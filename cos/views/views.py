@@ -1,34 +1,12 @@
 from pyramid.view import view_config
 from pyramid.response import Response
 from cos.models.Game import Game
-from cos.models.Game import Games
-from cos.models.Player import Player
-
 import json
 
 
 @view_config(route_name='home', renderer='templates/mytemplate.jinja2')
 def my_view(request):
     return {'project': 'Catan Board'}
-
-@view_config(route_name='game', renderer='templates/game.jinja2')
-def game_view(request):
-    """ Returns Game Play page based on ID"""
-    return {'project': 'Catan Board: Game_ID = ' + request.matchdict['game_id']}
-
-@view_config(route_name='createGame', renderer='json')
-def create_game_view(request):
-    new_game = Game()
-    request.registry.games.add_game(new_game)
-    request.registry.games.print_games()
-    return_data = {'game': {'game_id': new_game.id(),
-                   'player_id': new_game.players[0].id()}}
-    json_return = json.dumps(return_data)
-    return Response(
-        content_type='json',
-        body=json_return
-    )
-
 
 @view_config(route_name='game', renderer='templates/game.jinja2')
 def game_view(request):
@@ -51,13 +29,12 @@ def create_game_view(request):
                                     "game_id: String"
                                     "player_id: String"
                                 }
-        
     """
     new_game = Game()
     request.registry.games.add_game(new_game)
     request.registry.games.print_games()
     return_data = {'game': {'game_id': new_game.id,
-                            'player_id': new_game.players[0].id}}
+                            'player_id': new_game.players.itervalues().next().id}}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -171,10 +148,17 @@ def get_players_in_game(request):
     game_id = json_body['game_id']
     game = request.registry.games.games[game_id]
     players = []
-    for player in game.players:
+    for id, player in game.players.iteritems():
+        settlements_list_string = ''
+        if player.settlements:
+            for key, val in player.settlements.iteritems():
+                settlements_list_string = settlements_list_string + "(" + key + ") "
+        else:
+            settlements_list_string = 'None'
         players.append({'Player':
                         {'player_id': player.id,
                          'player_name': player.name,
+                         'owned_settlements': settlements_list_string,
                          'player_color': player.color
                          }})
     return_data = {'Players': players}
@@ -186,6 +170,31 @@ def get_players_in_game(request):
 
 @view_config(route_name='buySettlement', renderer='json')
 def buy_settlement(request):
+    """ Assigns the requested settelment to the buying player
+        TODO: Deduct resources from player for cost of settlement
+        TODO: Verify Settlement is in valid placement
+
+            Parameters
+            ----------
+            request: Request 
+                - required JSON parameters: "game_id": String
+
+            Returns
+            -------
+
+            Json object containing: "status": "success",
+                                    "Player": 
+                                        {
+                                            "player_id": String
+                                            "player_name": String
+                                            "player_color": String
+                                        },
+                                    "Settlement": 
+                                        {
+                                            "settlement_id": String
+                                            "settlement_color": String
+                                        }
+        """
     json_body = request.json_body
     game_id = json_body['game_id']
     game = request.registry.games.games[game_id]
@@ -193,16 +202,22 @@ def buy_settlement(request):
     settlement_id = json_body['settlement_id']
     game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
     player = game.players[player_id]
+    nearby_tiles = str(player.settlements[settlement_id].nearby_tiles).strip('[]')
     return_data = {'status': 'success',
-                   'settlement':
+                   'Settlement':
                        {'settlement_id': player.settlements[settlement_id].id,
+                        'nearby_tiles': nearby_tiles,
                         'settlement_color': player.settlements[settlement_id].color},
-                   'player':
+                   'Player':
                        {'player_id': player.id,
                         'player_name': player.name,
                         'player_color': player.color}
                    }
-
+    json_return = json.dumps(return_data)
+    return Response(
+        content_type='json',
+        body=json_return
+    )
 
 # @view_config(route_name='generate_ajax_data', renderer='json')
 # def my_ajax_view(request):
