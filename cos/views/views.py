@@ -173,10 +173,10 @@ def get_players_in_game(request):
     players = []
     for player in game.players:
         players.append({'Player':
-                        {'player_id': player.id,
-                         'player_name': player.name,
-                         'player_color': player.color
-                         }})
+                            {'player_id': player.id,
+                             'player_name': player.name,
+                             'player_color': player.color
+                             }})
     return_data = {'Players': players}
     json_return = json.dumps(return_data)
     return Response(

@@ -154,15 +154,27 @@ function build_board() {
                strokeWidth: 1,
         });
 
+    var playerColor;
+
+    /*$.ajax({
+        url     : 'http://127.0.0.1:6543/api/game/getPlayersInGame',
+        type    : 'GET',
+        dataType: 'json',
+        data    : 'game',
+        success :function (data) {
+            playerColor = data.game.Players[0].player.color;
+        }
+    })*/
+
     for (var i = 0; i < 5; i++) {
         var settlement = new Konva.Shape({
            sceneFunc: function (context) {
                context.beginPath();
                context.moveTo(settlementX, settlementY);
-               context.lineTo(settlementX, settlementY - 10);
-               context.lineTo(settlementX + 5, settlementY - 15);
-               context.lineTo(settlementX + 10, settlementY - 10);
-               context.lineTo(settlementX + 10, settlementY);
+               context.lineTo(settlementX, settlementY - 14);
+               context.lineTo(settlementX + 7, settlementY - 21);
+               context.lineTo(settlementX + 14, settlementY - 14);
+               context.lineTo(settlementX + 14, settlementY);
                context.lineTo(settlementX, settlementY);
                context.closePath();
 
@@ -174,7 +186,13 @@ function build_board() {
                draggable : true
         });
         layer.add(settlement);
+        settlement.on("dragend", function(e){
+            console.log('dragend');
+            this.setDraggable(false);
+        })
     }
+
+
 
 
     // add the layer to the stage

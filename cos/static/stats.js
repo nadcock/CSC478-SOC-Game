@@ -91,9 +91,27 @@ function display_players() {
     //Fetch from backend
     var playerCount = 3;
     var playerName = ["davmmeyer", "mpolsgrove", "nadcock"];
-    var playerColor = ["blue", "red", "orange", "white"];
+    var playerColor = ['blue', 'red', 'orange'];
     var playerRoad = ["","Yes",""];
     var playerArmy = ["","","Yes"];
+
+
+    //Get player info
+    /*$.ajax({
+        dataType: 'json',
+        url     : '/api/game/getPlayersInGame',
+        type    : 'GET',
+        data    : 'game',
+        success : function (data) {
+            var players = data.game.Players;
+            playerCount = players.length;
+            for (i = 0; i < playerCount; i++) {
+                var player = players[i].player;
+                playerName[i] = player.name;
+                playerColor[i] = player.color;
+            }
+        }
+    })*/
 
     //Generates table
     var body = document.getElementById("players");
