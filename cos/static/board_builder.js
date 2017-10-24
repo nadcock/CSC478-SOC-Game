@@ -5,7 +5,7 @@
 function build_board() {
     var stage = new Konva.Stage({
       container: 'container',
-      width: 1000,
+      width: 1300,
       height: 1000
     });
 
@@ -16,6 +16,9 @@ function build_board() {
     var max_row_length = 7;
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
     var token_numbers = ['8', '5', '6', '10', '4', '3', '12', '8', '11', "R", '9', '4', '9', '5', '11', '3', '6', '2', '10'];
+    var settlementX = 1000;
+    var settlementY = 400;
+
     var layer = new Konva.Layer();
     for (var x = 0; x < board_layout.length; x++) {
         var hex_in_row = board_layout[x];
@@ -132,6 +135,45 @@ function build_board() {
             }
 
         }
+    }
+
+    var settlementShape = new Konva.Shape({
+           sceneFunc: function (context) {
+               context.beginPath();
+               context.lineTo(0,10);
+               context.lineTo(5,15);
+               context.lineTo(10,10);
+               context.lineTo(10, 0);
+               context.lineTo(0,0);
+               context.closePath();
+
+               context.fillStrokeShape(this);
+               },
+               fill: 'blue',
+               stroke: 'black',
+               strokeWidth: 1,
+        });
+
+    for (var i = 0; i < 5; i++) {
+        var settlement = new Konva.Shape({
+           sceneFunc: function (context) {
+               context.beginPath();
+               context.moveTo(settlementX, settlementY);
+               context.lineTo(settlementX, settlementY - 10);
+               context.lineTo(settlementX + 5, settlementY - 15);
+               context.lineTo(settlementX + 10, settlementY - 10);
+               context.lineTo(settlementX + 10, settlementY);
+               context.lineTo(settlementX, settlementY);
+               context.closePath();
+
+               context.fillStrokeShape(this);
+               },
+               fill: 'blue',
+               stroke: 'black',
+               strokeWidth: 1,
+               draggable : true
+        });
+        layer.add(settlement);
     }
 
 
