@@ -3,6 +3,10 @@ from Settement import Settlement
 class Board(object):
     def __init__(self):
         self.open_settlements = {}
+        # Creates settlement objects and adds them to the open_settlement dict as {settlement_id: Settlement}
+        # There are 6 rows of settlements that have 7, 9, 11, 11, 9, and 7 settlements to each row, respectively
+        # Each settlement in a row represents a column, and all columns begin at 1, regardless of where it exists on
+        # the actual board.
         for row in range(1, 7):
             if (row == 1) or (row == 6):
                 for column in range(1, 8):

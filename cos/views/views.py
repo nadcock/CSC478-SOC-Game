@@ -129,10 +129,6 @@ def add_player_to_game(request):
         request.response.status = 400
         return {'error': "Requested Game with id '%s' does not exist." % game_id}
 
-    if game_id not in request.registry.games.games:
-        request.response.status = 400
-        return {'error': "Requested Game with id '%s' does not exist." % game_id}
-
     if 'player_name' in json_body:
         player_name = json_body['player_name']
     else:
