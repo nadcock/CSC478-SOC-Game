@@ -1,5 +1,6 @@
 import random
 from Player import Player
+from Board import Board
 
 
 class Game(object):
@@ -31,7 +32,9 @@ class Game(object):
         """
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
-        self.players = [Player(name="Player 1", color=self.PLAYER_COLORS[0])]
+        self.game_board = Board()
+        first_player = Player(name="Player 1", color=self.PLAYER_COLORS[0])
+        self.players = {first_player.id: first_player}
 
     def get_player_count(self):
         """ returns number of players currently added to game """
@@ -65,8 +68,29 @@ class Game(object):
         else:
             new_player = Player(name="Player " + str(self.get_player_count() + 1),
                                 color=self.PLAYER_COLORS[self.get_player_count()])
-            self.players.append(new_player)
+            self.players[new_player.id] = new_player
             return new_player
+
+    def buy_settlement(self, player_id, settlement_id):
+        """
+                    If the players maximum has not been reached, a Player object is created and added to
+                    the list of players, then that player object is returned. Otherwise, None is returned. 
+
+                    Parameters
+                    ----------
+                    player_id : String
+                        id string of player object
+                    settlement_id : String
+                        id string of settlement object
+
+                    Returns
+                    -------
+                    None
+
+                """
+        buying_player = self.players[player_id]
+        buying_settlement = self.game_board.open_settlements.pop(settlement_id)
+        buying_player.add_settlement(buying_settlement)
 
 
 class Games(object):
@@ -124,7 +148,7 @@ class Games(object):
         """ Prints the current list of games to the console. Used for debugging """
         print "Current Games List:"
         for id in self.games:
-            print "'Game ID': " + id + "   'First Player': " + self.games[id].players[0].id
+            print "'Game ID': " + id + "   'First Player': " + self.games[id].players.itervalues().next().id
         print ""
 
 

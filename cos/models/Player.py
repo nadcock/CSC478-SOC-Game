@@ -12,7 +12,7 @@ class Player(object):
 
             Methods
             -------
-            None
+            add_settlement(Settlement)
 
         """
     def __init__(self, name, color):
@@ -20,4 +20,25 @@ class Player(object):
         self.id = id_string
         self.name = name
         self.color = color
+        self.settlements = {}
+
+    def add_settlement(self, settlement):
+        """
+                    Adds a settlement to the Player's list of settlments dictonary 
+
+                    Parameters
+                    ----------
+                    settlement : Settlement
+                        settlement to be added to settelements list
+
+                    Returns
+                    -------
+                    None
+
+                """
+        # type: (Settlement) -> None
+        settlement.ownedBy = self
+        settlement.color = self.color
+        self.settlements[settlement.id] = settlement
+
 
