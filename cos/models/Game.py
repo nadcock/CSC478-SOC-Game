@@ -21,7 +21,7 @@ class Game(object):
     # Maximum Players allowed in the game
     PLAYER_MAX = 4
     # Options for player colors
-    PLAYER_COLORS = ["white", "blue", "orange", "red"]
+    PLAYER_COLORS = ["blue", "white", "orange", "red"]
 
     def __init__(self):
         """ Constructor for Game class:
@@ -29,7 +29,7 @@ class Game(object):
                 - sets private attributes of game_id (random string of alpaha-numeric chars and
                   creates first player object named "Player1" 
         """
-        id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
+        id_string = "BLACK" #''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.players = [Player(name="Player 1", color=self.PLAYER_COLORS[0])]
 

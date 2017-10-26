@@ -88,30 +88,12 @@ function display_resources() {
 //Displays table of players
 function display_players() {
 
-    //Fetch from backend
+    //Initial values
     var playerCount = 3;
-    var playerName = ["davmmeyer", "mpolsgrove", "nadcock"];
-    var playerColor = ['blue', 'red', 'orange'];
+    var playerName = ["","",""];
+    var playerColor = ['black', 'black', 'black'];
     var playerRoad = ["","Yes",""];
     var playerArmy = ["","","Yes"];
-
-
-    //Get player info
-    /*$.ajax({
-        dataType: 'json',
-        url     : '/api/game/getPlayersInGame',
-        type    : 'GET',
-        data    : 'game',
-        success : function (data) {
-            var players = data.game.Players;
-            playerCount = players.length;
-            for (i = 0; i < playerCount; i++) {
-                var player = players[i].player;
-                playerName[i] = player.name;
-                playerColor[i] = player.color;
-            }
-        }
-    })*/
 
     //Generates table
     var body = document.getElementById("players");
@@ -128,13 +110,16 @@ function display_players() {
             if (i > 0) {
                 switch (j) {
                     case 0:
+                        cell.id ="player_name" + (i-1);
                         cell.style.color = playerColor[i-1];
                         cellText = document.createTextNode(playerName[i-1]);
                         break;
                     case 1:
+                        cell.id ="player_road" + (i-1);
                         cellText = document.createTextNode(playerRoad[i-1]);
                         break;
                     case 2:
+                        cell.id = "player_army" + (i-1);
                         cellText = document.createTextNode(playerArmy[i-1]);
                         break;
                 }
@@ -161,6 +146,9 @@ function display_players() {
         }
         playerTableBody.appendChild(row);
     }
+
+    //Get player info
+    get_player_info();
 
     playerTable.appendChild(playerTableBody);
     body.appendChild(playerTable);

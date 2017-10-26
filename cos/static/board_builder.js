@@ -156,16 +156,6 @@ function build_board() {
 
     var playerColor;
 
-    /*$.ajax({
-        url     : 'http://127.0.0.1:6543/api/game/getPlayersInGame',
-        type    : 'GET',
-        dataType: 'json',
-        data    : 'game',
-        success :function (data) {
-            playerColor = data.game.Players[0].player.color;
-        }
-    })*/
-
     for (var i = 0; i < 5; i++) {
         var settlement = new Konva.Shape({
            sceneFunc: function (context) {
@@ -180,17 +170,20 @@ function build_board() {
 
                context.fillStrokeShape(this);
                },
-               fill: 'blue',
+               fill: 'red',
                stroke: 'black',
                strokeWidth: 1,
-               draggable : true
+               draggable : true,
+               name : 'settlement'
         });
         layer.add(settlement);
         settlement.on("dragend", function(e){
-            console.log('dragend');
+            //console.log('dragend');
             this.setDraggable(false);
         })
     }
+
+    get_player_color_info(stage, layer);
 
 
 
