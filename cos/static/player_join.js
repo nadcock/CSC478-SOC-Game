@@ -33,7 +33,7 @@ function submit_player_info() {
  */
 function player_join() {
 
-    var gameId = "5Q16IU";
+    var gameId = document.getElementById("game_id").innerText;
 
     // Get count of players is game
     var count = "";
@@ -41,7 +41,7 @@ function player_join() {
     // Call Ajax function to get players in game
     get_players_in_game(gameId, function(count){
 
-        count +=2; // **TEMP**
+        count +=2; // **TEMP for testing**
 
         // If game is full, notify the player as such. Otherwise, provide join game form.
         if (count >= 4) {

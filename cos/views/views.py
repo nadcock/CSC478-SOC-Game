@@ -14,7 +14,7 @@ def my_view(request):
 @view_config(route_name='game', renderer='templates/game.jinja2')
 def game_view(request):
     """ Returns Game Play page based on ID"""
-    return {'project': 'Catan Board: Game_ID = ' + request.matchdict['game_id']}
+    return {'project': request.matchdict['game_id']}
 
 @view_config(route_name='createGame', renderer='json')
 def create_game_view(request):
@@ -28,13 +28,6 @@ def create_game_view(request):
         content_type='json',
         body=json_return
     )
-
-
-@view_config(route_name='game', renderer='templates/game.jinja2')
-def game_view(request):
-    """ Returns Game Play page based on ID"""
-    return {'project': 'Catan Board: Game_ID = ' + request.matchdict['game_id']}
-
 
 @view_config(route_name='createGame', renderer='json')
 def create_game_view(request):

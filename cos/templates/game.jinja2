@@ -16,7 +16,9 @@
       <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
   </head>
   <body>
-    <h1>{{project}}</h1>
+    <h1>Catan Board: Game_ID = {{project}}</h1>
+    <!-- Stores the game ID for reference later -->
+    <div id="game_id" hidden>{{project}}</div>
     <div id = "container"></div>
     <script>build_board()</script>
 
