@@ -2,30 +2,34 @@
  *Created by David Meyer 10/22/17
  */
 
-
 /**
- * This function displays a modal notifying the player that the game is full
- * and they are unable to join.
-  */
-function get_player_count(doc) {
-    window.alert("Hi from full game!");
-    var modal = document.createElement("modal");
-}
-
-/**
- * This function displays a modal. The modal will show a player submission form with the following details:
+ * This function checks if the modal form has been input. If it has, then the following data is submitted:
  * 1) player name
  * 2) player age
- * 3) submission button
   */
-function display_player_join_modal() {
+function submit_player_info() {
 
+    var playerName = document.joinForm.player_name.value;
+    var playerAge = document.joinForm.player_age.value;
+
+    if (playerName == "") {
+        alert("Please enter player name.");
+    }
+    else if (playerAge < 5 || playerAge > 120) {
+        alert("Please enter an age between 5 and 120.")
+    }
+    else {
+        document.joinForm.submit();
+    }
 }
+
+
 
 /**
  * This function will add players to a game. It will:
  * 1) check if the game is full. If so, the player will be notified. If not, the player will ask to join.
- * 2) submit player info to backend so player can be added to game.
+ * 2) show join player modal
+ * 3) submit player info to backend so player can be added to game.
  */
 function player_join() {
 
@@ -33,14 +37,25 @@ function player_join() {
 
     // Get count of players is game
     var count = "";
-    get_players_in_game(gameId, function(count){alert(count);});
+
+    // Call Ajax function to get players in game
+    get_players_in_game(gameId, function(count){
+
+        count +=2; // **TEMP**
+
+        // If game is full, notify the player as such. Otherwise, provide join game form.
+        if (count >= 4) {
+            alert("Sorry, game is full. Returning you to the landing page.");
+            window.location.replace(window.location.origin + '/');
+
+        }
+        else {
+            alert("Current player count: " + count);
+
+            var modal = document.getElementById("newGame");
+            modal.style.display = "block"
+        }
 
 
-    var playerJoin = document.getElementById("player_join_prompt");
-
-    var playername = "";
-
-    //var count = get_players_in_game("5Q16IU");
-
-
+    });
 }

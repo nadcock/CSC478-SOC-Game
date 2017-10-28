@@ -26,19 +26,10 @@ function get_players_in_game(gameID, cbFunc) {
         contentType :   "application/json",
         success :   function (data) {
 
-            //console.log("returned data: " + data);
-            var players = data.Players
+            var players = data.Players;
 
-            //var name = players[0].Player.player_name;
-            //name += players.length;
-
-            //print("Number of players in game: " + players.length);
-
-            //document.getElementById("playerName0").textContent = name;
-            //document.getElementById("playerName0").textContent = players[0].Player.player_name;
-
-            // Callback function returns number of players
-            cbFunc(players.length);
+            // Callback function with player count
+            cbFunc (players.length);
         }
     })
 }
