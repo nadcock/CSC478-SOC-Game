@@ -33,3 +33,26 @@ function get_players_in_game(gameID, cbFunc) {
         }
     })
 }
+
+
+/**
+ *
+ * @param gameID
+ * @param playerName
+ */
+function add_player_to_game(gameID, playerName) {
+    $.ajax({
+        url     :   '/api/game/addPlayerToGame',
+        type    :   'POST',
+        datatype:   'json',
+        data    :   JSON.stringify({"game_id":gameID, "player_name":playerName}),
+        contentType :   "application/json",
+        success :   function(data) {
+
+
+
+            alert("Player added to game");
+
+        }
+    })
+}

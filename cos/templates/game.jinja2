@@ -45,15 +45,17 @@
             </div>
             <div class="col-md-12">
                 <div class="modal-body">
-                    <form name="joinForm" action="/api/game/addPlayerToGame">
+                    <form id="joinForm" name="joinForm" action="">
                         <label><b>Player name</b></label><br>
-                        <input type="text" placeholder="your name" name="player_name" required><br>
+                        <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
                         <label><b>Age</b></label><br>
-                        <input type="number" min="5" max="120" placeholder="99" name="player_age" required>
-                        <div class="modal-footer">
-                            <input type="submit" onclick="submit_player_info()" class="startbtn" value="Start Game!" required />
-                        </div>
+                        <input id="player_age" type="number" min="5" max="120" placeholder="99" name="player_age" required>
+
+
                     </form>
+                    <div class="modal-footer">
+                        <button id="startGameBtn" type="button" class="startbtn" value="Start Game!" required />
+                        </div>
                 </div>
             </div>
         </div>
