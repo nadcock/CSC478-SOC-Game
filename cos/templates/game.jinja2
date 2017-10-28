@@ -12,15 +12,13 @@
       <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
+      <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
   </head>
   <body>
     <h1>{{project}}</h1>
     <div id = "container"></div>
     <script>build_board()</script>
 
-    <!-- Prompt for player join -->
-    <div id="player_join_prompt"></div>
-    <script>player_join()</script>
 
     <!-- Game stats tables -->
     <h3 id = "score"></h3>
@@ -33,5 +31,11 @@
     <script>display_devcards()</script>
     <span id = "road_and_army"></span>
     <script>display_road_and_army()</script>
+
+
+    <!-- Prompt for player join -->
+    <div id="player_join_prompt"></div>
+    <script>player_join()</script>
+
   </body>
 </html>

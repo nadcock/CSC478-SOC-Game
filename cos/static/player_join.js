@@ -29,8 +29,18 @@ function display_player_join_modal() {
  */
 function player_join() {
 
+    var gameId = "5Q16IU";
+
+    // Get count of players is game
+    var count = "";
+    get_players_in_game(gameId, function(count){alert(count);});
+
 
     var playerJoin = document.getElementById("player_join_prompt");
 
-    get_player_count(playerJoin);
+    var playername = "";
+
+    //var count = get_players_in_game("5Q16IU");
+
+
 }
