@@ -7,7 +7,6 @@
  * 1) player name
  * 2) player age
   */
-
 $(document).on("click", "#startGameBtn", function(e){
 
     e.preventDefault();
@@ -30,43 +29,6 @@ $(document).on("click", "#startGameBtn", function(e){
     }
 });
 
-
-
-
-
-/**
- * Submits the join player to add player to game
- * @param name
- * @param age
- */
-function submit_join_player_modal() {
-
-    var gameId = document.getElementById("game_id").innerText;
-
-    var form = $('#joinForm').serializeArray();
-
-    console.log(form[0]);
-    console.log(form[1]);
-
-    add_player_to_game(gameId, "David");
-}
-
-
-// $("#joinForm").submit(function(event) {
-//        event.preventDefault();
-//
-//        var gameID = document.getElementById("game_id").innerText;
-//        var playerName = $('#player_name').val();
-//
-//        console.log(gameID + " " + playerName);
-//
-//        add_player_to_game(gameID, playerName);
-//
-//
-//     });
-
-
-
 /**
  * This function will add players to a game. It will:
  * 1) check if the game is full. If so, the player will be notified. If not, the player will ask to join.
@@ -80,18 +42,16 @@ function player_join() {
     // Call Ajax function to get players in game
     get_players_in_game(gameId, function(count){
 
-        //count +=3;
         // If game is full, notify the player as such. Otherwise, provide join game form.
         if (count >= 4) {
             alert("Sorry, game is full. Returning you to the landing page.");
-            window.location.replace(window.location.origin + '/');
 
+            window.location.replace(window.location.origin + '/');
         }
         else {
-            alert("Current player count: " + count);
+            console.log("Current player count: " + count);
 
             $("#newGame").modal({backdrop: "static"});
-
         }
     });
 }

@@ -31,12 +31,12 @@ function get_players_in_game(gameID, cbFunc) {
             // Callback function with player count
             cbFunc (players.length);
         }
-    })
+    });
 }
 
-
 /**
- *
+ * This function passes in player information to the backend to add new player
+ * to the game. It takes in the following parameters:
  * @param gameID
  * @param playerName
  */
@@ -49,8 +49,8 @@ function add_player_to_game(gameID, playerName) {
         contentType :   "application/json",
         success :   function(data) {
 
-            alert("Player added to game");
+            console.log("Player added to game: " + playerName);
 
         }
-    })
+    });
 }
