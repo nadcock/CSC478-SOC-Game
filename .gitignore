@@ -39,3 +39,4 @@ ehthumbs.db
 Thumbs.db
 .idea/workspace.xml
 .idea/CSC478-SOC-Game.iml
+.idea/*.*

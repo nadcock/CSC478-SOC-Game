@@ -1,9 +1,6 @@
 from pyramid.view import view_config
 from pyramid.response import Response
 from cos.models.Game import Game
-from cos.models.Game import Games
-from cos.models.Player import Player
-
 import json
 
 
@@ -16,18 +13,6 @@ def game_view(request):
     """ Returns Game Play page based on ID"""
     return {'project': request.matchdict['game_id']}
 
-@view_config(route_name='createGame', renderer='json')
-def create_game_view(request):
-    new_game = Game()
-    request.registry.games.add_game(new_game)
-    request.registry.games.print_games()
-    return_data = {'game': {'game_id': new_game.id(),
-                   'player_id': new_game.players[0].id()}}
-    json_return = json.dumps(return_data)
-    return Response(
-        content_type='json',
-        body=json_return
-    )
 
 @view_config(route_name='createGame', renderer='json')
 def create_game_view(request):
@@ -35,22 +20,29 @@ def create_game_view(request):
         
         Parameters
         ----------
-        request: Request (does not get used)
+        request: Request
+            - required JSON parameters: "game_name": String
         
         Returns
         -------
         
         Json object containing "game": {
                                     "game_id: String"
-                                    "player_id: String"
                                 }
-        
     """
-    new_game = Game()
+    json_body = request.json_body
+    if 'game_name' in json_body:
+        game_name = json_body['game_name']
+    else:
+        request.response.status = 400
+        return {'error': "'game_name' is a required parameter for this request"}
+    new_game = Game(game_name)
     request.registry.games.add_game(new_game)
     request.registry.games.print_games()
-    return_data = {'game': {'game_id': new_game.id,
-                            'player_id': new_game.players[0].id}}
+    return_data = {'game': {
+                        'game_id': new_game.id,
+                        'game_name': new_game.name
+                  }}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -76,7 +68,16 @@ def get_player_full_status_view(request):
                                     }
     """
     json_body = request.json_body
-    game_id = json_body['game_id']
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+
     game = request.registry.games.games[game_id]
     return_data = {'player_full_status':
                    {'player_count': str(game.get_player_count()),
@@ -98,6 +99,7 @@ def add_player_to_game(request):
         request: Request 
             - required JSON parameters: "game_id":      String
                                         "player_name":  String
+                                        "player_age": Int
 
         Returns
         -------
@@ -112,14 +114,35 @@ def add_player_to_game(request):
                                     "player_id":        String
                                     "player_name":      String
                                     "player_color":     String
+                                    "player_age:        Int
                                 }
 
     """
     json_body = request.json_body
-    game_id = json_body['game_id']
-    player_name = json_body['player_name']
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+
+    if 'player_name' in json_body:
+        player_name = json_body['player_name']
+    else:
+        request.response.status = 400
+        return {'error': "'player_name' is a required parameter for this request"}
+
+    if 'player_age' in json_body:
+        player_age = json_body['player_age']
+    else:
+        request.response.status = 400
+        return {'error': "'player_age' is a required parameter for this request"}
+
     game = request.registry.games.games[game_id]
-    player = game.add_player(player_name)
+    player = game.add_player(player_name, player_age)
     if player is not None:
         return_data = {'game':
                        {'player_count': str(game.get_player_count()),
@@ -127,10 +150,12 @@ def add_player_to_game(request):
                        'player':
                        {'player_id': player.id,
                         'player_name': player.name,
+                        'player_age': player.age,
                         'player_color': player.color}
                        }
     else:
-        return_data = {'Error': "Player not created, game is full"}
+        request.response.status = 400
+        return {'Error': "Player not created, game is full"}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -156,21 +181,175 @@ def get_players_in_game(request):
                                         "player_id": String
                                         "player_name": String
                                         "player_color": String
+                                        "player_age": Int
                                     } ...
                                 ]
 
     """
     json_body = request.json_body
-    game_id = json_body['game_id']
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+
     game = request.registry.games.games[game_id]
     players = []
-    for player in game.players:
-        players.append({'Player':
-                        {'player_id': player.id,
-                         'player_name': player.name,
-                         'player_color': player.color
-                         }})
+    if game.players:
+        for id, player in game.players.iteritems():
+            settlements_list_string = ''
+            if player.settlements:
+                for key, val in player.settlements.iteritems():
+                    settlements_list_string = settlements_list_string + "(" + key + ") "
+            else:
+                settlements_list_string = 'None'
+            players.append({'Player':
+                            {'player_id': player.id,
+                             'player_name': player.name,
+                             'player_age': player.age,
+                             'owned_settlements': settlements_list_string,
+                             'player_color': player.color
+                             }})
+    else:
+        players.append("None")
     return_data = {'Players': players}
+    json_return = json.dumps(return_data)
+    return Response(
+        content_type='json',
+        body=json_return
+    )
+
+@view_config(route_name='buySettlement', renderer='json')
+def buy_settlement(request):
+    """ Assigns the requested settelment to the buying player
+        TODO: Deduct resources from player for cost of settlement
+        TODO: Verify Settlement is in valid placement
+
+            Parameters
+            ----------
+            request: Request
+                - required JSON parameters: "game_id": String, "player_id": String, and "settlement_id": String
+
+            Returns
+            -------
+
+            Json object containing: "status": "success",
+                                    "Player":
+                                        {
+                                            "player_id": String
+                                            "player_name": String
+                                            "player_color": String
+                                        },
+                                    "Settlement":
+                                        {
+                                            "settlement_id": String
+                                            "settlement_color": String
+                                        }
+    """
+    json_body = request.json_body
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    if 'player_id' in json_body:
+        player_id = json_body['player_id']
+    else:
+        request.response.status = 400
+        return {'error': "'player_id' is a required parameter for this request"}
+
+    if 'settlement_id' in json_body:
+        settlement_id = json_body['settlement_id']
+    else:
+        request.response.status = 400
+        return {'error': "'settlement_id' is a required parameter for this request"}
+
+    if player_id not in game.players:
+        request.response.status = 400
+        return {'error': "Requested Player with id '%s' does not exist in this Game." % player_id}
+
+    if settlement_id not in game.game_board.open_settlements:
+        request.response.status = 400
+        return {'error': "Requested Settlement with id "
+                         "'%s' does not exist, or has already been purchased." % settlement_id}
+
+    game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
+    player = game.players[player_id]
+    nearby_tiles = str(player.settlements[settlement_id].nearby_tiles).strip('[]')
+    return_data = {'status': 'success',
+                   'Settlement':
+                       {'settlement_id': player.settlements[settlement_id].id,
+                        'nearby_tiles': nearby_tiles,
+                        'settlement_color': player.settlements[settlement_id].color},
+                   'Player':
+                       {'player_id': player.id,
+                        'player_name': player.name,
+                        'player_age:': player.age,
+                        'player_color': player.color}
+                   }
+    json_return = json.dumps(return_data)
+    return Response(
+        content_type='json',
+        body=json_return
+    )
+
+@view_config(route_name='rollDice', renderer='json')
+def roll_dice(request):
+    """ Returns two dice rolls and their total
+
+            Parameters
+            ----------
+            request: Request
+                - required JSON parameters: "game_id": String, "player_id": String
+
+            Returns
+            -------
+
+            Json object containing: "Roll": {
+                                        "dice_one": "2",
+                                        "dice_total": "5",
+                                        "dice_two": "3"
+                                    }
+        """
+    json_body = request.json_body
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    if 'player_id' in json_body:
+        player_id = json_body['player_id']
+    else:
+        request.response.status = 400
+        return {'error': "'player_id' is a required parameter for this request"}
+
+    if player_id not in game.players:
+        request.response.status = 400
+        return {'error': "Requested Player with id '%s' does not exist in this Game." % player_id}
+
+    roll = game.roll_dice(player_id)
+
+    return_data = {"Roll": {
+                        "dice_one": str(roll[0]),
+                        "dice_two": str(roll[1]),
+                        "dice_total": str(roll[0] + roll[1])
+                   }}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
