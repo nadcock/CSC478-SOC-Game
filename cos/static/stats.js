@@ -88,12 +88,12 @@ function display_resources() {
 //Displays table of players
 function display_players() {
 
-    //Fetch from backend
+    //Initial values
     var playerCount = 3;
-    var playerName = ["davmmeyer", "mpolsgrove", "nadcock"];
-    var playerColor = ["blue", "red", "orange", "white"];
-    var playerRoad = ["","Yes",""];
-    var playerArmy = ["","","Yes"];
+    var playerName = ["","",""];
+    var playerColor = ['black', 'black', 'black'];
+    var playerRoad = ["","",""];
+    var playerArmy = ["",""," "];
 
     //Generates table
     var body = document.getElementById("players");
@@ -110,13 +110,16 @@ function display_players() {
             if (i > 0) {
                 switch (j) {
                     case 0:
+                        cell.id ="player_name" + (i-1);
                         cell.style.color = playerColor[i-1];
                         cellText = document.createTextNode(playerName[i-1]);
                         break;
                     case 1:
+                        cell.id ="player_road" + (i-1);
                         cellText = document.createTextNode(playerRoad[i-1]);
                         break;
                     case 2:
+                        cell.id = "player_army" + (i-1);
                         cellText = document.createTextNode(playerArmy[i-1]);
                         break;
                 }
@@ -143,6 +146,11 @@ function display_players() {
         }
         playerTableBody.appendChild(row);
     }
+    var stage;
+    var layer;
+
+    //Get player info
+    get_player_info(update_tables,stage,layer);
 
     playerTable.appendChild(playerTableBody);
     body.appendChild(playerTable);
@@ -280,4 +288,14 @@ function display_road_and_army(){
     body.appendChild(playerTable);
 
     playerTable.setAttribute("border", "2");
+}
+
+//Call to redraw tables with information from the backend
+function update_tables(data,stage,layer){
+    var players = data.Players;
+        for (i = 0; i < 3; i++) {
+            var elm = document.getElementById("player_name" + i);
+            elm.innerText = players[i].Player.player_name;
+            elm.style.color = players[i].Player.player_color;
+        }
 }
