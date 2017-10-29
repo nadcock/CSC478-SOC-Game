@@ -2,12 +2,40 @@
  *Created by David Meyer 10/22/17
  */
 
+
+
+
 /**
- * This function checks if the modal form has been input. If it has, then the following data is submitted:
+ * Landing Page modal: this function checks if start game modal form has a game name. If it has,
+ * then the game name is submitted and a new game is started:
+ * 1) Game name
+  */
+$(document).on("click", "#startNewGameModalBtn", function(e){
+
+    e.preventDefault();
+    console.log("Start New Game button clicked");
+
+    var gameName = document.startGameForm.game_name.value;
+
+    if (gameName == "") {
+        alert("Please enter a game name.");
+    }
+    else {
+        create_game(gameName);
+
+        $("#newGame").modal("hide");
+
+    }
+});
+
+
+/**
+ * Player Join Game Modal: this function checks if the modal form has been input. If it has, then the
+ * following data is submitted:
  * 1) player name
  * 2) player age
   */
-$(document).on("click", "#startGameBtn", function(e){
+$(document).on("click", "#joinGameBtn", function(e){
 
     e.preventDefault();
     console.log("start game button clicked");
@@ -23,8 +51,7 @@ $(document).on("click", "#startGameBtn", function(e){
         alert("Please enter an age between 5 and 120.")
     }
     else {
-        //document.joinForm.submit();
-        add_player_to_game(gameID, playerName);
+        add_player_to_game(gameID, playerName, playerAge);
         $("#newGame").modal("hide");
     }
 });

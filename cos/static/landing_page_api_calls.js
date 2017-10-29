@@ -1,11 +1,12 @@
 /**
  * Created by nickadcock on 10/18/17.
  */
-function create_game() {
+function create_game(gameName) {
     $.ajax({
         url     :   '/api/game/createGame',
         type    :   'POST',
         dataType:   'json',
+        data    :   JSON.stringify({"game_name":gameName}),
         success :   function (data) {
             window.location.href = '/game/' + data.game.game_id;
         }
@@ -40,12 +41,14 @@ function get_players_in_game(gameID, cbFunc) {
  * @param gameID
  * @param playerName
  */
-function add_player_to_game(gameID, playerName) {
+function add_player_to_game(gameID, playerName, playerAge) {
     $.ajax({
         url     :   '/api/game/addPlayerToGame',
         type    :   'POST',
         datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID, "player_name":playerName}),
+        data    :   JSON.stringify({"game_id":gameID,
+                                    "player_name":playerName,
+                                    "player_age":playerAge}),
         contentType :   "application/json",
         success :   function(data) {
 
