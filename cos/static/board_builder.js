@@ -85,6 +85,7 @@ function build_board() {
 
                 layer.add(settlement_area_bottom);
 
+
                 var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
@@ -137,23 +138,6 @@ function build_board() {
         }
     }
 
-    var settlementShape = new Konva.Shape({
-           sceneFunc: function (context) {
-               context.beginPath();
-               context.lineTo(0,10);
-               context.lineTo(5,15);
-               context.lineTo(10,10);
-               context.lineTo(10, 0);
-               context.lineTo(0,0);
-               context.closePath();
-
-               context.fillStrokeShape(this);
-               },
-               fill: 'blue',
-               stroke: 'black',
-               strokeWidth: 1,
-        });
-
     var playerColor;
 
     for (var i = 0; i < 5; i++) {
@@ -173,21 +157,25 @@ function build_board() {
                fill: 'red',
                stroke: 'black',
                strokeWidth: 1,
-               draggable : true,
                name : 'settlement'
         });
         layer.add(settlement);
-        settlement.on("dragend", function(e){
-            //console.log('dragend');
-            this.setDraggable(false);
-        })
     }
 
-    get_player_color_info(stage, layer);
-
-
+    get_player_info(update_settlement_color,stage, layer);
 
 
     // add the layer to the stage
     stage.add(layer);
+}
+
+
+//Redraw settlements with info from backend
+function update_settlement_color(data,stage,layer) {
+    var players = data.Players;
+        var settlements = stage.find('.settlement');
+        for (i = 0; i < 5; i++){
+            settlements[i].fill(players[0].Player.player_color);
+            layer.batchDraw();
+        }
 }
