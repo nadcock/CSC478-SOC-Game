@@ -8,12 +8,12 @@
  * 2) player age
   */
 
-$("#startGameBtn").on("click", function(e){
-
-    console.log("start game button clicked");
+$(document).on("click", "#startGameBtn", function(e){
 
     e.preventDefault();
+    console.log("start game button clicked");
 
+    var gameID = document.getElementById("game_id").innerText;
     var playerName = document.joinForm.player_name.value;
     var playerAge = document.joinForm.player_age.value;
 
@@ -24,8 +24,9 @@ $("#startGameBtn").on("click", function(e){
         alert("Please enter an age between 5 and 120.")
     }
     else {
-        document.joinForm.submit();
-
+        //document.joinForm.submit();
+        add_player_to_game(gameID, playerName);
+        $("#newGame").modal("hide");
     }
 });
 
@@ -51,19 +52,19 @@ function submit_join_player_modal() {
 }
 
 
-$(document).ready(function () {
-   $("#joinForm").submit(function(event) {
-       event.preventDefault();
+// $("#joinForm").submit(function(event) {
+//        event.preventDefault();
+//
+//        var gameID = document.getElementById("game_id").innerText;
+//        var playerName = $('#player_name').val();
+//
+//        console.log(gameID + " " + playerName);
+//
+//        add_player_to_game(gameID, playerName);
+//
+//
+//     });
 
-       var gameID = document.getElementById("game_id").innerText;
-       var playerName = $('#player_name').val();
-
-       console.log(gameID + " " + playerName);
-
-       add_player_to_game(gameID, playerName);
-
-    });
-});
 
 
 /**
@@ -89,8 +90,8 @@ function player_join() {
         else {
             alert("Current player count: " + count);
 
-            var modal = document.getElementById("newGame");
-            modal.style.display = "block"
+            $("#newGame").modal({backdrop: "static"});
+
         }
     });
 }

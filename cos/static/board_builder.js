@@ -9,10 +9,10 @@ function build_board() {
       height: 1000
     });
 
-    var hex_radius = 70;
+    var hex_radius = 53;
     var hex_apothem = hex_radius * Math.sqrt(3) / 2;
     var hex_stroke_width = 1;
-    var buffer = 15;
+    var buffer = 11;
     var max_row_length = 7;
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
     var token_numbers = ['8', '5', '6', '10', '4', '3', '12', '8', '11', "R", '9', '4', '9', '5', '11', '3', '6', '2', '10'];
@@ -25,7 +25,7 @@ function build_board() {
             x: ((max_row_length - hex_in_row) * (hex_apothem + (buffer / 2))) + (i * (hex_apothem * 2)) + (i * buffer) + hex_apothem + hex_stroke_width,
             y: (x * 1.5 * hex_radius) + (x * buffer) + hex_radius + hex_stroke_width,
             sides: 6,
-            radius: 70,
+            radius: hex_radius,
             fill: 'green',
             stroke: 'black',
             strokeWidth: hex_stroke_width
@@ -66,7 +66,7 @@ function build_board() {
             }
 
             var road_width = hex_radius * .78;
-            var road_height = 9;
+            var road_height = 7;
 
             if ((i == 0 && x < ((board_layout.length / 2) - 1))
                 || (i > 0 && x < ((board_layout.length / 2) - 1))

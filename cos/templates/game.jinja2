@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="{{request.locale_name}}">
   <head>
+{#      <script type="text/javascript" src="{{request.static_url('cos:static/jquery-3.2.0.min.js')}}"></script>#}
       <!-- Bootstrap core CSS -->
-      <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
       <!-- Custom styles for this scaffold -->
-      <link href="{{request.static_url('cos:static/sandstone.css')}}" rel="stylesheet">
-      <link href="{{request.static_url('cos:static/modal.css')}}" rel="stylesheet">
+{#      <link href="{{request.static_url('cos:static/sandstone.css')}}" rel="stylesheet">#}
+{#      <link href="{{request.static_url('cos:static/modal.css')}}" rel="stylesheet">#}
 
-      <script type="text/javascript" src="{{request.static_url('cos:static/jquery-3.2.0.min.js')}}"></script>
+
       <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
       <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
@@ -16,54 +20,79 @@
       <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
   </head>
   <body>
+    <div class="container">
+        <div class="row">
+    <div class="col-lg-8">
     <h1>Catan Board: Game_ID = {{project}}</h1>
     <!-- Stores the game ID for reference later -->
     <div id="game_id" hidden>{{project}}</div>
     <div id = "container"></div>
     <script>build_board()</script>
-
-
+    </div>
+    <div class="col-lg-4">
     <!-- Game stats tables -->
     <h3 id = "score"></h3>
     <script>display_score()</script>
-    <span id = "resources"></span>
+    <div id = "resources"></div>
     <script>display_resources()</script>
-    <span id = "players"></span>
+    <div id = "players"></div>
     <script>display_players()</script>
-    <span id = "devcards"></span>
+    <div id = "devcards"></div>
     <script>display_devcards()</script>
-    <span id = "road_and_army"></span>
+    <div id = "road_and_army"></div>
     <script>display_road_and_army()</script>
-
+    </div>
+        </div>
+</div>
 
     <!-- New Game Modal -->
-    <div id="newGame" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="bold" align="center">Enter Player to Join Game</h3>
-            </div>
-            <div class="col-md-12">
+{#    <div id="newGame" class="modal">#}
+{#        <!-- Modal content -->#}
+{#        <div class="modal-content" id="player_join_modal">#}
+{#            <div class="modal-header">#}
+{#                <h3 style="font-weight: bold" align="center">Enter Player to Join Game</h3>#}
+{#            </div>#}
+{#            <div class="col-md-12">#}
+{#                <div class="modal-body">#}
+{#                    <form id="joinForm" name="joinForm" action="">#}
+{#                        <label><b>Player name</b></label><br>#}
+{#                        <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>#}
+{#                        <label><b>Age</b></label><br>#}
+{#                        <input id="player_age" type="number" min="5" max="120" placeholder="99" name="player_age" required>#}
+{#                    </form>#}
+{#                        <div class="modal-footer">#}
+{#                            <button id="startGameBtn" type="submit" class="startbtn">Start Game!</button>#}
+{#                        </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    <!-- Prompt for player join -->
+      <div class="modal fade" id="newGame" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">Enter Player to Join Game</h4>
+                </div>
                 <div class="modal-body">
                     <form id="joinForm" name="joinForm" action="">
-                        <label><b>Player name</b></label><br>
-                        <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
+                        <div class="form-group">
+                            <label><b>Player name</b></label><br>
+                            <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
+                        </div>
+                        <div class="form-group">
                         <label><b>Age</b></label><br>
                         <input id="player_age" type="number" min="5" max="120" placeholder="99" name="player_age" required>
-
-
-                    </form>
-                    <div class="modal-footer">
-                        <button id="startGameBtn" type="button" class="startbtn" value="Start Game!" required />
                         </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="startGameBtn" type="button" class="btn">Start Game!</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Prompt for player join -->
-    <div id="player_join_modal"></div>
     <script>player_join()</script>
-
-  </body>
+     </body>
 </html>

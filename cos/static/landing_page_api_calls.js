@@ -49,8 +49,6 @@ function add_player_to_game(gameID, playerName) {
         contentType :   "application/json",
         success :   function(data) {
 
-
-
             alert("Player added to game");
 
         }
