@@ -129,6 +129,11 @@ def add_player_to_game(request):
     if game_id not in request.registry.games.games:
         request.response.status = 400
         return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    if game.game_started:
+        request.response.status = 400
+        return {'error': "Requested Game has already started. Players cannot be added once a game has started."}
 
     if 'player_name' in json_body:
         player_name = json_body['player_name']
@@ -142,7 +147,7 @@ def add_player_to_game(request):
         request.response.status = 400
         return {'error': "'player_age' is a required parameter for this request"}
 
-    game = request.registry.games.games[game_id]
+
     player = game.add_player(player_name, player_age)
     if player is not None:
         return_data = {'game':
@@ -390,7 +395,7 @@ def start_game(request):
     if not game.game_started:
         game.start_game()
 
-    return_data = {"Success": "True"}
+    return_data = {"success": "True"}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -441,8 +446,8 @@ def complete_turn(request):
 
     game.take_turn()
 
-    return_data = {"Success": "True",
-                   "New_current_player": game.current_player_id}
+    return_data = {"success": "True",
+                   "new_current_player": game.current_player_id}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -489,7 +494,7 @@ def wait_for_turn(request):
     while player_id != game.current_player_id:
         time.sleep(5)
 
-    return_data = {"MyTurn": "True"}
+    return_data = {"my_turn": "True"}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
