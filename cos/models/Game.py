@@ -1,5 +1,7 @@
 import random
+from itertools import cycle
 from Player import Player
+from Board import Board
 
 
 class Game(object):
@@ -8,7 +10,9 @@ class Game(object):
         Current Attributes
         ------------------
         id: String
+        name: String
         players: [Player]
+        current_player_id: String
         
         Methods
         -------
@@ -23,7 +27,7 @@ class Game(object):
     # Options for player colors
     PLAYER_COLORS = ["blue", "white", "orange", "red"]
 
-    def __init__(self):
+    def __init__(self, name):
         """ Constructor for Game class:
                 - no required params
                 - sets private attributes of game_id (random string of alpaha-numeric chars and
@@ -31,11 +35,20 @@ class Game(object):
         """
         id_string = "GAME1" #''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
-        self.players = [Player(name="Player 1", color=self.PLAYER_COLORS[0])]
+        self.game_board = Board()
+        self.players = {}
+        self.name = name
+        self.current_player_id = ""
+        self.turn_order = []
+        self.turn_cycle = None
+        self.game_started = False
 
     def get_player_count(self):
         """ returns number of players currently added to game """
-        return len(self.players)
+        if self.players:
+            return len(self.players)
+        else:
+            return 0
 
     def is_game_full(self):
         """ returns True if game has reached the maximum, otherwise returns False """
@@ -44,7 +57,7 @@ class Game(object):
         else:
             return True
 
-    def add_player(self, name):
+    def add_player(self, name, age):
         """
             If the players maximum has not been reached, a Player object is created and added to
             the list of players, then that player object is returned. Otherwise, None is returned. 
@@ -63,10 +76,86 @@ class Game(object):
             print "Player maximum has already been reached."
             return None
         else:
-            new_player = Player(name="Player " + str(self.get_player_count() + 1),
-                                color=self.PLAYER_COLORS[self.get_player_count()])
-            self.players.append(new_player)
+            new_player = Player(name=name,
+                                color=self.PLAYER_COLORS[self.get_player_count()],
+                                age=age)
+            self.players[new_player.id] = new_player
+            self.turn_order.append(new_player.id)
             return new_player
+
+    def buy_settlement(self, player_id, settlement_id):
+        """
+            If the players maximum has not been reached, a Player object is created and added to
+            the list of players, then that player object is returned. Otherwise, None is returned. 
+
+            Parameters
+            ----------
+            player_id : String
+                id string of player object
+            settlement_id : String
+                id string of settlement object
+
+            Returns
+            -------
+            None
+        """
+        buying_player = self.players[player_id]
+        buying_settlement = self.game_board.open_settlements.pop(settlement_id)
+        buying_player.add_settlement(buying_settlement)
+
+    def roll_dice(self, player_id):
+        """
+            Rolls 2 "dice" and then assigns the total to the current_roll attribute of the player, then returns
+             a tuple of the dice rolls
+
+            Parameters
+            ----------
+            player_id : String
+                id string of player object
+
+            Returns
+            -------
+            (Integer, Integer)
+        """
+        dice_one = self.roll()
+        dice_two = self.roll()
+        self.players[player_id].current_roll = dice_one + dice_two
+        return dice_one, dice_two
+
+    def take_turn(self):
+        """
+            Sets current player to next player in turn cycle
+
+            Parameters
+            ----------
+            None
+
+            Returns
+            -------
+            None
+        """
+        self.current_player_id = next(self.turn_cycle)
+
+    def start_game(self):
+        """
+            Initializes turn cycle with turn order array and then sets the current player to the
+            first item in cycle. Sets game_started flag to True
+
+            Parameters
+            ----------
+            None
+
+            Returns
+            -------
+            None
+        """
+        self.turn_cycle = cycle(self.turn_order)
+        self.current_player_id = next(self.turn_cycle)
+        self.game_started = True
+
+    @staticmethod
+    def roll():
+        return random.choice(range(1, 7))
 
 
 class Games(object):
@@ -124,7 +213,7 @@ class Games(object):
         """ Prints the current list of games to the console. Used for debugging """
         print "Current Games List:"
         for id in self.games:
-            print "'Game ID': " + id + "   'First Player': " + self.games[id].players[0].id
+            print "Game ID: %s, Game Name: %s" % (id, self.games[id].name)
         print ""
 
 
