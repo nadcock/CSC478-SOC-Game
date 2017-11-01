@@ -9,6 +9,7 @@ def includeme(config):
     config.add_route('rollDice',            '/api/game/rollDice')
     config.add_route('startGame',           '/api/game/startGame')
     config.add_route('completeTurn',        '/api/game/completeTurn')
+    config.add_route('waitForNewPlayers',   '/api/game/waitForNewPlayers')
 
     config.add_route('buySettlement',       '/api/player/buySettlement')
     config.add_route('waitForTurn',         '/api/player/waitForTurn')
