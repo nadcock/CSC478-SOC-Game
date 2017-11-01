@@ -12,7 +12,7 @@ def my_view(request):
 @view_config(route_name='game', renderer='templates/game.jinja2')
 def game_view(request):
     """ Returns Game Play page based on ID"""
-    return {'project': 'Catan Board: Game_ID = ' + request.matchdict['game_id']}
+    return {'project': request.matchdict['game_id']}
 
 
 @view_config(route_name='createGame', renderer='json')
@@ -21,7 +21,7 @@ def create_game_view(request):
         
         Parameters
         ----------
-        request: Request 
+        request: Request
             - required JSON parameters: "game_name": String
         
         Returns
@@ -237,20 +237,20 @@ def buy_settlement(request):
 
             Parameters
             ----------
-            request: Request 
+            request: Request
                 - required JSON parameters: "game_id": String, "player_id": String, and "settlement_id": String
 
             Returns
             -------
 
             Json object containing: "status": "success",
-                                    "Player": 
+                                    "Player":
                                         {
                                             "player_id": String
                                             "player_name": String
                                             "player_color": String
                                         },
-                                    "Settlement": 
+                                    "Settlement":
                                         {
                                             "settlement_id": String
                                             "settlement_color": String
@@ -315,7 +315,7 @@ def roll_dice(request):
 
             Parameters
             ----------
-            request: Request 
+            request: Request
                 - required JSON parameters: "game_id": String, "player_id": String
 
             Returns
