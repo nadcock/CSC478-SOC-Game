@@ -295,12 +295,8 @@ def buy_settlement(request):
 
     game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
     player = game.players[player_id]
-    nearby_tiles = str(player.settlements[settlement_id].nearby_tiles).strip('[]')
     return_data = {'status': 'success',
-                   'Settlement':
-                       {'settlement_id':    player.settlements[settlement_id].id,
-                        'nearby_tiles':     nearby_tiles,
-                        'settlement_color': player.settlements[settlement_id].color},
+                   'Settlement': player.settlements[settlement_id].get_dict,
                    'Player':
                        {'player_id':        player.id,
                         'player_name':      player.name,
@@ -537,3 +533,34 @@ def wait_for_new_players(request):
         time.sleep(5)
 
     return get_players_in_game(request)
+
+@view_config(route_name='getGameBoard', renderer='json')
+def get_game_board(request):
+    """ Returns a game board object.
+
+            Parameters
+            ----------
+            request: Request 
+                - required JSON parameters: "game_id": String
+
+            Returns
+            -------
+            Board object (see object for structure)
+    """
+    json_body = request.json_body
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    json_return = json.dumps(game.game_board.get_dict())
+    return Response(
+        content_type='json',
+        body=json_return
+    )
