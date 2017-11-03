@@ -101,7 +101,7 @@ class Game(object):
         """
         buying_player = self.players[player_id]
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
-        buying_player.add_settlement(buying_settlement)
+        buying_player.add_settlement(buying_settlement, self.game_board)
 
     def roll_dice(self, player_id):
         """

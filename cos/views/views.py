@@ -242,7 +242,9 @@ def buy_settlement(request):
             Parameters
             ----------
             request: Request
-                - required JSON parameters: "game_id": String, "player_id": String, and "settlement_id": String
+                - required JSON parameters: "game_id": String, 
+                                            "player_id": String,  
+                                            "settlement_id": String
 
             Returns
             -------
@@ -288,6 +290,14 @@ def buy_settlement(request):
         request.response.status = 400
         return {'error': "Requested Player with id '%s' does not exist in this Game." % player_id}
 
+    if game.game_started is False:
+        request.response.status = 400
+        return {'error': "Game has not started. Settlements cannot be purchased before game has started."}
+
+    if game.current_player_id != player_id:
+        request.response.status = 400
+        return {'error': "Requested Player with id '%s' cannot do this action when it is not their turn." % player_id}
+
     if settlement_id not in game.game_board.open_settlements:
         request.response.status = 400
         return {'error': "Requested Settlement with id "
@@ -296,7 +306,7 @@ def buy_settlement(request):
     game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
     player = game.players[player_id]
     return_data = {'status': 'success',
-                   'Settlement': player.settlements[settlement_id].get_dict,
+                   'Settlement': player.settlements[settlement_id].get_dict(),
                    'Player':
                        {'player_id':        player.id,
                         'player_name':      player.name,
@@ -348,6 +358,10 @@ def roll_dice(request):
     if player_id not in game.players:
         request.response.status = 400
         return {'error': "Requested Player with id '%s' does not exist in this Game." % player_id}
+
+    if game.current_player_id != player_id:
+        request.response.status = 400
+        return {'error': "Requested Player with id '%s' cannot do this action when it is not their turn." % player_id}
 
     roll = game.roll_dice(player_id)
 
