@@ -147,17 +147,16 @@ def add_player_to_game(request):
         request.response.status = 400
         return {'error': "'player_age' is a required parameter for this request"}
 
-
     player = game.add_player(player_name, player_age)
     if player is not None:
         return_data = {'game':
-                       {'player_count': str(game.get_player_count()),
-                        'game_is_full': str(game.is_game_full())},
+                       {'player_count':     str(game.get_player_count()),
+                        'game_is_full':     str(game.is_game_full())},
                        'player':
-                       {'player_id': player.id,
-                        'player_name': player.name,
-                        'player_age': player.age,
-                        'player_color': player.color}
+                       {'player_id':        player.id,
+                        'player_name':      player.name,
+                        'player_age':       player.age,
+                        'player_color':     player.color}
                        }
     else:
         request.response.status = 400
@@ -214,15 +213,20 @@ def get_players_in_game(request):
             else:
                 settlements_list_string = 'None'
             players.append({'Player':
-                            {'player_id': player.id,
-                             'player_name': player.name,
-                             'player_age': player.age,
-                             'owned_settlements': settlements_list_string,
-                             'player_color': player.color
+                            {'player_id':           player.id,
+                             'player_name':         player.name,
+                             'player_age':          player.age,
+                             'owned_settlements':   settlements_list_string,
+                             'player_color':        player.color
                              }})
     else:
         players.append("None")
-    return_data = {'Players': players}
+    return_data = {'Players': players,
+                   'Game': {
+                       'game_id':           game_id,
+                       'game_has_started':  game.game_started,
+                       'game_player_count': len(game.turn_order)
+                   }}
     json_return = json.dumps(return_data)
     return Response(
         content_type='json',
@@ -294,14 +298,14 @@ def buy_settlement(request):
     nearby_tiles = str(player.settlements[settlement_id].nearby_tiles).strip('[]')
     return_data = {'status': 'success',
                    'Settlement':
-                       {'settlement_id': player.settlements[settlement_id].id,
-                        'nearby_tiles': nearby_tiles,
+                       {'settlement_id':    player.settlements[settlement_id].id,
+                        'nearby_tiles':     nearby_tiles,
                         'settlement_color': player.settlements[settlement_id].color},
                    'Player':
-                       {'player_id': player.id,
-                        'player_name': player.name,
-                        'player_age:': player.age,
-                        'player_color': player.color}
+                       {'player_id':        player.id,
+                        'player_name':      player.name,
+                        'player_age:':      player.age,
+                        'player_color':     player.color}
                    }
     json_return = json.dumps(return_data)
     return Response(
@@ -352,9 +356,9 @@ def roll_dice(request):
     roll = game.roll_dice(player_id)
 
     return_data = {"Roll": {
-                        "dice_one": str(roll[0]),
-                        "dice_two": str(roll[1]),
-                        "dice_total": str(roll[0] + roll[1])
+                        "dice_one":     str(roll[0]),
+                        "dice_two":     str(roll[1]),
+                        "dice_total":   str(roll[0] + roll[1])
                    }}
     json_return = json.dumps(return_data)
     return Response(
@@ -500,3 +504,36 @@ def wait_for_turn(request):
         content_type='json',
         body=json_return
     )
+
+@view_config(route_name='waitForNewPlayers', renderer='json')
+def wait_for_new_players(request):
+    """ This returns a list of players when the player count increases.
+
+            Parameters
+            ----------
+            request: Request 
+                - required JSON parameters: "game_id": String
+
+            Returns
+            -------
+
+            Same object as in get_players_in_game()
+    """
+    json_body = request.json_body
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+    else:
+        request.response.status = 400
+        return {'error': "'game_id' is a required parameter for this request"}
+
+    if game_id not in request.registry.games.games:
+        request.response.status = 400
+        return {'error': "Requested Game with id '%s' does not exist." % game_id}
+    game = request.registry.games.games[game_id]
+
+    player_count = len(game.turn_order)
+
+    while (player_count < 4) and (player_count == len(game.turn_order)) and not game.game_started:
+        time.sleep(5)
+
+    return get_players_in_game(request)
