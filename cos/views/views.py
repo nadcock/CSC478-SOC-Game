@@ -296,7 +296,7 @@ def buy_settlement(request):
     game.buy_settlement(player_id=player_id, settlement_id=settlement_id)
     player = game.players[player_id]
     return_data = {'status': 'success',
-                   'Settlement': player.settlements[settlement_id].get_dict,
+                   'Settlement': player.settlements[settlement_id].get_dict(),
                    'Player':
                        {'player_id':        player.id,
                         'player_name':      player.name,
