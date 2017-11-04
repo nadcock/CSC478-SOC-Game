@@ -1,4 +1,5 @@
 import random
+from itertools import cycle
 from Player import Player
 from Board import Board
 
@@ -11,6 +12,7 @@ class Game(object):
         id: String
         name: String
         players: [Player]
+        current_player_id: String
         
         Methods
         -------
@@ -36,6 +38,10 @@ class Game(object):
         self.game_board = Board()
         self.players = {}
         self.name = name
+        self.current_player_id = ""
+        self.turn_order = []
+        self.turn_cycle = None
+        self.game_started = False
 
     def get_player_count(self):
         """ returns number of players currently added to game """
@@ -74,6 +80,7 @@ class Game(object):
                                 color=self.PLAYER_COLORS[self.get_player_count()],
                                 age=age)
             self.players[new_player.id] = new_player
+            self.turn_order.append(new_player.id)
             return new_player
 
     def buy_settlement(self, player_id, settlement_id):
@@ -114,6 +121,37 @@ class Game(object):
         dice_two = self.roll()
         self.players[player_id].current_roll = dice_one + dice_two
         return dice_one, dice_two
+
+    def take_turn(self):
+        """
+            Sets current player to next player in turn cycle
+
+            Parameters
+            ----------
+            None
+
+            Returns
+            -------
+            None
+        """
+        self.current_player_id = next(self.turn_cycle)
+
+    def start_game(self):
+        """
+            Initializes turn cycle with turn order array and then sets the current player to the
+            first item in cycle. Sets game_started flag to True
+
+            Parameters
+            ----------
+            None
+
+            Returns
+            -------
+            None
+        """
+        self.turn_cycle = cycle(self.turn_order)
+        self.current_player_id = next(self.turn_cycle)
+        self.game_started = True
 
     @staticmethod
     def roll():
