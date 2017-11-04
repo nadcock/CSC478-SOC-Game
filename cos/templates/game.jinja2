@@ -13,6 +13,7 @@
         <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
 
   <!-- Game Body -->
   </head>
@@ -23,6 +24,7 @@
             <h1>Catan Board: Game_ID = {{project}}</h1>
             <!-- Stores the game ID for reference later -->
             <div id="game_id" hidden>{{project}}</div>
+            <div id="player_id" hidden></div>
             <div id = "container"></div>
             <script>build_board()</script>
         </div>
@@ -39,10 +41,29 @@
             <div id = "road_and_army"></div>
             <script>display_road_and_army()</script>
             <!-- Dice Controls -->
-            <div id = "gamedice">
-                <p>Dice</p>
-
-            </div>
+            <div id = "gamedice"></div>
+            <table id="diceTable" class="tab-content">
+                <th>
+                    <h4>Dice</h4>
+                </th>
+                <tr>
+                    <td>
+                        <div class="card p-3">
+                            <h3 id="dice1" align="center">3</h3>
+                            <span>dice one</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="card p-3">
+                            <h3 id="dice2" align="center">5</h3>
+                            <span>dice two</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <tr>
+                <button id="rollDiceBtn" type="button" class="btn" >Roll Dice</button>
+            </tr>
             <script>display_dice()</script>
         </div>
         </div>
