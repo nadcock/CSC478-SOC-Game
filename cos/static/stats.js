@@ -296,6 +296,12 @@ function update_tables(data,stage,layer){
         for (i = 0; i < 3; i++) {
             var elm = document.getElementById("player_name" + i);
             elm.innerText = players[i].Player.player_name;
-            elm.style.color = players[i].Player.player_color;
+            var color = players[i].Player.player_color;
+            if (color == 'white') {
+                elm.style.color = 'black';
+            }
+            else {
+                elm.style.color = color;
+            }
         }
 }
