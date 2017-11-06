@@ -33,7 +33,7 @@ class Game(object):
                 - sets private attributes of game_id (random string of alpaha-numeric chars and
                   creates first player object named "Player1" 
         """
-        id_string = "GAME1" #''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
+        id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.game_board = Board()
         self.players = {}
@@ -101,7 +101,7 @@ class Game(object):
         """
         buying_player = self.players[player_id]
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
-        buying_player.add_settlement(buying_settlement)
+        buying_player.add_settlement(buying_settlement, self.game_board)
 
     def roll_dice(self, player_id):
         """
