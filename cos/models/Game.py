@@ -25,7 +25,7 @@ class Game(object):
     # Maximum Players allowed in the game
     PLAYER_MAX = 4
     # Options for player colors
-    PLAYER_COLORS = ["blue", "white", "orange", "red"]
+    PLAYER_COLORS = ["white", "blue", "orange", "red"]
 
     def __init__(self, name):
         """ Constructor for Game class:
