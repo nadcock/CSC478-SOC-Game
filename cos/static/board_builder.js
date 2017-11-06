@@ -2,6 +2,8 @@
  * Created by nickadcock on 10/13/17.
  */
 
+var player_ID
+
 function build_board() {
     var stage = new Konva.Stage({
       container: 'container',
@@ -20,6 +22,7 @@ function build_board() {
     var settlementY = 400;
 
     var layer = new Konva.Layer();
+
     for (var x = 0; x < board_layout.length; x++) {
         var hex_in_row = board_layout[x];
 
@@ -83,12 +86,19 @@ function build_board() {
                     strokeWidth: 0,
                     name: 'settlement_area'
                 });
+                //determine settlement id
+                if (x < 3 ){
+                    settlement_area_bottom.ID = "s" + (x+1) + "," + (2*i + 1) + "";
+                }
+                else {
+                    settlement_area_bottom.ID = "s" + (x+1) + "," + (2*i) + "";
+                }
 
                 layer.add(settlement_area_bottom);
 
                 settlement_area_bottom.on('mouseup', function(){
                     if(settlement_area_bottom.getFill() == 'red'){
-                        place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer);
+                        place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
                     }
                 })
 
@@ -124,6 +134,14 @@ function build_board() {
                     name: 'settlement_area'
                 });
 
+                //determine settlement id (room for cleaning up)
+                if (x < 3 ){
+                    settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 2) + "";
+                }
+                else {
+                    settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 1) + "";
+                }
+
                 var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
@@ -144,13 +162,16 @@ function build_board() {
             }
             settlement_area_right.on('mouseup', function(){
                 if(settlement_area_right.getFill() == 'red'){
-                    place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer);
+                    place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
                 }
             })
 
         }
     }
 
+    //Draws settlements on board
+    //5 Settlements are able to be placed
+    //Last settlement drawn is a button to trigg4567hyu46ner placing settlements
     for (var i = 0; i < 6; i++) {
         var settlement = new Konva.Shape({
                 x: settlementX,
@@ -195,12 +216,12 @@ function update_settlement_color(data,stage,layer) {
         var settlements = stage.find('.settlement');
         for (i = 0; i < 6; i++){
             settlements[i].fill(players[0].Player.player_color);
-            console.log("fughetaboutit");
             layer.batchDraw();
         }
 }
 
 //Illuminates legal settlement locations for placement
+//Legal locations are anywhere without a settlement placed
 function mark_settlement_placement(stage,layer,placed, settlementX, settlementY) {
     //check for whether there are are remaining settlements
     var settlements = stage.find('.settlement');
@@ -226,7 +247,7 @@ function mark_settlement_placement(stage,layer,placed, settlementX, settlementY)
 }
 
 //Places settlement at appropriate location
-function place_settlement(x, y, settlementX, settlementY, stage, layer){
+function place_settlement(x, y, settlementX, settlementY, stage, layer, player_ID, settlement_ID){
     var settlements = stage.find('.settlement');
     for (i = 0; i < 5; i++){
         if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
@@ -237,5 +258,11 @@ function place_settlement(x, y, settlementX, settlementY, stage, layer){
         }
 
     }
-    layer.batchDraw()
+    layer.batchDraw();
+    buy_settlement(player_ID, settlement_ID);
+}
+
+function set_player_id() {
+    player_ID = document.getElementById("player_id").innerText;
+    console.log(player_ID);
 }
