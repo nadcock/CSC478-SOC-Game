@@ -30,7 +30,7 @@ function get_players_in_game(gameID, cbFunc) {
             var players = data.Players;
 
             // Callback function with player count
-            cbFunc (players.length);
+            cbFunc(players.length);
         }
     });
 }
@@ -41,7 +41,7 @@ function get_players_in_game(gameID, cbFunc) {
  * @param gameID
  * @param playerName
  */
-function add_player_to_game(gameID, playerName, playerAge) {
+function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
     $.ajax({
         url     :   '/api/game/addPlayerToGame',
         type    :   'POST',
@@ -52,8 +52,38 @@ function add_player_to_game(gameID, playerName, playerAge) {
         contentType :   "application/json",
         success :   function(data) {
 
-            console.log("Player added to game: " + playerName);
+            var player = data.player;
 
+            // Callback function to store player ID
+            cbFunc(player.player_id);
+
+            console.log("Player ID added to game: " + player.player_id);
+        }
+    });
+}
+
+
+/**
+ * This function calls the roll dice endpoint to get two randomly selected dice.
+ * @param gameID
+ * @param playerID
+ * @param cbFunc
+ */
+function roll_dice(gameID, playerID, cbFunc) {
+    $.ajax({
+        url     :   '/api/game/rollDice',
+        type    :   'POST',
+        datatype:   'json',
+        data    :   JSON.stringify({"game_id":gameID,
+                                    "player_id":playerID}),
+        contentType :   "application/json",
+        success :   function(data) {
+
+            var roll = data.Roll;
+
+            cbFunc(roll);
+
+            console.log("Player " + playerID + " rolled: " + roll.dice_one + " " + roll.dice_two);
         }
     });
 }
