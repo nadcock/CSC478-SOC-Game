@@ -162,7 +162,7 @@ function build_board() {
             }
             settlement_area_right.on('mouseup', function(){
                 if(settlement_area_right.getFill() == 'red'){
-                    place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
+                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
                 }
             })
 
@@ -247,7 +247,11 @@ function mark_settlement_placement(stage,layer,placed, settlementX, settlementY)
 }
 
 //Places settlement at appropriate location
-function place_settlement(x, y, settlementX, settlementY, stage, layer, player_ID, settlement_ID){
+function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, player_ID, settlement_ID){
+    buy_settlement(player_ID, settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
+}
+
+function place_settlement(x, y, settlementX, settlementY, stage, layer) {
     var settlements = stage.find('.settlement');
     for (i = 0; i < 5; i++){
         if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
@@ -256,13 +260,10 @@ function place_settlement(x, y, settlementX, settlementY, stage, layer, player_I
             mark_settlement_placement(stage,layer,true);
             break;
         }
-
     }
     layer.batchDraw();
-    buy_settlement(player_ID, settlement_ID);
 }
 
 function set_player_id() {
     player_ID = document.getElementById("player_id").innerText;
-    console.log(player_ID);
 }
