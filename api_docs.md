@@ -122,6 +122,7 @@
    ] }
 ```
 </p></details>
+
 <details> 
     <summary>getPlayerFullStatus</summary><p>
    
@@ -281,46 +282,6 @@
    }
 ```
 </p></details>
-<details> 
-    <summary>rollDice</summary><p>
-   
-   This is called to roll two dice, both dice and their total are returned
-   
-   - URL: ```/api/game/rollDice```
-   - **Required Parameters**: ```None```
-   - Returns
-     - Roll object:
-        - ```dice_one: Int``` 
-        - ```dice_two: Int``` 
-        - ```dice_total: In```
-   - Example return: 
-```javascript 
-   { "Roll": {
-           "dice_one": "2",
-           "dice_total": "5",
-           "dice_two": "3"
-   }}
-```
-</p></details>
-<details> 
-    <summary>completeTurn</summary><p>
-   
-   This should be called when a player wishes to complete their turn and the turn progresses to the next player
-
-   - URL: ```/api/game/completeTurn```
-   - **Required Parameters**: ```None```
-   - Returns
-     - ```success: Bool```
-     - ```new_current_player: String```
-
-   - Example return: 
-```javascript 
-   { 
-       "success": "True",
-       "new_current_player": "X5EY14" 
-   }
-```
-</p></details>
 
 ## Player Methods:
 <details> 
@@ -338,6 +299,27 @@
    { 
        "my_turn": "True" 
    }
+```
+</p></details>
+<details> 
+    <summary>rollDice</summary><p>
+   
+   This is called to roll two dice, both dice and their total are returned
+   
+   - URL: ```/api/player/rollDice```
+   - **Required Parameters**: ```None```
+   - Returns
+     - Roll object:
+        - ```dice_one: Int``` 
+        - ```dice_two: Int``` 
+        - ```dice_total: In```
+   - Example return: 
+```javascript 
+   { "Roll": {
+           "dice_one": "2",
+           "dice_total": "5",
+           "dice_two": "3"
+   }}
 ```
 </p></details>
 <details> 
@@ -379,4 +361,22 @@
      }}
 ```
 </p></details>
-    
+<details> 
+    <summary>completeTurn</summary><p>
+   
+   This should be called when a player wishes to complete their turn and the turn progresses to the next player
+
+   - URL: ```/api/player/completeTurn```
+   - **Required Parameters**: ```None```
+   - Returns
+     - ```success: Bool```
+     - ```new_current_player: String```
+
+   - Example return: 
+```javascript 
+   { 
+       "success": "True",
+       "new_current_player": "X5EY14" 
+   }
+```
+</p></details>
