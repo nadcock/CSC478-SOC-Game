@@ -14,7 +14,7 @@
    - Example return: 
 ```javascript 
    { "game": {
-                "game_id": String"
+                "game_id": "0RCDID"
    }}
 ```
 </p></details>
