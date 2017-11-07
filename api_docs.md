@@ -322,7 +322,7 @@
 ```
 </p></details>
 
-##Player Methods:
+## Player Methods:
 <details> 
     <summary>waitForTurn</summary><p>
    
