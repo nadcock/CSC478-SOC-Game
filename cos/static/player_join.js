@@ -51,7 +51,11 @@ $(document).on("click", "#joinGameBtn", function(e){
         alert("Please enter an age between 5 and 120.")
     }
     else {
-        add_player_to_game(gameID, playerName, playerAge);
+        // Adds player to game and stores player ID on HTML page for reference
+        add_player_to_game(gameID, playerName, playerAge, function(playerID){
+            document.getElementById("player_id").innerText = playerID;
+
+        });
         $("#newGame").modal("hide");
     }
 });
