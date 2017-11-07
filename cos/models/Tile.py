@@ -54,10 +54,10 @@ class TerrainTile(Tile):
 
     def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
-        tile_dict = super(TerrainTile, self).get_dict()
+        tile_dict = super(TerrainTile, self).get_dictionary()
         tile_dict["tile_resource"] = self.resource
         tile_dict["tile_type"] = "terrain"
-        tile_dict["tile_token"] = self.token.get_dict()
+        tile_dict["tile_token"] = self.token.get_dictionary()
         return tile_dict
 
 
@@ -80,7 +80,7 @@ class WaterTile(Tile):
 
     def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
-        tile_dict = super(WaterTile, self).get_dict()
+        tile_dict = super(WaterTile, self).get_dictionary()
         tile_dict["tile_type"] = "water"
         return tile_dict
 

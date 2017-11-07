@@ -157,17 +157,17 @@ class Board(object):
 
         tiles = []
         for key, val in self.tiles.iteritems():
-            tiles.append({key: val.get_dict()})
+            tiles.append({key: val.get_dictionary()})
         board_dict["Tiles"] = tiles
 
         settlements = []
         for key, val in self.open_settlements.iteritems():
-            settlements.append({key: val.get_dict()})
+            settlements.append({key: val.get_dictionary()})
         board_dict["Settlements"] = settlements
 
         roads = []
         for key, val in self.roads.iteritems():
-            roads.append({key: val.get_dict()})
+            roads.append({key: val.get_dictionary()})
         board_dict["Roads"] = roads
 
         return board_dict

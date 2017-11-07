@@ -1,9 +1,21 @@
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+a {color: #C00;}
+details {border: 1px solid #E1E1E1; border-radius: 5px; box-shadow: 0 1px 4px rgba(0, 0, 0, .4); color: #363636; margin: 0 0 .4em; padding: 1%;}
+details[open] {background: #E1E1E1;}
+summary {background: -webkit-linear-gradient(top, #FAFAFA 50%, #E1E1E1 50%); border-radius: 5px; cursor: pointer; font-size: .8em; font-weight: bold; margin: -1%; padding: 8px 0; position: relative; width: 102%;}
+summary:hover, details[open] summary {background: #E1E1E1;}
+summary::-webkit-details-marker {display: none}
+summary:before{border-radius: 5px; content: "+"; color: #363636; display: block; float: left; font-size: 1.5em; font-weight: bold; margin: -2px 10px 0 10px; padding: 0; text-align: center; width: 20px;}
+details[open] summary:before {content: "-"; margin-top: -4px;}
+p {font-size: .8em;}
+</style>
 # API Docs
 
-##Game Methods:
+## Game Methods:
 
 <details> 
-    <summary>createGame</summary><p>
+    <summary style="font-size:150%">createGame</summary><p>
    
    This should be called on the landing page to create a game.
     
@@ -128,7 +140,7 @@
    This should be called right when a player hits the game page, that way we can see if they are even able to participate or if the game is full
    
    - URL: ```/api/game/getPlayerFullStatus```
-   - **Required Parameters**: ```None```
+   - **Required Parameters**: ```game_id: String```
    - Returns:   
       - ```player_count: Int``` 
       - ```game_is_full: Bool```
@@ -281,46 +293,7 @@
    }
 ```
 </p></details>
-<details> 
-    <summary>rollDice</summary><p>
-   
-   This is called to roll two dice, both dice and their total are returned
-   
-   - URL: ```/api/game/rollDice```
-   - **Required Parameters**: ```None```
-   - Returns
-     - Roll object:
-        - ```dice_one: Int``` 
-        - ```dice_two: Int``` 
-        - ```dice_total: In```
-   - Example return: 
-```javascript 
-   { "Roll": {
-           "dice_one": "2",
-           "dice_total": "5",
-           "dice_two": "3"
-   }}
-```
-</p></details>
-<details> 
-    <summary>completeTurn</summary><p>
-   
-   This should be called when a player wishes to complete their turn and the turn progresses to the next player
 
-   - URL: ```/api/game/completeTurn```
-   - **Required Parameters**: ```None```
-   - Returns
-     - ```success: Bool```
-     - ```new_current_player: String```
-
-   - Example return: 
-```javascript 
-   { 
-       "success": "True",
-       "new_current_player": "X5EY14" 
-   }
-```
-</p></details>
 
 ##Player Methods:
 <details> 
@@ -379,4 +352,43 @@
      }}
 ```
 </p></details>
-    
+<details> 
+    <summary>rollDice</summary><p>
+   
+   This is called to roll two dice, both dice and their total are returned
+   
+   - URL: ```/api/player/rollDice```
+   - **Required Parameters**: ```None```
+   - Returns
+     - Roll object:
+        - ```dice_one: Int``` 
+        - ```dice_two: Int``` 
+        - ```dice_total: In```
+   - Example return: 
+```javascript 
+   { "Roll": {
+           "dice_one": "2",
+           "dice_total": "5",
+           "dice_two": "3"
+   }}
+```
+</p></details>
+<details> 
+    <summary>completeTurn</summary><p>
+   
+   This should be called when a player wishes to complete their turn and the turn progresses to the next player
+
+   - URL: ```/api/player/completeTurn```
+   - **Required Parameters**: ```None```
+   - Returns
+     - ```success: Bool```
+     - ```new_current_player: String```
+
+   - Example return: 
+```javascript 
+   { 
+       "success": "True",
+       "new_current_player": "X5EY14" 
+   }
+```
+</p></details>
