@@ -38,7 +38,7 @@ $(document).on("click", "#startNewGameModalBtn", function(e){
 $(document).on("click", "#joinGameBtn", function(e){
 
     e.preventDefault();
-    console.log("start game button clicked");
+    console.log("Join game button clicked");
 
     var gameID = document.getElementById("game_id").innerText;
     var playerName = document.joinForm.player_name.value;
@@ -59,7 +59,7 @@ $(document).on("click", "#joinGameBtn", function(e){
         $("#newGame").modal("hide");
 
         // Call wait for players and prompt modal to show
-        wait_for_players();
+        wait_for_players_to_join();
     }
 });
 
@@ -71,6 +71,9 @@ $(document).on("click", "#joinGameBtn", function(e){
 $(document).on("click", "#startGameBtn", function(e){
 
     $("#waitForPlayers").modal("hide");
+
+    var gameID = document.getElementById("game_id").innerText;
+    start_game(gameID);
 });
 
 
@@ -103,11 +106,16 @@ function player_join() {
 
 
 /**
- *  Wait for players
+ *  Waits for other players to join the game
  */
-function wait_for_players() {
+function wait_for_players_to_join() {
 
+    console.log("Called: wait_for_players_to_join()");
+
+    // Show wait for players modal
+    $("startGameBtn").prop('disabled', true);
     $("#waitForPlayers").modal({backdrop: "static"});
+
 
     var gameID = document.getElementById("game_id").innerText;
 

@@ -86,6 +86,26 @@ function wait_for_new_players(gameID, cbFunc) {
 }
 
 
+/**
+ * This function calls the start game endpoint to initiate the start of the
+ * game.
+ * @param gameID
+ */
+function start_game(gameID) {
+    $.ajax({
+        url     :   '/api/game/startGame',
+        type    :   'POST',
+        datatype:   'json',
+        data    :   JSON.stringify({"game_id":gameID}),
+        contentType :   "application/json",
+        success :   function(data) {
+
+            console.log("Game has started.")
+        }
+    });
+}
+
+
 
 /**
  * This function calls the roll dice endpoint to get two randomly selected dice.
