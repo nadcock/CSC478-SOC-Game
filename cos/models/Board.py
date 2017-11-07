@@ -151,7 +151,7 @@ class Board(object):
                         road = Road(row=row + 1, column=column, alignment=alignment)
                         self.roads[road.id] = road
 
-    def get_dict(self):
+    def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
         board_dict = {}
 

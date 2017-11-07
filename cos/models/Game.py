@@ -153,6 +153,21 @@ class Game(object):
         self.current_player_id = next(self.turn_cycle)
         self.game_started = True
 
+    def get_dictionary(self, turn_order=False, has_started=False, is_full=False, player_count=False):
+        """ returns dictionary representation of object that can be used for json """
+        game_dict = {}
+        game_dict["game_id"] = self.id
+        game_dict["game_name"] = self.name
+        if turn_order:
+            game_dict["game_turn_order"] = self.turn_cycle
+        if has_started:
+            game_dict["game_has_started"] = self.game_started
+        if is_full:
+            game_dict["game_is_full"] = self.is_game_full()
+        if player_count:
+            game_dict["game_player_count"] = self.get_player_count()
+        return game_dict
+
     @staticmethod
     def roll():
         return random.choice(range(1, 7))

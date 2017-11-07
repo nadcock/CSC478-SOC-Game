@@ -59,4 +59,23 @@ class Player(object):
                 else:
                     self.resources_by_roll[token_digit] = [tile_resource]
 
+    def get_dictionary(self, player_age=False, player_color=False, owned_settlements=False):
+        """ returns dictionary representation of object that can be used for json """
+        player_dict = {}
+        player_dict["player_id"] = self.id
+        player_dict["player_name"] = self.name
+        if player_age:
+            player_dict["player_age"] = self.age
+        if player_color:
+            player_dict["player_color"] = self.color
+        settlements_list = []
+        if self.settlements:
+            for key, val in self.settlements.iteritems():
+                settlements_list.append(key)
+        if owned_settlements:
+            player_dict["owned_settlements"] = settlements_list
+        else:
+            player_dict["owned_settlements"] = "None"
+        return player_dict
+
 

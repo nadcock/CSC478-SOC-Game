@@ -23,7 +23,7 @@ class Road(object):
         self.attached_settlement = None
         self.alignment = alignment
 
-    def get_dict(self):
+    def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
         settlement_dict = {}
         settlement_dict["road_id"] = self.id
