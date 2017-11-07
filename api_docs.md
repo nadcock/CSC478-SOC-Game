@@ -1,9 +1,9 @@
 # API Docs
 
-##Game Methods:
+## Game Methods:
 
 <details> 
-    <summary>createGame</summary><p>
+    <summary>### createGame</summary><p>
    
    This should be called on the landing page to create a game.
     
