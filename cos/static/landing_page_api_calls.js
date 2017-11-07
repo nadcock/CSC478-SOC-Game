@@ -64,6 +64,30 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
 
 
 /**
+ * This function waits for players to join game and returns afterward
+ * @param gameID
+ * @param cbFunc
+ */
+function wait_for_new_players(gameID, cbFunc) {
+    $.ajax({
+        url     :   '/api/game/waitForNewPlayers',
+        type    :   'POST',
+        datatype:   'json',
+        data    :   JSON.stringify({"game_id":gameID}),
+        contentType :   "application/json",
+        success :   function(data) {
+
+            // Callback function to update player UI upon return
+            cbFunc(data);
+
+            console.log("Player joined game.")
+        }
+    });
+}
+
+
+
+/**
  * This function calls the roll dice endpoint to get two randomly selected dice.
  * @param gameID
  * @param playerID

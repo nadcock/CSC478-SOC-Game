@@ -57,8 +57,22 @@ $(document).on("click", "#joinGameBtn", function(e){
 
         });
         $("#newGame").modal("hide");
+
+        // Call wait for players and prompt modal to show
+        wait_for_players();
     }
 });
+
+
+/**
+ * Clicking the start game modal button will begin the game for all players.
+ * Modal is dismissed upon click.
+ */
+$(document).on("click", "#startGameBtn", function(e){
+
+    $("#waitForPlayers").modal("hide");
+});
+
 
 /**
  * This function will add players to a game. It will:
@@ -85,4 +99,24 @@ function player_join() {
             $("#newGame").modal({backdrop: "static"});
         }
     });
+}
+
+
+/**
+ *  Wait for players
+ */
+function wait_for_players() {
+
+    $("#waitForPlayers").modal({backdrop: "static"});
+
+    var gameID = document.getElementById("game_id").innerText;
+
+    // When enough players join, activate the 'Start Game' button
+    // Also call wait for players again to wait for any remaining players
+    wait_for_new_players(gameID, function(data) {
+
+        $("startGameBtn").prop('disabled', false);
+
+    });
+
 }

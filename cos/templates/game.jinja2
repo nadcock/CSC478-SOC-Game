@@ -89,11 +89,31 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="joinGameBtn" type="button" class="btn">Start Game!</button>
+                    <button id="joinGameBtn" type="button" class="btn">Join Game!</button>
                 </div>
             </div>
         </div>
     </div>
     <script>player_join()</script>
+
+    <!-- Prompt for wait for players to join -->
+    <div class="modal fade" id="waitForPlayers" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">Waiting for other players to join...</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Waiting for 3 players to join before 'Start Game' activates.</label>
+                </div>
+                <div class="modal-footer">
+                    <button id="startGameBtn" type="button" class="btn" disabled="true">Start Game!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Show dialog to wait for players to join -->
+    <!--<script>wait_for_players()</script>-->
+
      </body>
 </html>
