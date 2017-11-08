@@ -151,23 +151,23 @@ class Board(object):
                         road = Road(row=row + 1, column=column, alignment=alignment)
                         self.roads[road.id] = road
 
-    def get_dict(self):
+    def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
         board_dict = {}
 
         tiles = []
         for key, val in self.tiles.iteritems():
-            tiles.append({key: val.get_dict()})
+            tiles.append({key: val.get_dictionary()})
         board_dict["Tiles"] = tiles
 
         settlements = []
         for key, val in self.open_settlements.iteritems():
-            settlements.append({key: val.get_dict()})
+            settlements.append({key: val.get_dictionary()})
         board_dict["Settlements"] = settlements
 
         roads = []
         for key, val in self.roads.iteritems():
-            roads.append({key: val.get_dict()})
+            roads.append({key: val.get_dictionary()})
         board_dict["Roads"] = roads
 
         return board_dict
