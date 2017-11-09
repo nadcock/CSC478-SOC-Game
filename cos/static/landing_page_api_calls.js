@@ -115,7 +115,7 @@ function start_game(gameID) {
  */
 function roll_dice(gameID, playerID, cbFunc) {
     $.ajax({
-        url     :   '/api/game/rollDice',
+        url     :   '/api/player/rollDice',
         type    :   'POST',
         datatype:   'json',
         data    :   JSON.stringify({"game_id":gameID,
