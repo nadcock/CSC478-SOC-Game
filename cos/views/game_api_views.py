@@ -121,9 +121,6 @@ def add_player_to_game(request):
     else:
         raise HTTPBadRequest(json_body={'error': "Player not created, game is full"})
     json_return = json.dumps(return_data)
-    response = Response
-    response.content_type = 'json'
-    response.body = json_return
     return Response(content_type='json', body=json_return)
 
 
