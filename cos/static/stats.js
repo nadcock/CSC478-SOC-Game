@@ -146,11 +146,6 @@ function display_players() {
         }
         playerTableBody.appendChild(row);
     }
-    var stage;
-    var layer;
-
-    //Get player info
-    get_player_info(update_tables,stage,layer);
 
     playerTable.appendChild(playerTableBody);
     body.appendChild(playerTable);
@@ -291,7 +286,8 @@ function display_road_and_army(){
 }
 
 //Call to redraw tables with information from the backend
-function update_tables(data,stage,layer){
+function update_tables(data){
+    console.log("Updating Tables");
     var players = data.Players;
         for (i = 0; i < 3; i++) {
             var elm = document.getElementById("player_name" + i);

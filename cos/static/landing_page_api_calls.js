@@ -20,20 +20,21 @@ function create_game(gameName) {
  */
 function get_players_in_game(gameID, cbFunc) {
     $.ajax({
-        url     :   '/api/game/getPlayersInGame',
+        url     :   '/api/game/getPlayerFullStatus',
         type    :   'POST',
         dataType:   'json',
         data    :   JSON.stringify({"game_id":gameID}),
         contentType :   "application/json",
         success :   function (data) {
 
-            var players = data.Players;
+            var is_full = data.game_is_full;
 
             // Callback function with player count
-            cbFunc(players.length);
+            cbFunc(is_full, data.player_count);
         }
     });
 }
+
 
 /**
  * This function passes in player information to the backend to add new player

@@ -2,10 +2,12 @@
  * Created by nickadcock on 10/13/17.
  */
 
-var player_ID
+var player_ID;
+var stage;
+var layer;
 
 function build_board() {
-    var stage = new Konva.Stage({
+    stage = new Konva.Stage({
       container: 'container',
       width: 1300,
       height: 1000
@@ -21,7 +23,7 @@ function build_board() {
     var settlementX = 1000;
     var settlementY = 400;
 
-    var layer = new Konva.Layer();
+    layer = new Konva.Layer();
 
     for (var x = 0; x < board_layout.length; x++) {
         var hex_in_row = board_layout[x];
@@ -202,8 +204,6 @@ function build_board() {
         layer.add(settlement);
     }
 
-    get_player_info(update_settlement_color,stage, layer);
-
 
     // add the layer to the stage
     stage.add(layer);
@@ -211,7 +211,7 @@ function build_board() {
 
 
 //Redraw settlements with info from backend
-function update_settlement_color(data,stage,layer) {
+function update_settlement_color(data) {
     var players = data.Players;
         var settlements = stage.find('.settlement');
         for (i = 0; i < 6; i++){

@@ -54,6 +54,12 @@ $(document).on("click", "#joinGameBtn", function(e){
         // Adds player to game and stores player ID on HTML page for reference
         add_player_to_game(gameID, playerName, playerAge, function(playerID){
             document.getElementById("player_id").innerText = playerID;
+            console.log("Player was added to game");
+            var update_UI = function(data){
+                update_tables(data)
+                update_settlement_color(data)
+            }
+            get_player_info(update_UI);
 
         });
         $("#newGame").modal("hide");
@@ -71,10 +77,10 @@ function player_join() {
     var gameId = document.getElementById("game_id").innerText;
 
     // Call Ajax function to get players in game
-    get_players_in_game(gameId, function(count){
+    get_players_in_game(gameId, function(is_full, count){
 
         // If game is full, notify the player as such. Otherwise, provide join game form.
-        if (count >= 4) {
+        if (is_full) {
             alert("Sorry, game is full. Returning you to the landing page.");
 
             window.location.replace(window.location.origin + '/');
