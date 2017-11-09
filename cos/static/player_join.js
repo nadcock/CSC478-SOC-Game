@@ -116,15 +116,24 @@ function wait_for_players_to_join() {
     $("startGameBtn").prop('disabled', true);
     $("#waitForPlayers").modal({backdrop: "static"});
 
-
     var gameID = document.getElementById("game_id").innerText;
 
-    // When enough players join, activate the 'Start Game' button
-    // Also call wait for players again to wait for any remaining players
-    wait_for_new_players(gameID, function(data) {
+    // Check current player count
+    get_players_in_game(gameID, function(count){
 
-        $("startGameBtn").prop('disabled', false);
+        // If game has 3 or more players, enable 'Start Game' button
+        if (count >= 3) {
+            $("startGameBtn").prop('disabled', false);
+        }
+        else {
+            // Wait for 3 or more players to join
+            console.log("Current player count: " + count);
 
+            wait_for_new_players(gameID, function(data) {
+
+                $("startGameBtn").prop('disabled', false);
+
+            });
+        }
     });
-
 }
