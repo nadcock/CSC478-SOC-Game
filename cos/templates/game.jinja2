@@ -14,12 +14,14 @@
         <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/game_page_api_calls.js')}}"></script>
+
 
   <!-- Game Body -->
   </head>
   <body>
-    <div class="container">
-    <div class="row">
+    <span class="container">
+    <span class="row">
         <div class="col-lg-8">
             <h1>Catan Board: Game_ID = {{project}}</h1>
             <!-- Stores the game ID for reference later -->
@@ -28,7 +30,7 @@
             <div id = "container"></div>
             <script>build_board()</script>
         </div>
-        <div class="col-lg-4">
+        <span class="col-lg-4">
             <!-- Game stats tables -->
             <h3 id = "score"></h3>
             <script>display_score()</script>
@@ -65,9 +67,9 @@
                 <button id="rollDiceBtn" type="button" class="btn" >Roll Dice</button>
             </tr>
 
-        </div>
-        </div>
-    </div>
+        </span>
+        </span>
+    </span>
 
     <!-- Prompt for player join -->
     <div class="modal fade" id="newGame" role="dialog">

@@ -51,7 +51,7 @@ class Settlement(object):
     def convert_to_id(self, row, column):
         return "t%s,%s" % (row, column)
 
-    def get_dict(self):
+    def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
         dict = {}
         dict["settlement_id"] = self.id
