@@ -23,10 +23,10 @@
     <span class="container">
     <span class="row">
         <div class="col-lg-8">
-            <h1>Catan Board: Game_ID = {{project}}</h1>
+            <h1>Catan Board: Game_ID = {{game_id}}</h1>
             <!-- Stores the game ID for reference later -->
-            <div id="game_id" hidden>{{project}}</div>
-            <div id="player_id" hidden></div>
+            <div id="game_id" hidden>{{game_id}}</div>
+            <div id="player_id" hidden>{{ player_id }}</div>
             <div id = "container"></div>
             <script>build_board()</script>
         </div>
