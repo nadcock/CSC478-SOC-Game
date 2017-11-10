@@ -52,16 +52,10 @@ def get_player_full_status_view(request):
                                     "game_is_full": Bool
                                     }
     """
-    json_body = request.json_body
-    if 'game_id' in json_body:
-        game_id = json_body['game_id']
-        if game_id not in request.registry.games.games:
-            raise HTTPBadRequest(json_body={'error': "The requested 'game_id' is not found in list of current games"})
-        else:
-            request.session['game_id'] = game_id
+    if 'game_id' in request.session:
+        game = request.registry.games.games[request.session['game_id']]
     else:
-        raise HTTPBadRequest(json_body={'error': "'game_id' is a required parameter for this request"})
-    game = request.registry.games.games[game_id]
+        raise HTTPBadRequest(json_body={'error': 'Requested game not found. Session may have expired'})
 
     return_data = {'player_full_status': game.get_dictionary(player_count=True, is_full=True)}
     json_return = json.dumps(return_data)
@@ -99,6 +93,9 @@ def add_player_to_game(request):
         game = request.registry.games.games[request.session['game_id']]
     else:
         raise HTTPBadRequest(json_body={'error': 'Requested game not found. Session may have expired'})
+
+    if 'game_id' in json_body:
+        game = request.registry.games.games[json_body['game_id']]
 
     if game.game_started:
         raise HTTPBadRequest(json_body={'error': 'Game has already started'})
