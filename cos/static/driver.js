@@ -30,9 +30,19 @@ function player_join_driver() {
     // Player clicks Join Game button.
 
     // Wait for players to join.
+    var wait = true;
+    /*
+    do {
+        wait_for_new_players(function(data) {
 
+            console.log("driver::player_join_driver::wait_for_new_players");
+            if (data.game_has_started) {
+                wait = false;
+            }
 
+        });
 
+    } while (wait); */
 }
 
 

@@ -137,13 +137,14 @@ function wait_for_players_to_join() {
 
         // If game has 3 or more players, enable 'Start Game' button
         if (count >= 3) {
+            console.log("Enable Start Game button");
             $("#startGameBtn").prop('disabled', false);
         }
         else {
             // Wait for 3 or more players to join
             console.log("Current player count: " + count);
 
-            wait_for_new_players(gameID, function(data) {
+            wait_for_new_players(function(data) {
 
                 $("#startGameBtn").prop('disabled', false);
 

@@ -99,16 +99,15 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
  * @param gameID
  * @param cbFunc
  */
-function wait_for_new_players(gameID, cbFunc) {
+function wait_for_new_players(cbFunc) {
     $.ajax({
         url     :   '/api/game/waitForNewPlayers',
         type    :   'POST',
         datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID}),
         contentType :   "application/json",
         success :   function(data) {
 
-            // Callback function to update player UI upon return
+            // Callback function to do some action
             cbFunc(data);
 
             console.log("Player joined game.")
