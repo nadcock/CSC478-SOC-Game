@@ -85,4 +85,6 @@ function player_join() {
             $("#newGame").modal({backdrop: "static"});
         }
     });
+    document.getElementById("is_turn").innerHTML = "false";
+    wait_for_turn(start_turn());
 }

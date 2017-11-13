@@ -2,6 +2,8 @@
  * Created by nickadcock on 10/13/17.
  */
 
+var is_turn;
+
 function build_board() {
     var stage = new Konva.Stage({
       container: 'container',
@@ -261,4 +263,15 @@ function place_settlement(x, y, settlementX, settlementY, stage, layer) {
         }
     }
     layer.batchDraw();
+}
+
+//Called when backend confirms it is player's turn
+function start_turn() {
+    document.getElementById("is_turn").innerHTML = "false";
+}
+
+//Called when player chooses to end turn
+function end_turn() {
+    document.getElementById("is_turn").innerHTML = "true";
+    wait_for_turn(start_turn());
 }
