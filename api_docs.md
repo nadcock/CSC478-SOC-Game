@@ -282,6 +282,34 @@
    }
 ```
 </p></details>
+<details> 
+    <summary>setSessionWithGame</summary><p>
+   
+   This should be called when all players are ready to start the game, once game is started players cannot be added
+   
+   - URL: ```/api/game/setSessionWithGame```
+   - **Required Parameters**: ```game_id: String```
+   - Optional Parameters: ```player_id: String```
+   - Returns
+     - Game object:    
+         - ```player_count: Int```     
+         - ```game_is_full: Bool```    
+      - Player object (if player_id is included in request):    
+         - ```player_id: String``` 
+         - ```player_name: String```
+
+   - Example return: 
+```javascript 
+   { "Game":  {
+                  "player_count": "2", 
+                  "game_is_full": "False"
+     "Player":  {
+                  "player_id": "XF093D", 
+                  "player_name": "Player 3",
+                  "player_color": "orange"
+   }}
+```
+</p></details>
 
 ## Player Methods:
 <details> 
