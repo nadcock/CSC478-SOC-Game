@@ -26,6 +26,47 @@ function buy_settlement (player_ID, settlement_ID, x, y, settlementX, settlement
 }
 
 /**
+ * This function returns the count of players in the game. cbFunc is a callback.
+ * @param gameID
+ * @param cbFunc
+ */
+function get_players_in_game(gameID, cbFunc) {
+    $.ajax({
+        url     :   '/api/game/getPlayersInGame',
+        type    :   'POST',
+        dataType:   'json',
+        data    :   JSON.stringify({"game_id":gameID}),
+        contentType :   "application/json",
+        success :   function (data) {
+
+            var players = data.Players;
+
+            // Callback function with player count
+            cbFunc(players.length);
+        }
+    });
+}
+
+
+/**
+ * This function looks up how many players are in the game and whether it is full
+ *@param cbFunc
+ */
+function get_is_game_full(cbFunc) {
+    $.ajax({
+        url     :   '/api/game/getPlayerFullStatus',
+        type    :   'POST',
+        dataType:   'json',
+        contentType :   "application/json",
+        success :   function(data) {
+
+            cbFunc(data.player_full_status);
+        }
+    });
+}
+
+
+/**
  * This function passes in player information to the backend to add new player
  * to the game. It takes in the following parameters:
  * @param gameID

@@ -13,24 +13,3 @@ function create_game(gameName) {
     });
 }
 
-/**
- * This function returns the count of players in the game. cbFunc is a callback.
- * @param gameID
- * @param cbFunc
- */
-function get_players_in_game(gameID, cbFunc) {
-    $.ajax({
-        url     :   '/api/game/getPlayersInGame',
-        type    :   'POST',
-        dataType:   'json',
-        data    :   JSON.stringify({"game_id":gameID}),
-        contentType :   "application/json",
-        success :   function (data) {
-
-            var players = data.Players;
-
-            // Callback function with player count
-            cbFunc(players.length);
-        }
-    });
-}

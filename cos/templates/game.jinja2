@@ -10,11 +10,11 @@
         <!-- Core JavaScript -->
         <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/driver.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/game_page_api_calls.js')}}"></script>
-
+        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
 
   <!-- Game Body -->
   </head>
@@ -27,20 +27,18 @@
             <div id="game_id" hidden>{{game_id}}</div>
             <div id="player_id" hidden>{{ player_id }}</div>
             <div id = "container"></div>
-            <script>build_board()</script>
+
+            <script>player_join_driver()</script>
+
+            <!--<script>build_board()</script>-->
         </div>
         <span class="col-lg-4">
             <!-- Game stats tables -->
             <h3 id = "score"></h3>
-            <script>display_score()</script>
             <div id = "resources"></div>
-            <script>display_resources()</script>
             <div id = "players"></div>
-            <script>display_players()</script>
             <div id = "devcards"></div>
-            <script>display_devcards()</script>
             <div id = "road_and_army"></div>
-            <script>display_road_and_army()</script>
 
             <!-- Dice Controls -->
             <table id="diceTable" class="tab-content">
@@ -95,7 +93,6 @@
             </div>
         </div>
     </div>
-    <script>player_join()</script>
 
     <!-- Prompt for wait for players to join -->
     <div class="modal fade" id="waitForPlayers" role="dialog">
@@ -108,7 +105,7 @@
                     <label>Waiting for 3 players to join before 'Start Game' activates.</label>
                 </div>
                 <div class="modal-footer">
-                    <button id="startGameBtn" type="button" class="btn" disabled>Start Game!</button>
+                    <button id="startGameBtn" type="button" class="btn" name="startGameBtn">Start Game!</button>
                 </div>
             </div>
         </div>
