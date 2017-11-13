@@ -86,5 +86,5 @@ function player_join() {
         }
     });
     document.getElementById("is_turn").innerHTML = "false";
-    wait_for_turn(start_turn());
+    wait_for_turn(start_turn);
 }

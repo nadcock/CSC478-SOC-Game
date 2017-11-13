@@ -1,5 +1,5 @@
 /**
- * Created by mattpolsgrove on 10/17/17.
+ * Created by Matthew Polsgrove on 10/17/17.
  */
 
 function display_score() {
