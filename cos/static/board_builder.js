@@ -224,25 +224,28 @@ function update_settlement_color(data,stage,layer) {
 //Illuminates legal settlement locations for placement
 //Legal locations are anywhere without a settlement placed
 function mark_settlement_placement(stage,layer,placed, settlementX, settlementY) {
-    //check for whether there are are remaining settlements
-    var settlements = stage.find('.settlement');
-    var remaining = false;
-    for (i = 0; i < 5; i++){
-        if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
-            remaining = true;
-            break;
-        }
+    //check if is player's turn
+    if (document.getElementById("is_turn").innerHTML == "true") {
+        //check for whether there are are remaining settlements
+        var settlements = stage.find('.settlement');
+        var remaining = false;
+        for (i = 0; i < 5; i++) {
+            if (settlements[i].x() == settlementX && settlements[i].y() == settlementY) {
+                remaining = true;
+                break;
+            }
 
-    }
-    if (remaining || placed) {
-        var settlement_areas = stage.find('.settlement_area');
-        var color = 'red';
-        if (placed) {
-            color = 'orange';
         }
-        for (i = 0; i < settlement_areas.length; i++) {
-            settlement_areas.fill(color);
-            layer.batchDraw();
+        if (remaining || placed) {
+            var settlement_areas = stage.find('.settlement_area');
+            var color = 'red';
+            if (placed) {
+                color = 'orange';
+            }
+            for (i = 0; i < settlement_areas.length; i++) {
+                settlement_areas.fill(color);
+                layer.batchDraw();
+            }
         }
     }
 }
