@@ -2,8 +2,6 @@
  * Created by nickadcock on 10/13/17.
  */
 
-var player_ID
-
 function build_board() {
     var stage = new Konva.Stage({
       container: 'container',
@@ -98,7 +96,7 @@ function build_board() {
 
                 settlement_area_bottom.on('mouseup', function(){
                     if(settlement_area_bottom.getFill() == 'red'){
-                        place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
+                        initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
                     }
                 })
 
@@ -134,7 +132,7 @@ function build_board() {
                     name: 'settlement_area'
                 });
 
-                //determine settlement id (room for cleaning up)
+                //determine settlement id
                 if (x < 3 ){
                     settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 2) + "";
                 }
@@ -162,7 +160,7 @@ function build_board() {
             }
             settlement_area_right.on('mouseup', function(){
                 if(settlement_area_right.getFill() == 'red'){
-                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
+                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
                 }
             })
 
@@ -207,6 +205,7 @@ function build_board() {
 
     // add the layer to the stage
     stage.add(layer);
+
 }
 
 
@@ -247,8 +246,8 @@ function mark_settlement_placement(stage,layer,placed, settlementX, settlementY)
 }
 
 //Places settlement at appropriate location
-function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, player_ID, settlement_ID){
-    buy_settlement(player_ID, settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
+function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, settlement_ID){
+    buy_settlement(settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
 }
 
 function place_settlement(x, y, settlementX, settlementY, stage, layer) {
@@ -262,8 +261,4 @@ function place_settlement(x, y, settlementX, settlementY, stage, layer) {
         }
     }
     layer.batchDraw();
-}
-
-function set_player_id() {
-    player_ID = document.getElementById("player_id").innerText;
 }
