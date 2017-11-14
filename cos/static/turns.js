@@ -13,10 +13,10 @@ function end_turn() {
     wait_for_turn(start_turn());
 }
 
+//End turn button functionality
 $(document).on("click", "#endTurnBtn", function(e){
 
-    console.log("End Turn clicked");
-
-    complete_turn(end_turn);
-
+    if (document.getElementById("is_turn").innerHTML == "true") {
+        complete_turn(end_turn);
+    }
 });
