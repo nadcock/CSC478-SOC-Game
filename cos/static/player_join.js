@@ -87,6 +87,9 @@ $(document).on("click", "#startGameBtn", function(e){
 
     var gameID = document.getElementById("game_id").innerText;
     start_game(gameID);
+
+    // Initialize the player area
+    init_game_driver();
 });
 
 
@@ -119,7 +122,10 @@ function player_join() {
     });
 }
 
-
+/**
+ *
+ * @param playerCount
+ */
 function update_player_wait_ui(playerCount) {
 
     var joinCountStr = "Players joined: " + playerCount;

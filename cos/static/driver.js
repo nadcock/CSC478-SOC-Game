@@ -1,9 +1,8 @@
 /**
  * Created by David Meyer 11/12/17
  *
- * The purpose of DRIVER is to bring game elements together and
- * sequence specific actions to achieve game functionality.
- *
+ * The purpose of DRIVER is to bring game elements together and sequence
+ * specific actions to achieve game functionality in a readable manner.
  */
 
 
@@ -30,29 +29,21 @@ function player_join_driver() {
     // Player clicks Join Game button.
 
     // Wait for players to join.
-    var wait = true;
-    /*
-    do {
-        wait_for_new_players(function(data) {
-
-            console.log("driver::player_join_driver::wait_for_new_players");
-            if (data.game_has_started) {
-                wait = false;
-            }
-
-        });
-
-    } while (wait); */
 }
 
 
 /**
- * This function initializes the game screen components following all of the players joining.
+ * This function initializes the game screen components following all of the players joined.
+ *
+ * Screen elements include:
+ * - score
+ * - resources
+ * - player names and color
+ * - development cards
+ * - road
+ * - army
  */
 function init_game_driver() {
-
-    // Create the game board
-    build_board();
 
     // Generate the game stats area
     display_score();
@@ -61,18 +52,30 @@ function init_game_driver() {
     display_devcards();
     display_road_and_army();
 
-    // Generate game action center
+    // Generate game action center TBD
 
-
+    // Start Game turn for players
+    game_play_driver();
 }
 
 
 /**
+ * TO BE IMPLEMENTED
+ *
  * This function creates the player turn cycle and calls all of the individual actions.
+ * Game play driver will be recursive
+ *
+ * Function order:
+ * - wait for turn
+ * - roll dice
+ * - place settlement
+ * - end turn
  */
 function game_play_driver() {
 
-    // call wait for my turn
+    // Loop wait for my turn
+
+
     // call get next game play options
 
 

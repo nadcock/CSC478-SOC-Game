@@ -28,10 +28,11 @@
             <div id="player_id" hidden>{{ player_id }}</div>
             <div id = "container"></div>
 
-            <script>player_join_driver()</script>
-
             <!-- Render game board early -->
             <script>build_board()</script>
+
+            <!-- Begin game join sequence -->
+            <script>player_join_driver()</script>
         </div>
         <span class="col-lg-4">
             <!-- Game stats tables -->
