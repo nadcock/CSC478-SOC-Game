@@ -57,6 +57,8 @@ $(document).on("click", "#joinGameBtn", function(e){
 
         });
         $("#newGame").modal("hide");
+
+        update_ui_for_new_player();
     }
 });
 
@@ -83,8 +85,7 @@ function player_join() {
             console.log("Current player count: " + count);
 
             $("#newGame").modal({backdrop: "static"});
+
         }
     });
-    document.getElementById("is_turn").innerHTML = "false";
-    wait_for_turn(start_turn);
 }

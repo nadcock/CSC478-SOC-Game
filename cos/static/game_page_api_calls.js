@@ -1,5 +1,5 @@
 //Gets information about players from the backend
-function get_player_info (cb_func,stage,layer) {
+function get_player_info (cb_func) {
     $.ajax({
         url: '/api/game/getPlayersInGame',
         type: 'POST',
@@ -7,7 +7,7 @@ function get_player_info (cb_func,stage,layer) {
         data: JSON.stringify({"game_id": document.getElementById("game_id").innerHTML}),
         contentType: "application/json",
         success: function (data) {
-            cb_func(data, stage, layer);
+            cb_func(data);
         }
     })
 }
