@@ -30,7 +30,8 @@
 
             <script>player_join_driver()</script>
 
-            <!--<script>build_board()</script>-->
+            <!-- Render game board early -->
+            <script>build_board()</script>
         </div>
         <span class="col-lg-4">
             <!-- Game stats tables -->
@@ -79,7 +80,7 @@
                     <form id="joinForm" name="joinForm" action="">
                         <div class="form-group">
                             <label><b>Player name</b></label><br>
-                            <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
+                            <input id="player_name" type="text" placeholder="your name" name="player_name" autofocus required><br>
                         </div>
                         <div class="form-group">
                             <label><b>Age</b></label><br>
@@ -102,7 +103,8 @@
                     <h4 class="modal-title" id="modalLabel">Waiting for other players to join...</h4>
                 </div>
                 <div class="modal-body">
-                    <label>Waiting for 3 players to join before 'Start Game' activates.</label>
+                    <label>Waiting for 3 players to join before 'Start Game' activates.</label><br>
+                    <label id="playerJoinCount">Players joined 1</label>
                 </div>
                 <div class="modal-footer">
                     <button id="startGameBtn" type="button" class="btn" name="startGameBtn">Start Game!</button>

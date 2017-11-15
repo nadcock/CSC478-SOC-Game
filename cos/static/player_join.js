@@ -3,6 +3,11 @@
  */
 
 
+/**
+ * This function adds ability to JQuery to toggle a control as
+ * 'disabled == true'
+ * 'disabled == false'
+ */
 jQuery.fn.extend({
     disable: function(state) {
         return this.each(function() {
@@ -115,6 +120,35 @@ function player_join() {
 }
 
 
+function update_player_wait_ui(playerCount) {
+
+    var joinCountStr = "Players joined: " + playerCount;
+
+    document.getElementById('playerJoinCount').innerHTML = joinCountStr;
+
+    if (playerCount >= 3) {
+        $("#startGameBtn").prop('disabled', false);
+    }
+}
+
+/**
+ *
+ * @param data
+ */
+function wait_for_additional_players(data) {
+
+    console.log("Player # joined: " + data.Game.game_player_count);
+
+    // Update player UI to reflect current player count
+    update_player_wait_ui(data.Game.game_player_count);
+
+    if (data.Game.game_player_count < 4) {
+
+        wait_for_new_players(wait_for_additional_players);
+    }
+}
+
+
 /**
  *  Waits for other players to join the game
  */
@@ -128,27 +162,17 @@ function wait_for_players_to_join() {
     // Disable Start Game button while waiting for players
     $("#startGameBtn").prop('disabled', true);
 
-    var gameID = document.getElementById("game_id").innerText;
+    var player_count = 0;
 
     // Check current player count
-    get_players_in_game(gameID, function(count){
+    get_players_in_game(function(count){
 
-        console.log("get player returned... count is " + count);
+        player_count = count;
+        console.log("wait_for_players_to_join::Get player count is " + player_count);
 
-        // If game has 3 or more players, enable 'Start Game' button
-        if (count >= 3) {
-            console.log("Enable Start Game button");
-            $("#startGameBtn").prop('disabled', false);
-        }
-        else {
-            // Wait for 3 or more players to join
-            console.log("Current player count: " + count);
+        update_player_wait_ui(player_count);
 
-            wait_for_new_players(function(data) {
-
-                $("#startGameBtn").prop('disabled', false);
-
-            });
-        }
+        // Wait for 3 or more players to join
+        wait_for_new_players(wait_for_additional_players);
     });
 }

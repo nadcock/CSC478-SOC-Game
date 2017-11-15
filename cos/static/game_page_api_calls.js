@@ -11,6 +11,8 @@ function get_player_info (cb_func,stage,layer) {
         }
     })
 }
+
+
 //Posts information about newly constructed settlements to backend
 function buy_settlement (player_ID, settlement_ID, x, y, settlementX, settlementY, stage, layer, cb_func) {
     $.ajax({
@@ -27,15 +29,13 @@ function buy_settlement (player_ID, settlement_ID, x, y, settlementX, settlement
 
 /**
  * This function returns the count of players in the game. cbFunc is a callback.
- * @param gameID
  * @param cbFunc
  */
-function get_players_in_game(gameID, cbFunc) {
+function get_players_in_game(cbFunc) {
     $.ajax({
         url     :   '/api/game/getPlayersInGame',
         type    :   'POST',
         dataType:   'json',
-        data    :   JSON.stringify({"game_id":gameID}),
         contentType :   "application/json",
         success :   function (data) {
 
