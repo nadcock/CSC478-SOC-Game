@@ -62,7 +62,7 @@ function init_game_driver() {
 /**
  * TO BE IMPLEMENTED
  *
- * This function creates the player turn cycle and calls all of the individual actions.
+ * This function initiates the player turn cycle and calls all of the individual actions.
  * Game play driver will be recursive
  *
  * Function order:
