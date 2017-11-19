@@ -54,29 +54,6 @@ function init_game_driver() {
 
     // Generate game action center TBD
 
-    // Start Game turn for players
-    game_play_driver();
-}
-
-
-/**
- * TO BE IMPLEMENTED
- *
- * This function initiates the player turn cycle and calls all of the individual actions.
- * Game play driver will be recursive
- *
- * Function order:
- * - wait for turn
- * - roll dice
- * - place settlement
- * - end turn
- */
-function game_play_driver() {
-
-    // Loop wait for my turn
-
-
-    // call get next game play options
-
+    // Start Game turn for players TBD
 
 }

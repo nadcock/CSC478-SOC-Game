@@ -160,8 +160,6 @@ function wait_for_additional_players(data) {
  */
 function wait_for_players_to_join() {
 
-    console.log("Called: wait_for_players_to_join()");
-
     // Show wait for players modal
     $("#waitForPlayers").modal({backdrop: "static"});
 
@@ -174,7 +172,6 @@ function wait_for_players_to_join() {
     get_players_in_game(function(count){
 
         player_count = count;
-        console.log("wait_for_players_to_join::Get player count is " + player_count);
 
         update_player_wait_ui(player_count);
 
