@@ -241,3 +241,48 @@ def get_game_board(request):
 
     json_return = json.dumps(game.game_board.get_dictionary())
     return Response(content_type='json', body=json_return)
+
+
+@view_config(route_name='setSessionWithGame', renderer='json')
+def set_session_with_game(request):
+    """ ONLY FOR USE WITH POSTMAN: Sets the session for game, and optionally player
+
+        Parameters
+        ----------
+        request: Request 
+            - required JSON parameters: "game_id": String
+            - optional JSON parameters: "player_id": String
+
+        Returns
+        -------
+        Game object, optional Player object
+    """
+    json_body = request.json_body
+    response = {}
+    if 'game_id' in request.session:
+        raise HTTPBadRequest(json_body={'error': "The session has already been set. Please remove the session in this "
+                                                 "request in order to set a new session."})
+
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+        if game_id in request.registry.games.games:
+            request.session['game_id'] = game_id
+            game = request.registry.games.games[game_id]
+            response["Game"] = game.get_dictionary()
+        else:
+            raise HTTPBadRequest(json_body={'error': "specified game id '%s' not found in games list" % game_id})
+    else:
+        raise HTTPBadRequest(json_body={'error': "'game_id' is a required parameter for this call"})
+
+    if "player_id" in json_body:
+        player_id = json_body['player_id']
+        if player_id in game.players:
+            request.session['player_id'] = player_id
+            response["Player"] = game.players[player_id].get_dictionary()
+        else:
+            raise HTTPBadRequest(json_body={'error': "specified player id "
+                                                     "'%s' not found in game '%s'" % (game_id, player_id)})
+
+    json_return = json.dumps(response)
+    return Response(content_type='json', body=json_return)
+
