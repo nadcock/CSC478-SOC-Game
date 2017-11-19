@@ -143,12 +143,13 @@ function update_player_wait_ui(playerCount) {
  */
 function wait_for_additional_players(data) {
 
-    console.log("Player # joined: " + data.Game.game_player_count);
+    console.log("Player # joined: " + data.Game.game_player_count + "; game started: " + data.Game.game_has_started);
 
     // Update player UI to reflect current player count
     update_player_wait_ui(data.Game.game_player_count);
 
-    if (data.Game.game_player_count < 4) {
+    // Check if there is still room for more players and stop if game has started
+    if ((data.Game.game_player_count < 4) && !data.Game.game_has_started) {
 
         wait_for_new_players(wait_for_additional_players);
     }
@@ -166,14 +167,10 @@ function wait_for_players_to_join() {
     // Disable Start Game button while waiting for players
     $("#startGameBtn").prop('disabled', true);
 
-    var player_count = 0;
-
     // Check current player count
     get_players_in_game(function(count){
 
-        player_count = count;
-
-        update_player_wait_ui(player_count);
+        update_player_wait_ui(count);
 
         // Wait for 3 or more players to join
         wait_for_new_players(wait_for_additional_players);
