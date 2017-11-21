@@ -71,8 +71,6 @@ $(document).on("click", "#joinGameBtn", function(e){
         });
         $("#newGame").modal("hide");
 
-        update_ui_for_new_player();
-
         // Call wait for players and prompt modal to show
         wait_for_players_to_join();
     }
@@ -85,13 +83,13 @@ $(document).on("click", "#joinGameBtn", function(e){
  */
 $(document).on("click", "#startGameBtn", function(e){
 
-    $("#waitForPlayers").modal("hide");
+    //$("#waitForPlayers").modal("hide");
 
     var gameID = document.getElementById("game_id").innerText;
     start_game(gameID);
 
     // Initialize the player area
-    init_game_driver();
+    //init_game_driver();
 });
 
 
@@ -155,6 +153,12 @@ function wait_for_additional_players(data) {
     if ((data.Game.game_player_count < 4) && !data.Game.game_has_started) {
 
         wait_for_new_players(wait_for_additional_players);
+    }
+    else {
+        $("#waitForPlayers").modal("hide");
+
+        // Initialize the player area
+        init_game_driver();
     }
 }
 

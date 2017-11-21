@@ -54,6 +54,6 @@ function init_game_driver() {
 
     // Generate game action center TBD
 
-    // Start Game turn for players TBD
+    update_ui_for_new_player();
 
 }
