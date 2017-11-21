@@ -10,13 +10,13 @@
         <!-- Core JavaScript -->
         <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/driver.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/game_page_api_calls.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/turns.js')}}"></script>
 
+        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
 
   <!-- Game Body -->
   </head>
@@ -30,20 +30,21 @@
             <div id="player_id" hidden>{{ player_id }}</div>
             <div id="is_turn" hidden>{{ is_turn }}</div>
             <div id = "container"></div>
+
+            <!-- Render game board early -->
             <script>build_board()</script>
+
+            <!-- Begin game join sequence -->
+            <script>player_join_driver()</script>
         </div>
         <span class="col-lg-4">
             <!-- Game stats tables -->
+            <h3 id="playerTurn"></h3>
             <h3 id = "score"></h3>
-            <script>display_score()</script>
             <div id = "resources"></div>
-            <script>display_resources()</script>
             <div id = "players"></div>
-            <script>display_players()</script>
             <div id = "devcards"></div>
-            <script>display_devcards()</script>
             <div id = "road_and_army"></div>
-            <script>display_road_and_army()</script>
 
             <!-- Dice Controls -->
             <table id="diceTable" class="tab-content">
@@ -88,7 +89,7 @@
                     <form id="joinForm" name="joinForm" action="">
                         <div class="form-group">
                             <label><b>Player name</b></label><br>
-                            <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
+                            <input id="player_name" type="text" placeholder="your name" name="player_name" autofocus required><br>
                         </div>
                         <div class="form-group">
                             <label><b>Age</b></label><br>
@@ -97,11 +98,31 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="joinGameBtn" type="button" class="btn">Start Game!</button>
+                    <button id="joinGameBtn" type="button" class="btn">Join Game!</button>
                 </div>
             </div>
         </div>
     </div>
-    <script>player_join()</script>
+
+    <!-- Prompt for wait for players to join -->
+    <div class="modal fade" id="waitForPlayers" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">Waiting for other players to join...</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Waiting for 3 players to join before 'Start Game' activates.</label><br>
+                    <label id="playerJoinCount">Players joined 1</label>
+                </div>
+                <div class="modal-footer">
+                    <button id="startGameBtn" type="button" class="btn" name="startGameBtn">Start Game!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Show dialog to wait for players to join -->
+    <!--<script>wait_for_players()</script>-->
+
      </body>
 </html>

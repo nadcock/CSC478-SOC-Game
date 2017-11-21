@@ -213,11 +213,12 @@ function build_board() {
 //Redraw settlements with info from backend
 function update_settlement_color(data) {
     var players = data.Players;
-        var settlements = stage.find('.settlement');
-        for (i = 0; i < 6; i++){
-            settlements[i].fill(players[0].Player.player_color);
-            layer.batchDraw();
-        }
+    var settlements = stage.find('.settlement');
+
+    for (i = 0; i < 6; i++){
+        settlements[i].fill(players[0].Player.player_color);
+        layer.batchDraw();
+    }
 }
 
 //Illuminates legal settlement locations for placement
