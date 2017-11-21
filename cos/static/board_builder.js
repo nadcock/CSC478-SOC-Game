@@ -73,7 +73,7 @@ function build_board() {
             }
 
             var road_width = hex_radius * .78;
-            var road_height = 7;
+            //var road_height = 7;
 
             if ((i == 0 && x < ((board_layout.length / 2) - 1))
                 || (i > 0 && x < ((board_layout.length / 2) - 1))
@@ -104,7 +104,7 @@ function build_board() {
                 })
 
 
-                var road_right_up = new Konva.Rect({
+                /*var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
                     x: hexagon.x() + (hex_apothem / 2) + (buffer * .4) - (road_width / 2),
@@ -118,7 +118,7 @@ function build_board() {
 
                 });
 
-                layer.add(road_right_up);
+                layer.add(road_right_up);*/
             }
 
             if ((x == 0 && i < (hex_in_row - 1))
@@ -143,7 +143,7 @@ function build_board() {
                     settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 1) + "";
                 }
 
-                var road_right_up = new Konva.Rect({
+                /*var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
                     x: hexagon.x() - (hex_apothem / 2) - (buffer * .15) - (road_width / 2),
@@ -157,7 +157,7 @@ function build_board() {
 
                 });
 
-                layer.add(road_right_up);
+                layer.add(road_right_up);*/
 
                 layer.add(settlement_area_right);
             }
