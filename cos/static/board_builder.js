@@ -2,10 +2,11 @@
  * Created by nickadcock on 10/13/17.
  */
 
-var player_ID
+var stage;
+var layer;
 
 function build_board() {
-    var stage = new Konva.Stage({
+    stage = new Konva.Stage({
       container: 'container',
       width: 1300,
       height: 1000
@@ -21,7 +22,7 @@ function build_board() {
     var settlementX = 1000;
     var settlementY = 400;
 
-    var layer = new Konva.Layer();
+    layer = new Konva.Layer();
 
     for (var x = 0; x < board_layout.length; x++) {
         var hex_in_row = board_layout[x];
@@ -72,7 +73,7 @@ function build_board() {
             }
 
             var road_width = hex_radius * .78;
-            var road_height = 7;
+            //var road_height = 7;
 
             if ((i == 0 && x < ((board_layout.length / 2) - 1))
                 || (i > 0 && x < ((board_layout.length / 2) - 1))
@@ -98,12 +99,12 @@ function build_board() {
 
                 settlement_area_bottom.on('mouseup', function(){
                     if(settlement_area_bottom.getFill() == 'red'){
-                        place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
+                        initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
                     }
                 })
 
 
-                var road_right_up = new Konva.Rect({
+                /*var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
                     x: hexagon.x() + (hex_apothem / 2) + (buffer * .4) - (road_width / 2),
@@ -117,7 +118,7 @@ function build_board() {
 
                 });
 
-                layer.add(road_right_up);
+                layer.add(road_right_up);*/
             }
 
             if ((x == 0 && i < (hex_in_row - 1))
@@ -134,7 +135,7 @@ function build_board() {
                     name: 'settlement_area'
                 });
 
-                //determine settlement id (room for cleaning up)
+                //determine settlement id
                 if (x < 3 ){
                     settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 2) + "";
                 }
@@ -142,7 +143,7 @@ function build_board() {
                     settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 1) + "";
                 }
 
-                var road_right_up = new Konva.Rect({
+                /*var road_right_up = new Konva.Rect({
                     // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
                     // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
                     x: hexagon.x() - (hex_apothem / 2) - (buffer * .15) - (road_width / 2),
@@ -156,13 +157,13 @@ function build_board() {
 
                 });
 
-                layer.add(road_right_up);
+                layer.add(road_right_up);*/
 
                 layer.add(settlement_area_right);
             }
             settlement_area_right.on('mouseup', function(){
                 if(settlement_area_right.getFill() == 'red'){
-                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, player_ID, this.ID);
+                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
                 }
             })
 
@@ -202,17 +203,15 @@ function build_board() {
         layer.add(settlement);
     }
 
-    get_player_info(update_settlement_color,stage, layer);
-
 
     // add the layer to the stage
     stage.add(layer);
+
 }
 
 
 //Redraw settlements with info from backend
-function update_settlement_color(data,stage,layer) {
-
+function update_settlement_color(data) {
     var players = data.Players;
     var settlements = stage.find('.settlement');
 
@@ -225,32 +224,35 @@ function update_settlement_color(data,stage,layer) {
 //Illuminates legal settlement locations for placement
 //Legal locations are anywhere without a settlement placed
 function mark_settlement_placement(stage,layer,placed, settlementX, settlementY) {
-    //check for whether there are are remaining settlements
-    var settlements = stage.find('.settlement');
-    var remaining = false;
-    for (i = 0; i < 5; i++){
-        if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
-            remaining = true;
-            break;
-        }
+    //check if is player's turn
+    if (document.getElementById("is_turn").innerHTML == "true") {
+        //check for whether there are are remaining settlements
+        var settlements = stage.find('.settlement');
+        var remaining = false;
+        for (i = 0; i < 5; i++) {
+            if (settlements[i].x() == settlementX && settlements[i].y() == settlementY) {
+                remaining = true;
+                break;
+            }
 
-    }
-    if (remaining || placed) {
-        var settlement_areas = stage.find('.settlement_area');
-        var color = 'red';
-        if (placed) {
-            color = 'orange';
         }
-        for (i = 0; i < settlement_areas.length; i++) {
-            settlement_areas.fill(color);
-            layer.batchDraw();
+        if (remaining || placed) {
+            var settlement_areas = stage.find('.settlement_area');
+            var color = 'red';
+            if (placed) {
+                color = 'orange';
+            }
+            for (i = 0; i < settlement_areas.length; i++) {
+                settlement_areas.fill(color);
+                layer.batchDraw();
+            }
         }
     }
 }
 
 //Places settlement at appropriate location
-function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, player_ID, settlement_ID){
-    buy_settlement(player_ID, settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
+function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, settlement_ID){
+    buy_settlement(settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
 }
 
 function place_settlement(x, y, settlementX, settlementY, stage, layer) {
@@ -266,6 +268,12 @@ function place_settlement(x, y, settlementX, settlementY, stage, layer) {
     layer.batchDraw();
 }
 
-function set_player_id() {
-    player_ID = document.getElementById("player_id").innerText;
+function update_ui_for_new_player (){
+    //waits for turn
+    document.getElementById("is_turn").innerHTML = "false";
+    wait_for_turn(start_turn);
+
+    //updates stats tables
+    get_player_info(update_tables);
+    get_player_info(update_settlement_color);
 }
