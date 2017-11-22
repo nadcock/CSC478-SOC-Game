@@ -68,11 +68,14 @@ $(document).on("click", "#joinGameBtn", function(e){
         add_player_to_game(gameID, playerName, playerAge, function(playerID){
 
             document.getElementById("player_id").innerText = playerID;
-        });
-        $("#newGame").modal("hide");
 
-        // Call wait for players and prompt modal to show
-        wait_for_players_to_join();
+             $("#newGame").modal("hide");
+
+            // Call wait for players and prompt modal to show
+            wait_for_players_to_join();
+
+        });
+
     }
 });
 
