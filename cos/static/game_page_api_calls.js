@@ -196,3 +196,20 @@ function roll_dice(gameID, playerID, cbFunc) {
         }
     });
 }
+
+
+/**
+ * This function calls the API that returns the Game Board layout.
+ * @param cb_func
+ */
+function get_game_board(cb_func) {
+    $.ajax({
+        url     :   '/api/player/getGameBoard',
+        type    :   'POST',
+        datatype:   'json',
+        success :   function(data) {
+
+            cb_func(data);
+        }
+    });
+}
