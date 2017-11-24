@@ -47,14 +47,15 @@ function board_maker(data) {
 
         for (var colNum = 0; colNum < columnCount; colNum++) {
 
-            //var tileFillColor = tile_fill_color()
+            // The row and column names in the JSON is 1 based rather than 0 based. Add + 1 to each
+            var hexTile = get_hex_tile_data(data, rowNum + 1, colNum + 1);
 
             var hexagon = new Konva.RegularPolygon({
                 x: ((max_row_length - columnCount) * (hex_apothem + (buffer / 2))) + (colNum * (hex_apothem * 2)) + (colNum * buffer) + hex_apothem + hex_stroke_width,
                 y: (rowNum * 1.5 * hex_radius) + (rowNum * buffer) + hex_radius + hex_stroke_width,
                 sides: 6,
                 radius: hex_radius,
-                fill: "grey", //tileFillColor,
+                fill: get_tile_fill_color(hexTile),
                 stroke: 'black',
                 strokeWidth: hex_stroke_width
                 });
@@ -151,7 +152,6 @@ function get_hex_tile_data(data, row, col) {
             break;
         }
     }
-
     return result;
 }
 
@@ -162,13 +162,15 @@ function show_board() {
 
     get_game_board(function(data) {
 
-        var hexData = get_hex_tile_data(data, 6, 2);
+        board_maker(data);
 
-        console.log(hexData.tile_type);
-        console.log(hexData.tile_resource);
+        //var hexData = get_hex_tile_data(data, 6, 2);
 
-        var color = get_tile_fill_color(hexData);
-        console.log("color is: " + color);
+        //console.log(hexData.tile_type);
+        //console.log(hexData.tile_resource);
+
+        //var color = get_tile_fill_color(hexData);
+        //console.log("color is: " + color);
     });
 }
 
