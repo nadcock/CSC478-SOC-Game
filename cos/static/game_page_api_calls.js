@@ -202,6 +202,7 @@ function roll_dice(gameID, playerID, cbFunc) {
  * @param cbFunc
  */
 function get_game_board(cbFunc) {
+    console.log("call get_game_board"),
     $.ajax({
         url     :   '/api/game/getGameBoard',
         type    :   'POST',
@@ -209,7 +210,6 @@ function get_game_board(cbFunc) {
         contentType :   "application/json",
         success :   function(data) {
 
-            console.log("get game board called");
             cbFunc(data);
         }
     });

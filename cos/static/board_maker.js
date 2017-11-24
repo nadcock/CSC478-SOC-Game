@@ -68,19 +68,73 @@ function board_maker(data) {
 }
 
 
-function get_tile_fill() {
+/**
+ * This function returns the fill color of the tile based on the tile type and resource type
+ *
+ * @param hexTile
+ * @returns {string}
+ */
+function get_tile_fill_color(hexTile) {
 
-    return "blue";
+    var color;
+
+    if (hexTile.tile_type == "water") {
+        color = "blue";
+    }
+    else {
+
+    }
+
+    return color;
 
 }
 
-function printer(data) {
+/**
+ * This function returns a specified Tile with all property data.
+ *
+ * Of note: this search function is, from a performance perspective, OK but not great.
+ * The JSON returned for the Game Board is in random order and must be iterated over to
+ * locate the desired hex square.
+ *
+ * @param data (pass full JSON data object)
+ * @param row
+ * @param col
+ * @returns {*}
+ */
+function get_hex_tile_data(data, row, col) {
 
-    var tiles = data.Tiles;
+    var result;
 
-    for (var i = 0; i < 10; i++) {
-        console.log(tiles.Tiles[i]);
+    // Iterate through the array to find the match
+    for (var i = 0; i < data.Tiles.length; i++) {
+
+        var lookup = "t" + row + "," + col;
+
+        // Check for a match
+        if (data.Tiles[i][lookup]) {
+
+            result = data.Tiles[i][lookup];
+
+            break;
+        }
     }
+
+    return result;
+}
+
+/**
+ * This function initiates the game board render sequence
+ */
+function show_board() {
+
+    get_game_board(function(data) {
+
+        var hexData = get_hex_tile_data(data, 6, 2);
+
+        console.log(hexData.tile_type);
+        console.log(hexData.tile_resource);
+
+    });
 }
 
 
