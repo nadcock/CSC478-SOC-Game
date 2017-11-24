@@ -69,7 +69,7 @@ function board_maker(data) {
 
 
 /**
- * This function returns the fill color of the tile based on the tile type and resource type
+ * This function returns the fill color of the tile based on the tile and/or resource type
  *
  * @param hexTile
  * @returns {string}
@@ -78,15 +78,48 @@ function get_tile_fill_color(hexTile) {
 
     var color;
 
+    // Tile type is either water or terrain
+    // If water, default to blue
     if (hexTile.tile_type == "water") {
         color = "blue";
     }
     else {
+        // Assign color based on terrain resource type
+        switch(hexTile.tile_resource) {
 
+            // Hills --> brick
+            case "brick":
+                color = "red";
+                break;
+
+            // Desert
+            case "desert":
+                color = "tan";
+                break;
+
+            // Pasture --> wool
+            case "wool":
+                color = "black";
+                break;
+
+            // Forest --> lumber
+            case "lumber":
+                color = "brown";
+                break;
+
+            // Mountains --> ore
+            case "ore":
+                color = "gray";
+                break;
+
+            // Fields --> grain
+            case "grain":
+                color = "yellow";
+                break;
+        };
     }
 
     return color;
-
 }
 
 /**
@@ -94,7 +127,7 @@ function get_tile_fill_color(hexTile) {
  *
  * Of note: this search function is, from a performance perspective, OK but not great.
  * The JSON returned for the Game Board is in random order and must be iterated over to
- * locate the desired hex square.
+ * locate the desired hex square. Big-O worst case scenario is 37x37 loops.
  *
  * @param data (pass full JSON data object)
  * @param row
@@ -134,6 +167,8 @@ function show_board() {
         console.log(hexData.tile_type);
         console.log(hexData.tile_resource);
 
+        var color = get_tile_fill_color(hexData);
+        console.log("color is: " + color);
     });
 }
 
