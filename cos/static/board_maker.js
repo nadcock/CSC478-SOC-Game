@@ -5,7 +5,88 @@
 var stage;
 var layer;
 
-function build_board() {
+
+/**
+ *
+ * This is passed in to the server call as a call back function.
+ *
+ */
+function board_maker(data) {
+
+    // Create the stage for hosting the game board
+    stage = new Konva.Stage({
+      container: 'gameBoard',
+      width: 1300,
+      height: 1000
+    });
+
+    // Data returned from the backend includes:
+    // - number and row of each element
+    // - whether the element is a road, tile, or settlement
+    // - the locations of each element
+    // - tile type: water or terrain
+
+    var hex_radius = 53;
+    var hex_apothem = hex_radius * Math.sqrt(3) / 2;
+    var hex_stroke_width = 1;
+    var buffer = 11;
+    var max_row_length = 7;
+    var board_layout = [4, 5, 6, 7, 6, 5, 4];
+    var settlementX = 1000;
+    var settlementY = 400;
+
+    //tileData = data.Tiles; // An array of tile data returned from the server
+
+    layer = new Konva.Layer();
+
+    // Create game hex board layout on a row-column basis
+    // Board structure is a jagged array based on the board_layout
+    for (var rowNum = 0; rowNum < board_layout.length; rowNum++) {
+
+        var columnCount = board_layout[rowNum];
+
+        for (var colNum = 0; colNum < columnCount; colNum++) {
+
+            //var tileFillColor = tile_fill_color()
+
+            var hexagon = new Konva.RegularPolygon({
+                x: ((max_row_length - columnCount) * (hex_apothem + (buffer / 2))) + (colNum * (hex_apothem * 2)) + (colNum * buffer) + hex_apothem + hex_stroke_width,
+                y: (rowNum * 1.5 * hex_radius) + (rowNum * buffer) + hex_radius + hex_stroke_width,
+                sides: 6,
+                radius: hex_radius,
+                fill: "grey", //tileFillColor,
+                stroke: 'black',
+                strokeWidth: hex_stroke_width
+                });
+
+            layer.add(hexagon);
+        }
+    }
+
+    // Add the layer to the stage
+    stage.add(layer);
+}
+
+
+function get_tile_fill() {
+
+    return "blue";
+
+}
+
+function printer(data) {
+
+    var tiles = data.Tiles;
+
+    for (var i = 0; i < 10; i++) {
+        console.log(tiles.Tiles[i]);
+    }
+}
+
+
+function build_maker() {
+
+    // Create the stage for hosting the game board
     stage = new Konva.Stage({
       container: 'container',
       width: 1300,
@@ -190,73 +271,4 @@ function build_board() {
     // add the layer to the stage
     stage.add(layer);
 
-}
-
-
-//Redraw settlements with info from backend
-function update_settlement_color(data) {
-    var players = data.Players;
-    var settlements = stage.find('.settlement');
-
-    for (i = 0; i < 6; i++){
-        settlements[i].fill(players[0].Player.player_color);
-        layer.batchDraw();
-    }
-}
-
-//Illuminates legal settlement locations for placement
-//Legal locations are anywhere without a settlement placed
-function mark_settlement_placement(stage,layer,placed, settlementX, settlementY) {
-    //check if is player's turn
-    if (document.getElementById("is_turn").innerHTML == "true") {
-        //check for whether there are are remaining settlements
-        var settlements = stage.find('.settlement');
-        var remaining = false;
-        for (i = 0; i < 5; i++) {
-            if (settlements[i].x() == settlementX && settlements[i].y() == settlementY) {
-                remaining = true;
-                break;
-            }
-
-        }
-        if (remaining || placed) {
-            var settlement_areas = stage.find('.settlement_area');
-            var color = 'red';
-            if (placed) {
-                color = 'orange';
-            }
-            for (i = 0; i < settlement_areas.length; i++) {
-                settlement_areas.fill(color);
-                layer.batchDraw();
-            }
-        }
-    }
-}
-
-//Places settlement at appropriate location
-function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, settlement_ID){
-    buy_settlement(settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
-}
-
-function place_settlement(x, y, settlementX, settlementY, stage, layer) {
-    var settlements = stage.find('.settlement');
-    for (i = 0; i < 5; i++){
-        if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
-            settlements[i].x(x);
-            settlements[i].y(y);
-            mark_settlement_placement(stage,layer,true);
-            break;
-        }
-    }
-    layer.batchDraw();
-}
-
-function update_ui_for_new_player (){
-    //waits for turn
-    document.getElementById("is_turn").innerHTML = "false";
-    wait_for_turn(start_turn);
-
-    //updates stats tables
-    get_player_info(update_tables);
-    get_player_info(update_settlement_color);
 }
