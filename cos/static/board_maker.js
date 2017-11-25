@@ -7,9 +7,10 @@ var layer;
 
 
 /**
+ * This function is responsible for creating the game board and rending it.
+ * It is recommended this is passed in as a callback function.
  *
- * This is passed in to the server call as a call back function.
- *
+ * @param data (this is the JSON data returned from the server)
  */
 function board_maker(data) {
 
@@ -47,8 +48,8 @@ function board_maker(data) {
 
         for (var colNum = 0; colNum < columnCount; colNum++) {
 
-            // The row and column names in the JSON is 1 based rather than 0 based. Add + 1 to each
-            var hexTile = get_hex_tile_data(data, rowNum + 1, colNum + 1);
+            // The row and column names in the JSON is 1 based rather than 0 based. + 1 added to each
+            var hexTile = get_hex_tile_data(data, 't', rowNum + 1, colNum + 1);
 
             // ******************* ADD HEXAGON *******************
             var hexagon = new Konva.RegularPolygon({
@@ -66,7 +67,7 @@ function board_maker(data) {
             // Check that the hex tile isn't water, then add the Token to it
             if (hexTile.tile_type == "terrain") {
 
-                // ****************** TOKEN TEXT *********************
+                // ****************** ADD TOKEN TEXT *********************
 
                 // Add a token to the tile
                 // Define the token
@@ -100,7 +101,80 @@ function board_maker(data) {
                 layer.add(tokenText);
             }
 
+            // ******************* ADD SETTLEMENT PLACEMENT LOCATIONS *******************
+            if ((rowNum == 0 && colNum < (columnCount - 1))
+                || (rowNum > 0 && rowNum < board_layout.length - 1 && colNum < (columnCount / 2) - 1)
+                || (rowNum > 0 && colNum < (columnCount) - 1) && rowNum < (board_layout.length - 1)) {
+
+                var settlementTile;
+
+                // Determine settlement id
+                if (rowNum < 3 ) {
+                    console.log("s" + (rowNum + 1) + (colNum * 2 + 2));
+                    settlementTile = get_hex_tile_data(data, 's', rowNum + 1, (colNum * 2 + 2));
+                    console.log(settlementTile);
+                }
+                else {
+                    console.log("s" + (rowNum + 1) + (colNum * 2 + 1));
+                    settlementTile = get_hex_tile_data(data, 's', rowNum + 1, (colNum * 2 + 1));
+                    console.log(settlementTile);
+                }
+
+                var settlement_area_right = new Konva.Circle({
+                    x: hexagon.x() + hex_apothem + (buffer / 2),
+                    y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
+                    radius: 5,
+                    fill: settlementTile.settlement_color,
+                    stroke: 'white',
+                    strokeWidth: 0,
+                    name: 'settlement_area'
+                });
+
+                settlement_area_right.ID = settlementTile.settlement_id;
+
+                layer.add(settlement_area_right);
+            }
+
+            settlement_area_right.on('mouseup', function() {
+                if (settlement_area_right.getFill() == 'red') {
+                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
+                }
+            });
+
         }
+    }
+
+    // Draws settlements on board
+    // 5 Settlements are able to be placed
+    // Last settlement drawn is a button to trigger placing settlements
+    for (var i = 0; i < 6; i++) {
+        var settlement = new Konva.Shape({
+                x: settlementX,
+                y: settlementY,
+           sceneFunc: function (context) {
+               context.beginPath();
+               context.moveTo(-7, 4);
+               context.lineTo(-7, -10);
+               context.lineTo(0, -17);
+               context.lineTo(7, -10);
+               context.lineTo(7, 4);
+               context.lineTo(-7, 4);
+               context.closePath();
+
+               context.fillStrokeShape(this);
+               },
+               fill: 'red',
+               stroke: 'black',
+               strokeWidth: 1,
+               name : 'settlement'
+        });
+        if (i==5) {
+            settlement.on('mousedown', function(){
+                mark_settlement_placement(stage,layer,false, settlementX, settlementY);
+            })
+            settlement.id('settlement_button');
+        }
+        layer.add(settlement);
     }
 
     // Add the layer to the stage
@@ -125,7 +199,7 @@ function get_tile_fill_color(hexTile) {
     }
     else {
         // Assign color based on terrain resource type
-        switch(hexTile.tile_resource) {
+        switch (hexTile.tile_resource) {
 
             // Hills --> brick
             case "brick":
@@ -166,36 +240,56 @@ function get_tile_fill_color(hexTile) {
 }
 
 /**
- * This function returns a specified Tile with all property data.
+ * This function returns a specified Tile, Road, or Settlement with all property data.
  *
  * Of note: this search function is, from a performance perspective, OK but not great.
  * The JSON returned for the Game Board is in random order and must be iterated over to
  * locate the desired hex square. Big-O worst case scenario is 37x37 loops.
  *
  * @param data (pass full JSON data object)
- * @param row
- * @param col
+ * @param type (pass 't' for tile, 's' for settlement, and 'r' for road)
+ * @param row  (for row)
+ * @param col  (for column)
  * @returns {*}
  */
-function get_hex_tile_data(data, row, col) {
+function get_hex_tile_data(data, type, row, col) {
 
     var result;
+    var dataType;
+
+    switch (type) {
+        case "t":
+            dataType = data.Tiles;
+            break;
+
+        case "s":
+            dataType = data.Settlements;
+            break;
+
+        case "r":
+            dataType = data.Roads;
+            break;
+
+        default:
+            console.log("get_hex_tile_data::Invalid parameter!");
+    };
 
     // Iterate through the array to find the match
-    for (var i = 0; i < data.Tiles.length; i++) {
+    for (var i = 0; i < dataType.length; i++) {
 
-        var lookup = "t" + row + "," + col;
+        var lookup = type + row + "," + col;
 
         // Check for a match
-        if (data.Tiles[i][lookup]) {
+        if (dataType[i][lookup]) {
 
-            result = data.Tiles[i][lookup];
+            result = dataType[i][lookup];
 
             break;
         }
     }
     return result;
 }
+
 
 /**
  * This function initiates the game board render sequence
