@@ -35,6 +35,9 @@ function board_maker(data) {
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
     var settlementX = 1000;
     var settlementY = 400;
+    // var road_width = hex_radius * .78;
+    // var road_height = 7;
+
 
     //tileData = data.Tiles; // An array of tile data returned from the server
 
@@ -101,23 +104,19 @@ function board_maker(data) {
                 layer.add(tokenText);
             }
 
-            // ******************* ADD SETTLEMENT PLACEMENT LOCATIONS *******************
+            // ******************* ADD SETTLEMENT PLACEMENT LOCATION: HEX-->RIGHT *******************
             if ((rowNum == 0 && colNum < (columnCount - 1))
                 || (rowNum > 0 && rowNum < board_layout.length - 1 && colNum < (columnCount / 2) - 1)
                 || (rowNum > 0 && colNum < (columnCount) - 1) && rowNum < (board_layout.length - 1)) {
 
                 var settlementTile;
 
-                // Determine settlement id
+                // Determine settlement ID. Note, the 's' param is for settlement
                 if (rowNum < 3 ) {
-                    console.log("s" + (rowNum + 1) + (colNum * 2 + 2));
                     settlementTile = get_hex_tile_data(data, 's', rowNum + 1, (colNum * 2 + 2));
-                    console.log(settlementTile);
                 }
                 else {
-                    console.log("s" + (rowNum + 1) + (colNum * 2 + 1));
                     settlementTile = get_hex_tile_data(data, 's', rowNum + 1, (colNum * 2 + 1));
-                    console.log(settlementTile);
                 }
 
                 var settlement_area_right = new Konva.Circle({
@@ -133,6 +132,23 @@ function board_maker(data) {
                 settlement_area_right.ID = settlementTile.settlement_id;
 
                 layer.add(settlement_area_right);
+
+                // ******************* ADD ROAD PLACEMENT #1 *******************
+                /*var road_right_up = new Konva.Rect({
+                    // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
+                    // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
+                    x: hexagon.x() - (hex_apothem / 2) - (buffer * .15) - (road_width / 2),
+                    y: settlement_area_right.y() + (buffer * .15)- (road_height / 2),
+                    width: road_width,
+                    height: road_height,
+                    rotation: 30,
+                    fill: 'yellow',
+                    stroke: 'black',
+                    strokeWidth: 1
+
+                });
+
+                layer.add(road_right_up);*/
             }
 
             settlement_area_right.on('mouseup', function() {
@@ -141,6 +157,52 @@ function board_maker(data) {
                 }
             });
 
+            // ******************* ADD SETTLEMENT PLACEMENT LOCATION: HEX-->BOTTOM *******************
+            if ((colNum == 0 && rowNum < ((board_layout.length / 2) - 1))
+                || (colNum > 0 && rowNum < ((board_layout.length / 2) - 1))
+                || (colNum > 0 && rowNum < (board_layout.length - 1) && colNum < (columnCount - 1))) {
+                var settlement_area_bottom = new Konva.Circle({
+                    x: hexagon.x(),
+                    y: hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
+                    radius: 5,
+                    fill: settlementTile.settlement_color,
+                    stroke: 'white',
+                    strokeWidth: 0,
+                    name: 'settlement_area'
+                });
+
+                // Determine settlement ID.
+                if (rowNum < 3 ){
+                    settlement_area_bottom.ID = get_hex_tile_data(data, "s", (rowNum + 1), (2 * colNum + 1));
+                }
+                else {
+                    settlement_area_bottom.ID = get_hex_tile_data(data, "s",(rowNum + 1), (2 * colNum));
+                }
+
+                layer.add(settlement_area_bottom);
+
+                settlement_area_bottom.on('mouseup', function(){
+                    if(settlement_area_bottom.getFill() == 'red'){
+                        initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
+                    }
+                })
+
+                // ******************* ADD ROAD PLACEMENT #2 *******************
+                /*var road_right_up = new Konva.Rect({
+                    // x: hexagon.x() + (hex_apothem / 2) + (buffer / 2) - (road_width / 2),
+                    // y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (road_height / 2),
+                    x: hexagon.x() + (hex_apothem / 2) + (buffer * .4) - (road_width / 2),
+                    y: settlement_area_bottom.y() - (buffer * .4)- (road_height / 2),
+                    width: road_width,
+                    height: road_height,
+                    rotation: -30,
+                    fill: 'yellow',
+                    stroke: 'black',
+                    strokeWidth: 1
+
+                });
+                layer.add(road_right_up);*/
+            }
         }
     }
 
@@ -296,206 +358,10 @@ function get_hex_tile_data(data, type, row, col) {
  */
 function show_board() {
 
+    // Get game board from backend
     get_game_board(function(data) {
 
+        // Render the game board
         board_maker(data);
-
-        //var hexData = get_hex_tile_data(data, 6, 2);
-
-        //console.log(hexData.tile_type);
-        //console.log(hexData.tile_resource);
-
-        //var color = get_tile_fill_color(hexData);
-        //console.log("color is: " + color);
     });
-}
-
-
-function build_maker() {
-
-    // Create the stage for hosting the game board
-    stage = new Konva.Stage({
-      container: 'container',
-      width: 1300,
-      height: 1000
-    });
-
-    var hex_radius = 53;
-    var hex_apothem = hex_radius * Math.sqrt(3) / 2;
-    var hex_stroke_width = 1;
-    var buffer = 11;
-    var max_row_length = 7;
-    var board_layout = [4, 5, 6, 7, 6, 5, 4];
-    var token_numbers = ['8', '5', '6', '10', '4', '3', '12', '8', '11', "R", '9', '4', '9', '5', '11', '3', '6', '2', '10'];
-    var settlementX = 1000;
-    var settlementY = 400;
-
-    layer = new Konva.Layer();
-
-    // 'x' is a Row
-    // 'i' is a Column
-
-    for (var x = 0; x < board_layout.length; x++) {
-        var hex_in_row = board_layout[x];
-
-        // Iterate over each row
-        for (var i = 0; i < hex_in_row; i++) {
-
-            // ****************** HEX *********************
-            var hexagon = new Konva.RegularPolygon({
-                x: ((max_row_length - hex_in_row) * (hex_apothem + (buffer / 2))) + (i * (hex_apothem * 2)) + (i * buffer) + hex_apothem + hex_stroke_width,
-                y: (x * 1.5 * hex_radius) + (x * buffer) + hex_radius + hex_stroke_width,
-                sides: 6,
-                radius: hex_radius,
-                fill: 'green',
-                stroke: 'black',
-                strokeWidth: hex_stroke_width
-                });
-
-            layer.add(hexagon);
-
-            // If the tile is a water tile, make it blue
-            if (x == 0 || x == board_layout.length - 1 || i == 0 || i == board_layout[x] - 1) {
-                hexagon.fill("blue")
-            } else {
-
-                // ****************** TOKEN TEXT *********************
-
-                // Add a token to the tile
-                // Define the token
-                var token = new Konva.Circle({
-                    x: hexagon.x(),
-                    y: hexagon.y(),
-                    radius: hexagon.radius() / 4,
-                    fill: 'white',
-                    stroke: 'black',
-                    strokeWidth: 1
-                });
-
-                // Add text to the token to represent the tile number
-                var tokenText = new Konva.Text({
-                    x: token.x(),
-                    y: token.y(),
-                    text: token_numbers.pop(),
-                    fontSize: 15,
-                    fontFamily: 'Calibri Bold',
-                    fontStyle: 'bold',
-                    fill: 'black',
-                    align: "center"
-                });
-
-                tokenText.setOffset( {
-                    x: tokenText.getWidth() / 2,
-                    y: tokenText.getHeight() / 2
-                });
-
-                layer.add(token);
-                layer.add(tokenText);
-            }
-
-
-            // ****************** SETTLEMENT CIRCLE *********************
-            if ((i == 0 && x < ((board_layout.length / 2) - 1))
-                || (i > 0 && x < ((board_layout.length / 2) - 1))
-                || (i > 0 && x < (board_layout.length - 1) && i < (hex_in_row - 1))) {
-
-                var settlement_area_bottom = new Konva.Circle({
-                    x: hexagon.x(),
-                    y: hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
-                    radius: 5,
-                    fill: 'orange',
-                    stroke: 'white',
-                    strokeWidth: 0,
-                    name: 'settlement_area'
-                });
-
-                //determine settlement id
-                if (x < 3 ){
-                    settlement_area_bottom.ID = "s" + (x+1) + "," + (2*i + 1) + "";
-                }
-                else {
-                    settlement_area_bottom.ID = "s" + (x+1) + "," + (2*i) + "";
-                }
-
-                layer.add(settlement_area_bottom);
-
-                settlement_area_bottom.on('mouseup', function(){
-                    if(settlement_area_bottom.getFill() == 'red'){
-                        initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
-                    }
-                })
-
-            }
-
-            // ****************** SETTLEMENT CIRCLE  *********************
-            if ((x == 0 && i < (hex_in_row - 1))
-                || (x > 0 && x < board_layout.length - 1 && i < (hex_in_row / 2) - 1)
-                || (x > 0 && i < (hex_in_row) - 1) && x < (board_layout.length - 1)
-            ) {
-                var settlement_area_right = new Konva.Circle({
-                    x: hexagon.x() + hex_apothem + (buffer / 2),
-                    y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
-                    radius: 5,
-                    fill: 'orange',
-                    stroke: 'white',
-                    strokeWidth: 0,
-                    name: 'settlement_area'
-                });
-
-                //determine settlement id
-                if (x < 3 ){
-                    settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 2) + "";
-                }
-                else {
-                    settlement_area_right.ID = "s" + (x+1) + "," + (2*i + 1) + "";
-                }
-
-                layer.add(settlement_area_right);
-            }
-            settlement_area_right.on('mouseup', function(){
-                if(settlement_area_right.getFill() == 'red'){
-                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
-                }
-            })
-
-        }
-    }
-
-    //Draws settlements on board
-    //5 Settlements are able to be placed
-    //Last settlement drawn is a button to trigger placing settlements
-    for (var i = 0; i < 6; i++) {
-        var settlement = new Konva.Shape({
-                x: settlementX,
-                y: settlementY,
-           sceneFunc: function (context) {
-               context.beginPath();
-               context.moveTo(-7, 4);
-               context.lineTo(-7, -10);
-               context.lineTo(0, -17);
-               context.lineTo(7, -10);
-               context.lineTo(7, 4);
-               context.lineTo(-7, 4);
-               context.closePath();
-
-               context.fillStrokeShape(this);
-               },
-               fill: 'red',
-               stroke: 'black',
-               strokeWidth: 1,
-               name : 'settlement'
-        });
-        if (i==5) {
-            settlement.on('mousedown', function(){
-                mark_settlement_placement(stage,layer,false, settlementX, settlementY);
-            })
-            settlement.id('settlement_button');
-        }
-        layer.add(settlement);
-    }
-
-
-    // add the layer to the stage
-    stage.add(layer);
-
 }

@@ -10,7 +10,6 @@
         <!-- Core JavaScript -->
         <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/board_maker.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/driver.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
@@ -35,7 +34,7 @@
 
             <!-- Render game board early -->
             <!--<script>build_board()</script>-->
-            <script>show_board()</script>
+            <script>render_board()</script>
 
             <!-- Begin game join sequence -->
             <script>player_join_driver()</script>
