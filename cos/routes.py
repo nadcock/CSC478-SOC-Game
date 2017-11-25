@@ -10,6 +10,7 @@ def includeme(config):
     config.add_route('startGame',           '/api/game/startGame')
     config.add_route('waitForNewPlayers',   '/api/game/waitForNewPlayers')
     config.add_route('getGameBoard',        '/api/game/getGameBoard')
+    config.add_route('setSessionWithGame',  '/api/game/setSessionWithGame')
 
     config.add_route('getTurnOptions',      '/api/player/getTurnOptions')
     config.add_route('performTurnOption', '/api/player/performTurnOption')

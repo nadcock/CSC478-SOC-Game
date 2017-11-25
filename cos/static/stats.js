@@ -1,5 +1,5 @@
 /**
- * Created by mattpolsgrove on 10/17/17.
+ * Created by Matthew Polsgrove on 10/17/17.
  */
 
 function display_score() {
@@ -149,9 +149,6 @@ function display_players() {
     var stage;
     var layer;
 
-    //Get player info
-    get_player_info(update_tables,stage,layer);
-
     playerTable.appendChild(playerTableBody);
     body.appendChild(playerTable);
 
@@ -293,15 +290,15 @@ function display_road_and_army(){
 //Call to redraw tables with information from the backend
 function update_tables(data,stage,layer){
     var players = data.Players;
-        for (i = 0; i < 3; i++) {
-            var elm = document.getElementById("player_name" + i);
-            elm.innerText = players[i].Player.player_name;
-            var color = players[i].Player.player_color;
-            if (color == 'white') {
-                elm.style.color = 'black';
-            }
-            else {
-                elm.style.color = color;
-            }
+    for (i = 0; i < players.length; i++) {
+        var elm = document.getElementById("player_name" + i);
+        elm.innerText = players[i].Player.player_name;
+        var color = players[i].Player.player_color;
+        if (color == 'white') {
+            elm.style.color = 'black';
         }
+        else {
+            elm.style.color = color;
+        }
+    }
 }
