@@ -5,6 +5,7 @@ from cos.models.Game import Game
 import time
 import json
 
+
 @view_config(route_name='buySettlement', renderer='json')
 def buy_settlement(request):
     """ Assigns the requested settelment to the buying player
@@ -106,16 +107,9 @@ def roll_dice(request):
 
     roll = game.roll_dice(player_id)
 
-    return_data = {"Roll": {
-                        "dice_one":     str(roll[0]),
-                        "dice_two":     str(roll[1]),
-                        "dice_total":   str(roll[0] + roll[1])
-                   }}
+    return_data = None
     json_return = json.dumps(return_data)
     return Response(content_type='json', body=json_return)
-
-
-
 
 
 @view_config(route_name='completeTurn', renderer='json')
@@ -190,5 +184,86 @@ def wait_for_turn(request):
         time.sleep(5)
 
     return_data = {"my_turn": "True"}
+    json_return = json.dumps(return_data)
+    return Response(content_type='json', body=json_return)
+
+
+@view_config(route_name='getTurnOptions', renderer='json')
+def get_turn_options(request):
+    """ This checks if it is the requested player's turn and if so returns True, otherwise it sleeps until
+        it is the players turn, at which point it returns True.
+
+        Parameters
+        ----------
+        request: Request 
+            - required JSON parameters: "game_id": String, "player_id": String
+
+        Returns
+        -------
+
+        Json object containing: {"MyTurn": Bool}
+    """
+    if 'game_id' in request.session:
+        game_id = request.session['game_id']
+        game = request.registry.games.games[game_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
+
+    if 'player_id' in request.session:
+        player_id = request.session['player_id']
+        if player_id not in game.players:
+            raise HTTPBadRequest(json_body={'error': 'Player found in request but not found in game.'})
+        if game.current_player_id != player_id:
+            raise HTTPBadRequest(json_body={'error': "Requested Player with id "
+                                                     "'%s' cannot do this action when it is not their turn." % player_id})
+        player = game.players[player_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
+
+
+    return_data = player.get_turn_options()
+    json_return = json.dumps(return_data)
+    return Response(content_type='json', body=json_return)
+
+
+@view_config(route_name='performTurnOption', renderer='json')
+def perform_turn_option(request):
+    """ This checks if it is the requested player's turn and if so returns True, otherwise it sleeps until
+        it is the players turn, at which point it returns True.
+
+        Parameters
+        ----------
+        request: Request 
+            - required JSON parameters: "game_id": String, "player_id": String
+
+        Returns
+        -------
+
+        Json object containing: {"MyTurn": Bool}
+    """
+    if 'game_id' in request.session:
+        game_id = request.session['game_id']
+        game = request.registry.games.games[game_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
+
+    if 'player_id' in request.session:
+        player_id = request.session['player_id']
+        if player_id not in game.players:
+            raise HTTPBadRequest(json_body={'error': 'Player found in request but not found in game.'})
+        if game.current_player_id != player_id:
+            raise HTTPBadRequest(json_body={'error': "Requested Player with id "
+                                                     "'%s' cannot do this action when it is not their turn." % player_id})
+        player = game.players[player_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
+
+    json_body = request.json_body
+    if 'turn_option' in json_body:
+        turn_option = json_body['turn_option']
+    else:
+        raise HTTPBadRequest(json_body={'error': "Required parameter 'turn_option' not included in request"})
+
+    return_data = player.perform_turn_option(turn_option=turn_option, game=game, data=json_body)
     json_return = json.dumps(return_data)
     return Response(content_type='json', body=json_return)

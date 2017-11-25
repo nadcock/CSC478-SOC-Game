@@ -24,12 +24,20 @@ class Player(object):
         self.settlements = {}
         self.age = age
         self.current_roll = 0
+        self.turn_state = None
+        self.resources = {
+            "brick":    0,
+            "grain":    0,
+            "ore":      0,
+            "wool":     0,
+            "lumber":   0
+        }
 
         self.resources_by_roll = {}
         for num in range(1,13):
             self.resources_by_roll[num] = None
 
-    def add_settlement(self, settlement, game_board):
+    def buy_settlement(self, settlement, game_board):
         """
             Adds a settlement to the Player's list of settlments dictonary 
 
@@ -44,7 +52,6 @@ class Player(object):
             None
 
         """
-        # type: (Settlement) -> None
         settlement.ownedBy = self
         settlement.color = self.color
         self.settlements[settlement.id] = settlement
@@ -58,8 +65,110 @@ class Player(object):
                     self.resources_by_roll[token_digit].append(tile_resource)
                 else:
                     self.resources_by_roll[token_digit] = [tile_resource]
+        self.resources["brick"] -= 1
+        self.resources["wool"] -= 1
+        self.resources["lumber"] -= 1
+        self.resources["grain"] -= 1
 
-    def get_dictionary(self, player_age=False, player_color=False, owned_settlements=False):
+    def set_next_turn_state(self):
+        if self.turn_state is None:
+            self.turn_state = "first"
+
+        if self.turn_state == "first_round":
+            self.turn_state = "second_round"
+
+        if self.turn_state == "second_round":
+            self.turn_state = "waiting_for_turn"
+
+        if self.turn_state == "waiting_for_turn":
+            self.turn_state = "rolling"
+
+        if self.turn_state == "rolling":
+            self.turn_state = "main_turn"
+
+        if self.turn_state == "main_turn":
+            self.turn_state = "waiting_for_turn"
+
+    def get_turn_options(self):
+        turn_options = []
+
+        if self.turn_state is None:
+            self.set_next_turn_state()
+
+        if self.turn_state == "first_round" or self.turn_state == "second_round":
+            turn_options.append("buy_initial_settlements")
+
+        if self.turn_state == "waiting_for_turn":
+            self.set_next_turn_state()
+
+        if self.turn_state == "rolling":
+            turn_options.append("roll_dice")
+
+        if self.turn_state == "main_turn":
+            turn_options.append("end_turn")
+            if self.can_buy_settlement():
+                turn_options.append("buy_settlement")
+
+        return {"turn_options": turn_options}
+
+    def perform_turn_option(self, turn_option, game, data):
+        if turn_option == "buy_initial_settlements":
+            settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
+            self.buy_settlement(settlement_to_buy, game.game_board)
+            return {"success": "True",
+                    "player": self.get_dictionary(owned_settlements=True, player_resources=True)}
+
+        if turn_option == "end_turn":
+            game.set_next_players_turn()
+            self.set_next_turn_state()
+            return {"success": "True",
+                    "next_player": game.current_player_id}
+
+        if turn_option == "roll_dice":
+            self.set_next_turn_state()
+            roll = self.roll_dice()
+            return{ "success": "True",
+                    "player": self.get_dictionary(owned_settlements=True, player_resources=True),
+                    "roll": roll}
+
+    def give_resources_for_roll(self, roll):
+        if self.resources_by_roll[roll] is not None:
+            for resource in self.resources_by_roll[roll]:
+                self.resources[resource] += 1
+
+    def roll_dice(self):
+        """
+            Rolls 2 "dice" and then assigns the total to the current_roll attribute of the player, then returns
+             a tuple of the dice rolls
+
+            Parameters
+            ----------
+            player_id : String
+                id string of player object
+
+            Returns
+            -------
+            (Integer, Integer)
+        """
+        dice_one = self.roll()
+        dice_two = self.roll()
+        self.current_roll = dice_one + dice_two
+        return {
+                    "dice_one":     str(dice_one),
+                    "dice_two":     str(dice_two),
+                    "dice_total":   str(self.current_roll)
+                }
+
+    def can_buy_settlement(self):
+        if all(x >= 1 for x in (self.resources["brick"],
+                                self.resources["wool"],
+                                self.resources["lumber"],
+                                self.resources["grain"])):
+            return True
+        else:
+            return False
+
+    def get_dictionary(self, player_age=False, player_color=False, owned_settlements=False, player_resources=False):
         """ returns dictionary representation of object that can be used for json """
         player_dict = {}
         player_dict["player_id"] = self.id
@@ -76,6 +185,11 @@ class Player(object):
             player_dict["owned_settlements"] = settlements_list
         else:
             player_dict["owned_settlements"] = "None"
+
+        if player_resources:
+            player_dict["resources"] = self.resources
         return player_dict
 
-
+    @staticmethod
+    def roll():
+        return random.choice(range(1, 7))
