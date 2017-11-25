@@ -160,6 +160,17 @@ function build_board(data) {
             if ((colNum == 0 && rowNum < ((board_layout.length / 2) - 1))
                 || (colNum > 0 && rowNum < ((board_layout.length / 2) - 1))
                 || (colNum > 0 && rowNum < (board_layout.length - 1) && colNum < (columnCount - 1))) {
+
+                var settlementTile;
+
+                // Determine settlement ID.
+                if (rowNum < 3 ){
+                    settlementTile = get_hex_tile_data(data, "s", (rowNum + 1), (2 * colNum + 1));
+                }
+                else {
+                    settlementTile = get_hex_tile_data(data, "s",(rowNum + 1), (2 * colNum));
+                }
+
                 var settlement_area_bottom = new Konva.Circle({
                     x: hexagon.x(),
                     y: hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
@@ -170,13 +181,7 @@ function build_board(data) {
                     name: 'settlement_area'
                 });
 
-                // Determine settlement ID.
-                if (rowNum < 3 ){
-                    settlement_area_bottom.ID = get_hex_tile_data(data, "s", (rowNum + 1), (2 * colNum + 1));
-                }
-                else {
-                    settlement_area_bottom.ID = get_hex_tile_data(data, "s",(rowNum + 1), (2 * colNum));
-                }
+                settlement_area_bottom.ID = settlementTile.settlement_id;
 
                 layer.add(settlement_area_bottom);
 
