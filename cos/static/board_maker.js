@@ -50,6 +50,7 @@ function board_maker(data) {
             // The row and column names in the JSON is 1 based rather than 0 based. Add + 1 to each
             var hexTile = get_hex_tile_data(data, rowNum + 1, colNum + 1);
 
+            // ******************* ADD HEXAGON *******************
             var hexagon = new Konva.RegularPolygon({
                 x: ((max_row_length - columnCount) * (hex_apothem + (buffer / 2))) + (colNum * (hex_apothem * 2)) + (colNum * buffer) + hex_apothem + hex_stroke_width,
                 y: (rowNum * 1.5 * hex_radius) + (rowNum * buffer) + hex_radius + hex_stroke_width,
@@ -61,6 +62,44 @@ function board_maker(data) {
                 });
 
             layer.add(hexagon);
+
+            // Check that the hex tile isn't water, then add the Token to it
+            if (hexTile.tile_type == "terrain") {
+
+                // ****************** TOKEN TEXT *********************
+
+                // Add a token to the tile
+                // Define the token
+                var token = new Konva.Circle({
+                    x: hexagon.x(),
+                    y: hexagon.y(),
+                    radius: hexagon.radius() / 4,
+                    fill: 'white',
+                    stroke: 'black',
+                    strokeWidth: 1
+                });
+
+                // Add text to the token to represent the tile number
+                var tokenText = new Konva.Text({
+                    x: token.x(),
+                    y: token.y(),
+                    text: hexTile.tile_token.token_digit,
+                    fontSize: 15,
+                    fontFamily: 'Calibri Bold',
+                    fontStyle: 'bold',
+                    fill: 'black',
+                    align: "center"
+                });
+
+                tokenText.setOffset( {
+                    x: tokenText.getWidth() / 2,
+                    y: tokenText.getHeight() / 2
+                });
+
+                layer.add(token);
+                layer.add(tokenText);
+            }
+
         }
     }
 
@@ -82,7 +121,7 @@ function get_tile_fill_color(hexTile) {
     // Tile type is either water or terrain
     // If water, default to blue
     if (hexTile.tile_type == "water") {
-        color = "blue";
+        color = "#919cf7";
     }
     else {
         // Assign color based on terrain resource type
@@ -90,33 +129,36 @@ function get_tile_fill_color(hexTile) {
 
             // Hills --> brick
             case "brick":
-                color = "red";
+                color = "#a03d21";
                 break;
 
             // Desert
             case "desert":
-                color = "tan";
+                color = "#ad8129";
                 break;
 
             // Pasture --> wool
             case "wool":
-                color = "black";
+                color = "#9ed153";
                 break;
 
             // Forest --> lumber
             case "lumber":
-                color = "brown";
+                color = "#546d2f";
                 break;
 
             // Mountains --> ore
             case "ore":
-                color = "gray";
+                color = "#929299";
                 break;
 
             // Fields --> grain
             case "grain":
-                color = "yellow";
+                color = "#d8d370";
                 break;
+
+            default:
+                color = "white";
         };
     }
 
