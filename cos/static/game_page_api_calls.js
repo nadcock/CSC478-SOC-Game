@@ -131,7 +131,6 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
 
 /**
  * This function waits for players to join game and returns afterward
- * @param gameID
  * @param cbFunc
  */
 function wait_for_new_players(cbFunc) {
@@ -193,6 +192,25 @@ function roll_dice(gameID, playerID, cbFunc) {
             cbFunc(roll);
 
             console.log("Player " + playerID + " rolled: " + roll.dice_one + " " + roll.dice_two);
+        }
+    });
+}
+
+
+/**
+ * This function calls the API that returns the Game Board layout.
+ * @param cbFunc
+ */
+function get_game_board(cbFunc) {
+    console.log("call get_game_board"),
+    $.ajax({
+        url     :   '/api/game/getGameBoard',
+        type    :   'POST',
+        datatype:   'json',
+        contentType :   "application/json",
+        success :   function(data) {
+
+            cbFunc(data);
         }
     });
 }
