@@ -49,8 +49,8 @@ function init_game_driver() {
     display_score();
     display_resources();
     display_players();
-    display_devcards();
-    display_road_and_army();
+    // display_devcards();
+    // display_road_and_army();
 
     // Generate game action center TBD
 

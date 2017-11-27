@@ -26,11 +26,11 @@ class Player(object):
         self.current_roll = 0
         self.turn_state = None
         self.resources = {
-            "brick":    0,
-            "grain":    0,
-            "ore":      0,
-            "wool":     0,
-            "lumber":   0
+            "brick":    2,
+            "grain":    2,
+            "ore":      2,
+            "wool":     2,
+            "lumber":   2
         }
 
         self.resources_by_roll = {}
@@ -65,6 +65,8 @@ class Player(object):
                     self.resources_by_roll[token_digit].append(tile_resource)
                 else:
                     self.resources_by_roll[token_digit] = [tile_resource]
+
+    def remove_resources_for_settlement(self):
         self.resources["brick"] -= 1
         self.resources["wool"] -= 1
         self.resources["lumber"] -= 1
@@ -72,31 +74,28 @@ class Player(object):
 
     def set_next_turn_state(self):
         if self.turn_state is None:
-            self.turn_state = "first"
-
-        if self.turn_state == "first_round":
-            self.turn_state = "second_round"
-
-        if self.turn_state == "second_round":
             self.turn_state = "waiting_for_turn"
+            return
 
         if self.turn_state == "waiting_for_turn":
+            print("setting turn state to rolling")
             self.turn_state = "rolling"
+            print("New turn state is " + self.turn_state)
+            return
 
         if self.turn_state == "rolling":
             self.turn_state = "main_turn"
+            return
 
         if self.turn_state == "main_turn":
             self.turn_state = "waiting_for_turn"
+            return
 
     def get_turn_options(self):
         turn_options = []
 
         if self.turn_state is None:
             self.set_next_turn_state()
-
-        if self.turn_state == "first_round" or self.turn_state == "second_round":
-            turn_options.append("buy_initial_settlements")
 
         if self.turn_state == "waiting_for_turn":
             self.set_next_turn_state()
@@ -105,16 +104,24 @@ class Player(object):
             turn_options.append("roll_dice")
 
         if self.turn_state == "main_turn":
-            turn_options.append("end_turn")
             if self.can_buy_settlement():
                 turn_options.append("buy_settlement")
+            turn_options.append("end_turn")
 
+        print(turn_options)
         return {"turn_options": turn_options}
 
     def perform_turn_option(self, turn_option, game, data):
         if turn_option == "buy_initial_settlements":
             settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
             self.buy_settlement(settlement_to_buy, game.game_board)
+            return {"success": "True",
+                    "player": self.get_dictionary(owned_settlements=True, player_resources=True)}
+
+        if turn_option == "buy_settlement":
+            settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
+            self.buy_settlement(settlement_to_buy, game.game_board)
+            self.remove_resources_for_settlement()
             return {"success": "True",
                     "player": self.get_dictionary(owned_settlements=True, player_resources=True)}
 

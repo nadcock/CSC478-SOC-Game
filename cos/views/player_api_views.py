@@ -222,6 +222,7 @@ def get_turn_options(request):
 
 
     return_data = player.get_turn_options()
+    return_data["success"] = "True"
     json_return = json.dumps(return_data)
     return Response(content_type='json', body=json_return)
 

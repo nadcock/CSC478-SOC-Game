@@ -4,7 +4,6 @@ function get_player_info (cb_func) {
         url: '/api/game/getPlayersInGame',
         type: 'POST',
         dataType: 'json',
-        data: JSON.stringify({"game_id": document.getElementById("game_id").innerHTML}),
         contentType: "application/json",
         success: function (data) {
             cb_func(data);
@@ -16,11 +15,10 @@ function get_player_info (cb_func) {
 //Posts information about newly constructed settlements to backend
 function buy_settlement (settlement_ID, x, y, settlementX, settlementY, stage, layer, cb_func) {
     $.ajax({
-        url: '/api/player/buySettlement',
+        url: '/api/player/performTurnOption',
         type: 'POST',
         dataType: 'json',
-        data: JSON.stringify({"game_id": document.getElementById("game_id").innerHTML,
-            "player_id": document.getElementById("player_id").innerHTML, "settlement_id": settlement_ID}),
+        data: JSON.stringify({"turn_option": "buy_settlement", "settlement_id": settlement_ID}),
         contentType: "application/json",
         success: function () {
             cb_func(x, y, settlementX, settlementY, stage, layer);
@@ -50,9 +48,10 @@ function wait_for_turn(cb_func) {
 //cb_func enters end turn state on front end
 function complete_turn(cb_func){
     $.ajax({
-        url: '/api/player/completeTurn',
+        url: '/api/player/performTurnOption',
         type: 'POST',
         dataType: 'json',
+        data: JSON.stringify({"turn_option": "end_turn"}),
         contentType: "application/json",
         success: function () {
             console.log("turn ended");
@@ -111,9 +110,8 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
     $.ajax({
         url     :   '/api/game/addPlayerToGame',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID,
-                                    "player_name":playerName,
+        dataType:   'json',
+        data    :   JSON.stringify({"player_name":playerName,
                                     "player_age":playerAge}),
         contentType :   "application/json",
         success :   function(data) {
@@ -138,7 +136,7 @@ function wait_for_new_players(cbFunc) {
     $.ajax({
         url     :   '/api/game/waitForNewPlayers',
         type    :   'POST',
-        datatype:   'json',
+        dataType:   'json',
         contentType :   "application/json",
         success :   function(data) {
 
@@ -156,16 +154,29 @@ function wait_for_new_players(cbFunc) {
  * game.
  * @param gameID
  */
-function start_game(gameID) {
+function start_game() {
     $.ajax({
         url     :   '/api/game/startGame',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID}),
+        dataType:   'json',
         contentType :   "application/json",
         success :   function(data) {
 
-            console.log("Game has started.")
+            console.log("Game has started.");
+        }
+    });
+}
+
+function get_turn_options(cbfunc) {
+    $.ajax({
+        url     :   '/api/player/getTurnOptions',
+        type    :   'POST',
+        dataType:   'json',
+        contentType :   "application/json",
+        success :   function(data) {
+
+            cbfunc(data);
+            console.log("getting_turn_options.");
         }
     });
 }
@@ -178,21 +189,20 @@ function start_game(gameID) {
  * @param playerID
  * @param cbFunc
  */
-function roll_dice(gameID, playerID, cbFunc) {
+function roll_dice(cbFunc) {
     $.ajax({
-        url     :   '/api/player/rollDice',
+        url     :   '/api/player/performTurnOption',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID,
-                                    "player_id":playerID}),
+        dataType:   'json',
+        data    :   JSON.stringify({"turn_option": "roll_dice"}),
         contentType :   "application/json",
         success :   function(data) {
 
-            var roll = data.Roll;
+            var roll = data.roll;
 
             cbFunc(roll);
 
-            console.log("Player " + playerID + " rolled: " + roll.dice_one + " " + roll.dice_two);
+            console.log("Player  rolled: " + roll.dice_one + " " + roll.dice_two);
         }
     });
 }

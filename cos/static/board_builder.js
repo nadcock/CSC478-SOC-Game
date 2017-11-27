@@ -9,7 +9,8 @@ function build_board() {
     stage = new Konva.Stage({
       container: 'container',
       width: 1300,
-      height: 1000
+      height: 1000,
+      id: "game_board_stage"
     });
 
     var hex_radius = 53;
@@ -22,7 +23,9 @@ function build_board() {
     var settlementX = 1000;
     var settlementY = 400;
 
-    layer = new Konva.Layer();
+    layer = new Konva.Layer({
+        id: "game_board_layer"
+    });
 
     for (var x = 0; x < board_layout.length; x++) {
         var hex_in_row = board_layout[x];

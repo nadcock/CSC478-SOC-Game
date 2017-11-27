@@ -10,19 +10,38 @@
   */
 $(document).on("click", "#rollDiceBtn", function(e){
 
-    if (document.getElementById("is_turn").innerHTML == "true") {
-        var gameID = document.getElementById("game_id").innerText;
-        var playerID = document.getElementById("player_id").innerText;
+    document.getElementById("rollDiceBtn").disabled = true;
 
+    if (document.getElementById("rollDiceBtn").innerText == "Roll Dice") {
 
         // Set the dice on the screen to the random values returned from the backend.
-        roll_dice(gameID, playerID, function(roll){
+        roll_dice(function(roll){
 
             document.getElementById("dice1").innerText = roll.dice_one;
             document.getElementById("dice2").innerText = roll.dice_two;
+            document.getElementById("rollDiceBtn").innerText = "Done";
+            document.getElementById("rollDiceBtn").disabled = false;
+
         });
+
+    } else {
+            hideDice();
+            start_turn();
+            console.log("Dice Done");
     }
 
     console.log("Roll dice clicked");
 
 });
+
+
+function hideDice() {
+    document.getElementById("diceControls").style.display = "none";
+}
+
+function showDice() {
+    document.getElementById("diceControls").style.display = "block";
+    document.getElementById("rollDiceBtn").innerText = "Roll Dice";
+    document.getElementById("rollDiceBtn").disabled = false;
+}
+
