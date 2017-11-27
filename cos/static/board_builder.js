@@ -216,35 +216,35 @@ function build_board(data) {
     // Draws settlements on board
     // 5 Settlements are able to be placed
     // Last settlement drawn is a button to trigger placing settlements
-    for (var i = 0; i < 6; i++) {
-        var settlement = new Konva.Shape({
-                x: settlementX,
-                y: settlementY,
-           sceneFunc: function (context) {
-               context.beginPath();
-               context.moveTo(-7, 4);
-               context.lineTo(-7, -10);
-               context.lineTo(0, -17);
-               context.lineTo(7, -10);
-               context.lineTo(7, 4);
-               context.lineTo(-7, 4);
-               context.closePath();
-
-               context.fillStrokeShape(this);
-               },
-               fill: 'red',
-               stroke: 'black',
-               strokeWidth: 1,
-               name : 'settlement'
-        });
-        if (i==5) {
-            settlement.on('mousedown', function(){
-                mark_settlement_placement(stage,layer,false, settlementX, settlementY);
-            })
-            settlement.id('settlement_button');
-        }
-        layer.add(settlement);
-    }
+    // for (var i = 0; i < 6; i++) {
+    //     var settlement = new Konva.Shape({
+    //             x: settlementX,
+    //             y: settlementY,
+    //        sceneFunc: function (context) {
+    //            context.beginPath();
+    //            context.moveTo(-7, 4);
+    //            context.lineTo(-7, -10);
+    //            context.lineTo(0, -17);
+    //            context.lineTo(7, -10);
+    //            context.lineTo(7, 4);
+    //            context.lineTo(-7, 4);
+    //            context.closePath();
+    //
+    //            context.fillStrokeShape(this);
+    //            },
+    //            fill: 'red',
+    //            stroke: 'black',
+    //            strokeWidth: 1,
+    //            name : 'settlement'
+    //     });
+    //     if (i==5) {
+    //         settlement.on('mousedown', function(){
+    //             mark_settlement_placement(stage,layer,false, settlementX, settlementY);
+    //         })
+    //         settlement.id('settlement_button');
+    //     }
+    //     layer.add(settlement);
+    // }
 
     // Add the layer to the stage
     stage.add(layer);
@@ -375,16 +375,16 @@ function render_board() {
 }
 
 
-//Redraw settlements with info from backend
-function update_settlement_color(data) {
-    var players = data.Players;
-    var settlements = stage.find('.settlement');
-
-    for (i = 0; i < 6; i++){
-        settlements[i].fill(players[0].Player.player_color);
-        layer.batchDraw();
-    }
-}
+// //Redraw settlements with info from backend
+// function update_settlement_color(data) {
+//     var players = data.Players;
+//     var settlements = stage.find('.settlement');
+//
+//     for (i = 0; i < 6; i++){
+//         settlements[i].fill(players[0].Player.player_color);
+//         layer.batchDraw();
+//     }
+// }
 
 //Illuminates legal settlement locations for placement
 //Legal locations are anywhere without a settlement placed
@@ -439,6 +439,6 @@ function update_ui_for_new_player (){
     wait_for_turn(start_turn);
 
     //updates stats tables
-    get_player_info(update_tables);
-    get_player_info(update_settlement_color);
+    get_players_in_game(update_player_table);
+    // get_players_in_game(update_settlement_color);
 }

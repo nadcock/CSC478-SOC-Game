@@ -25,6 +25,7 @@ class Player(object):
         self.age = age
         self.current_roll = 0
         self.turn_state = None
+        self.remaining_settlements = 10
         self.resources = {
             "brick":    2,
             "grain":    2,
@@ -65,6 +66,8 @@ class Player(object):
                     self.resources_by_roll[token_digit].append(tile_resource)
                 else:
                     self.resources_by_roll[token_digit] = [tile_resource]
+        self.remove_resources_for_settlement()
+        self.remaining_settlements -= 1
 
     def remove_resources_for_settlement(self):
         self.resources["brick"] -= 1
@@ -112,12 +115,6 @@ class Player(object):
         return {"turn_options": turn_options}
 
     def perform_turn_option(self, turn_option, game, data):
-        if turn_option == "buy_initial_settlements":
-            settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
-            self.buy_settlement(settlement_to_buy, game.game_board)
-            return {"success": "True",
-                    "player": self.get_dictionary(owned_settlements=True, player_resources=True)}
-
         if turn_option == "buy_settlement":
             settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
             self.buy_settlement(settlement_to_buy, game.game_board)
@@ -134,14 +131,16 @@ class Player(object):
         if turn_option == "roll_dice":
             self.set_next_turn_state()
             roll = self.roll_dice()
+            self.give_resources_for_roll(self.current_roll, game)
             return{ "success": "True",
                     "player": self.get_dictionary(owned_settlements=True, player_resources=True),
                     "roll": roll}
 
-    def give_resources_for_roll(self, roll):
-        if self.resources_by_roll[roll] is not None:
-            for resource in self.resources_by_roll[roll]:
-                self.resources[resource] += 1
+    def give_resources_for_roll(self, roll, game):
+        for _, player in game.players.iteritems():
+            if player.resources_by_roll[roll] is not None:
+                for resource in self.resources_by_roll[roll]:
+                    self.resources[resource] += 1
 
     def roll_dice(self):
         """
@@ -167,10 +166,10 @@ class Player(object):
                 }
 
     def can_buy_settlement(self):
-        if all(x >= 1 for x in (self.resources["brick"],
-                                self.resources["wool"],
-                                self.resources["lumber"],
-                                self.resources["grain"])):
+        if self.remaining_settlements > 0 and all(x >= 1 for x in (self.resources["brick"],
+                                                                   self.resources["wool"],
+                                                                   self.resources["lumber"],
+                                                                   self.resources["grain"])):
             return True
         else:
             return False
@@ -186,7 +185,7 @@ class Player(object):
             player_dict["player_color"] = self.color
         settlements_list = []
         if self.settlements:
-            for key, val in self.settlements.iteritems():
+            for key, _ in self.settlements.iteritems():
                 settlements_list.append(key)
         if owned_settlements:
             player_dict["owned_settlements"] = settlements_list

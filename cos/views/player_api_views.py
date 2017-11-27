@@ -180,10 +180,16 @@ def wait_for_turn(request):
     else:
         raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
 
+    timeout = 0
+    my_turn = "True"
     while player_id != game.current_player_id:
         time.sleep(5)
+        timeout += 1
+        if timeout > 10:
+            my_turn = "False"
+            break
 
-    return_data = {"my_turn": "True"}
+    return_data = {"my_turn": my_turn}
     json_return = json.dumps(return_data)
     return Response(content_type='json', body=json_return)
 
@@ -266,5 +272,42 @@ def perform_turn_option(request):
         raise HTTPBadRequest(json_body={'error': "Required parameter 'turn_option' not included in request"})
 
     return_data = player.perform_turn_option(turn_option=turn_option, game=game, data=json_body)
+    json_return = json.dumps(return_data)
+    return Response(content_type='json', body=json_return)
+
+
+@view_config(route_name='getPlayer', renderer='json')
+def get_player(request):
+    """ This checks if it is the requested player's turn and if so returns True, otherwise it sleeps until
+            it is the players turn, at which point it returns True.
+
+            Parameters
+            ----------
+            request: Request 
+                - required JSON parameters: "game_id": String, "player_id": String
+
+            Returns
+            -------
+
+            Json object containing: {"MyTurn": Bool}
+    """
+    if 'game_id' in request.session:
+        game_id = request.session['game_id']
+        game = request.registry.games.games[game_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
+
+    if 'player_id' in request.session:
+        player_id = request.session['player_id']
+        if player_id not in game.players:
+            raise HTTPBadRequest(json_body={'error': 'Player found in request but not found in game.'})
+        player = game.players[player_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
+
+    return_data = {"player": player.get_dictionary(player_age=True,
+                                                   player_color=True,
+                                                   owned_settlements=True,
+                                                   player_resources=True)}
     json_return = json.dumps(return_data)
     return Response(content_type='json', body=json_return)

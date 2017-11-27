@@ -1,16 +1,3 @@
-//Gets information about players from the backend
-function get_player_info (cb_func) {
-    $.ajax({
-        url: '/api/game/getPlayersInGame',
-        type: 'POST',
-        dataType: 'json',
-        contentType: "application/json",
-        success: function (data) {
-            cb_func(data);
-        }
-    })
-}
-
 
 //Posts information about newly constructed settlements to backend
 function buy_settlement (settlement_ID, x, y, settlementX, settlementY, stage, layer, cb_func) {
@@ -36,11 +23,16 @@ function wait_for_turn(cb_func) {
         type: 'POST',
         dataType: 'json',
         contentType: "application/json",
-        success: function () {
-            console.log("turn begun");
-            cb_func();
+        success: function (data) {
+            if (data.my_turn == "True") {
+                console.log("turn begun");
+                cb_func();
+            } else {
+                console.log("Not my turn, calling waitForTurn again");
+                wait_for_turn(cb_func)
+            }
         }
-    })
+    });
 }
 
 //Called when player chooses to end turn
@@ -57,7 +49,7 @@ function complete_turn(cb_func){
             console.log("turn ended");
             cb_func();
         }
-    })
+    });
 }
 
 
@@ -73,10 +65,9 @@ function get_players_in_game(cbFunc) {
         contentType :   "application/json",
         success :   function (data) {
 
-            var players = data.Players;
 
             // Callback function with player count
-            cbFunc(players.length);
+            cbFunc(data);
         }
     });
 }
@@ -131,9 +122,34 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
  * This function waits for players to join game and returns afterward
  * @param cbFunc
  */
-function wait_for_new_players(cbFunc) {
+function wait_for_new_players(current_player_count, cbFunc) {
     $.ajax({
         url     :   '/api/game/waitForNewPlayers',
+        type    :   'POST',
+        dataType:   'json',
+        data: JSON.stringify({current_player_count: current_player_count}),
+        contentType :   "application/json",
+        success :   function(data) {
+            if (data.players_added == "True") {
+                // Callback function to do some action
+                console.log("Player joined game.");
+                cbFunc(data);
+            } else {
+                console.log("No new players, calling waitForNewPlayers again");
+                wait_for_new_players(current_player_count, cbFunc);
+            }
+        }
+
+    });
+}
+
+/**
+ * This function waits for players to join game and returns afterward
+ * @param cbFunc
+ */
+function get_player_info(cbFunc) {
+    $.ajax({
+        url     :   '/api/player/getPlayer',
         type    :   'POST',
         dataType:   'json',
         contentType :   "application/json",
@@ -198,7 +214,7 @@ function roll_dice(cbFunc) {
         success :   function(data) {
 
             var roll = data.roll;
-
+            update_player_resources_table(data);
             cbFunc(roll);
 
             console.log("Player  rolled: " + roll.dice_one + " " + roll.dice_two);

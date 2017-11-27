@@ -147,19 +147,24 @@ function update_player_wait_ui(playerCount) {
  */
 function wait_for_additional_players(data) {
 
-    console.log("Player # joined: " + data.Game.game_player_count + "; game started: " + data.Game.game_has_started);
+    var current_player_count = data.Game.game_player_count;
+
+    console.log("Player # joined: " + current_player_count + "; game started: " + data.Game.game_has_started);
 
     // Update player UI to reflect current player count
-    update_player_wait_ui(data.Game.game_player_count);
+    update_player_wait_ui(current_player_count);
 
     // Check if there is still room for more players and stop if game has started
-    if ((data.Game.game_player_count < 4) && !data.Game.game_has_started) {
+    if ((current_player_count < 4) && !data.Game.game_has_started) {
 
-        wait_for_new_players(wait_for_additional_players);
+        wait_for_new_players(current_player_count, wait_for_additional_players);
     }
     else {
         $("#waitForPlayers").modal("hide");
 
+        get_player_info(function(data){
+                update_player_resources_table(data);
+        });
         // Initialize the player area
         init_game_driver();
     }
@@ -172,17 +177,25 @@ function wait_for_additional_players(data) {
 function wait_for_players_to_join() {
 
     // Show wait for players modal
-    $("#waitForPlayers").modal({backdrop: "static"});
+    console.log("waiting for new players");
+
+    console.log("Showing wait for players modal");
+    $("#waitForPlayers").modal({
+        backdrop: "static",
+        show: true
+    });
 
     // Disable Start Game button while waiting for players
     $("#startGameBtn").prop('disabled', true);
 
     // Check current player count
-    get_players_in_game(function(count){
+    get_players_in_game(function(data){
 
-        update_player_wait_ui(count);
+        var current_player_count = data.Players.length;
+
+        update_player_wait_ui(current_player_count);
 
         // Wait for 3 or more players to join
-        wait_for_new_players(wait_for_additional_players);
+        wait_for_new_players(current_player_count, wait_for_additional_players);
     });
 }

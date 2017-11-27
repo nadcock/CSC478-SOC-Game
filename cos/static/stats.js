@@ -55,18 +55,23 @@ function display_resources() {
                 switch (j) {
                     case 0:
                         cellText = document.createTextNode("" + brick);
+                        cell.id = "brickresource";
                         break;
                     case 1:
                         cellText = document.createTextNode("" + wool);
+                        cell.id = "woolresource";
                         break;
                     case 2:
                         cellText = document.createTextNode("" + ore);
+                        cell.id = "oreresource";
                         break;
                     case 3:
                         cellText = document.createTextNode("" + grain);
+                        cell.id = "grainresource";
                         break;
                     case 4:
                         cellText = document.createTextNode("" + lumber);
+                        cell.id = "lumberresource";
                         break;
                 }
             }
@@ -287,8 +292,17 @@ function display_road_and_army(){
     playerTable.setAttribute("border", "2");
 }
 
+function update_player_resources_table(data) {
+    var resource_dict = data.player.resources;
+    $.each(resource_dict, function (resource, num) {
+        //console.log($("#" + resource + 'resource').textContent);
+        $("#" + resource + 'resource').html(num);
+        console.log("#" + resource + '-resource is now ' +num )
+    })
+}
+
 //Call to redraw tables with information from the backend
-function update_tables(data,stage,layer){
+function update_player_table(data){
     var players = data.Players;
     for (i = 0; i < players.length; i++) {
         var elm = document.getElementById("player_name" + i);

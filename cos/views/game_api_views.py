@@ -206,18 +206,40 @@ def wait_for_new_players(request):
 
         Same object as in get_players_in_game()
     """
+    json_body = request.json_body
     if 'game_id' in request.session:
         game_id = request.session['game_id']
         game = request.registry.games.games[game_id]
     else:
         raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
 
-    player_count = len(game.turn_order)
+    if 'current_player_count' in json_body:
+        player_count = json_body['current_player_count']
+    else:
+        raise HTTPBadRequest(json_body={'error': "Required parameter 'current_player_count' not found in request"})
 
+    timeout = 0
+    players_added = "True"
     while (player_count < 4) and (player_count == len(game.turn_order)) and not game.game_started:
-        time.sleep(5)
+        time.sleep(1)
+        timeout += 1
+        if timeout > 10:
+            players_added = "False"
+            break
 
-    return get_players_in_game(request)
+    players = []
+    if game.players:
+        for _, player in game.players.iteritems():
+            players.append(
+                {'Player': player.get_dictionary(player_age=True, player_color=True, owned_settlements=True)})
+    else:
+        players.append("None")
+
+    return_data = {'players_added': players_added,
+                   'Players': players,
+                   'Game': game.get_dictionary(has_started=True, player_count=True)}
+    json_return = json.dumps(return_data)
+    return Response(content_type='json', body=json_return)
 
 
 @view_config(route_name='getGameBoard', renderer='json')
