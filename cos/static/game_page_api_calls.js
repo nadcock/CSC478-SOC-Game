@@ -1,14 +1,15 @@
 
 //Posts information about newly constructed settlements to backend
-function buy_settlement (settlement_ID, x, y, settlementX, settlementY, stage, layer, cb_func) {
+function buy_settlement (settlement_ID, x, y, cb_func) {
     $.ajax({
         url: '/api/player/performTurnOption',
         type: 'POST',
         dataType: 'json',
         data: JSON.stringify({"turn_option": "buy_settlement", "settlement_id": settlement_ID}),
         contentType: "application/json",
-        success: function () {
-            cb_func(x, y, settlementX, settlementY, stage, layer);
+        success: function (data) {
+            update_player_resources_table(data);
+            cb_func(x, y, data.player.player_color);
         }
     })
 }
@@ -26,6 +27,7 @@ function wait_for_turn(cb_func) {
         success: function (data) {
             if (data.my_turn == "True") {
                 console.log("turn begun");
+                displaySnackbar("It is now your turn.");
                 cb_func();
             } else {
                 console.log("Not my turn, calling waitForTurn again");
@@ -157,7 +159,7 @@ function get_player_info(cbFunc) {
 
             // Callback function to do some action
             cbFunc(data);
-
+            update_player_resources_table(data);
             console.log("Player joined game.")
         }
     });

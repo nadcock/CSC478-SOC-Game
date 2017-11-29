@@ -37,6 +37,8 @@ $(document).on("click", "#rollDiceBtn", function(e){
 
 function hideDice() {
     document.getElementById("diceControls").style.display = "none";
+    document.getElementById("dice1").innerText = "?";
+    document.getElementById("dice2").innerText = "?";
 }
 
 function showDice() {

@@ -30,6 +30,7 @@ function display_resources() {
         var row = document.createElement("tr");
         for (var j = 0; j < 5; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i == 0) {
@@ -110,6 +111,7 @@ function display_players() {
         var row = document.createElement("tr");
         for (var j = 0; j < 3; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i > 0) {
@@ -253,6 +255,7 @@ function display_road_and_army(){
         var row = document.createElement("tr");
         for (var j = 0; j < 2; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (j == 0) {

@@ -66,8 +66,6 @@ class Player(object):
                     self.resources_by_roll[token_digit].append(tile_resource)
                 else:
                     self.resources_by_roll[token_digit] = [tile_resource]
-        self.remove_resources_for_settlement()
-        self.remaining_settlements -= 1
 
     def remove_resources_for_settlement(self):
         self.resources["brick"] -= 1
@@ -116,11 +114,13 @@ class Player(object):
 
     def perform_turn_option(self, turn_option, game, data):
         if turn_option == "buy_settlement":
-            settlement_to_buy = game.game_board.open_settlements.pop(data["settlement_id"])
+            settlement_to_buy = game.game_board.open_settlements[data["settlement_id"]]
             self.buy_settlement(settlement_to_buy, game.game_board)
             self.remove_resources_for_settlement()
+            self.remaining_settlements -= 1
             return {"success": "True",
-                    "player": self.get_dictionary(owned_settlements=True, player_resources=True)}
+                    "remaining_settlement_count": self.remaining_settlements,
+                    "player": self.get_dictionary(owned_settlements=True, player_color=True, player_resources=True)}
 
         if turn_option == "end_turn":
             game.set_next_players_turn()
@@ -137,10 +137,14 @@ class Player(object):
                     "roll": roll}
 
     def give_resources_for_roll(self, roll, game):
+        if roll == 7:
+            return
         for _, player in game.players.iteritems():
+            print("Roll: " + str(roll))
+            print(player.resources_by_roll[roll])
             if player.resources_by_roll[roll] is not None:
-                for resource in self.resources_by_roll[roll]:
-                    self.resources[resource] += 1
+                for resource in player.resources_by_roll[roll]:
+                    player.resources[resource] += 1
 
     def roll_dice(self):
         """
