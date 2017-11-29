@@ -44,3 +44,26 @@ However, delay the fade out process for 2.5 seconds */
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
+.btn-turn-options {
+    color: #000000;
+    background-color: transparent;
+    background-image: none;
+    border-color: #000000
+}
+.btn-turn-options:hover {
+    color: #fff;
+    background-color: #000000;
+    border-color: #000000
+}
+.btn-turn-options.focus,
+.btn-turn-options:focus {
+    box-shadow: 0 0 0 .2rem rgba(0, 0, 0, 0.5)
+}
+.btn-turn-options.disabled,
+.btn-turn-options:disabled {
+    color: #000000;
+    background-color: transparent
+}
+.btn-turn-options:not([disabled]):not(.disabled).active,
+.btn-turn-options:not([disabled]):not(.disabled):active

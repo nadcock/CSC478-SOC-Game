@@ -29,8 +29,8 @@
 
     <span class="container">
     <span class="row">
-        <div class="col-lg-1"></div>
-        <div id="game_board" class="col-lg-7">
+        <div class="col-1"></div>
+        <div id="game_board" class="col-7">
             <h1>Catan Board: Game_ID = {{game_id}}</h1>
             <!-- Stores the game ID for reference later -->
             <div id="game_id" hidden>{{game_id}}</div>
@@ -47,48 +47,47 @@
             <!-- Begin game join sequence -->
             <script>player_join_driver()</script>
         </div>
-        <span class="col-lg-3">
-            <!-- Game stats tables -->
-            <h3 id="playerTurn"></h3>
-            <h3 id="score"></h3>
-            <div id="resources"></div>
-            <br/>
-            <div id="players"></div>
-{#            <div id="devcards"></div>#}
-{#            <div id="road_and_army"></div>#}
-            <br/>
-            <div id="turnControls" style="display:none">
-                <!-- Dice Controls -->
-                <div id="diceControls" style="display:none">
-                    <table id="diceTable" class="tab-content">
-                        <th>
-                            <h4>Dice</h4>
-                        </th>
+        <span class="col-3">
+            <div class="card" style="padding: 10px">
+                <!-- Game stats tables -->
+                <h3 id="playerTurn"></h3>
+                    <h3 id="score"></h3>
+                <div id="resources"></div>
+                <br/>
+                <div id="players"></div>
+        {#            <div id="devcards"></div>#}
+        {#            <div id="road_and_army"></div>#}
+                <br/>
+                <div id="turnControls" class="card" style="display:none">
+                    <!-- Dice Controls -->
+                    <div id="diceControls" align="center" style="display:none">
+                        <table id="diceTable" class="tab-content">
+                            <tr>
+                                <td style="padding: 5px">
+                                    <div class="card card-outline-primary p-3" style="width: 75px">
+                                        <h3 id="dice1" align="center">?</h3>
+                                    </div>
+                                </td>
+                                <td style="padding: 5px">
+                                    <div class="card card-outline-primary p-3" style="width: 75px">
+                                        <h3 id="dice2" align="center">?</h3>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                         <tr>
-                            <td>
-                                <div class="card p-3">
-                                    <h3 id="dice1" align="center">?</h3>
-                                    <span>dice one</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="card p-3">
-                                    <h3 id="dice2" align="center">?</h3>
-                                    <span>dice two</span>
-                                </div>
-                            </td>
+                            <div style="padding: 10px">
+                                <button id="rollDiceBtn" type="button" class="btn btn-block btn-turn-options" >Roll Dice</button>
+                            </div>
                         </tr>
-                    </table>
-                    <tr>
-                        <button id="rollDiceBtn" type="button" class="btn" >Roll Dice</button>
-                    </tr>
-                    <!-- End Turn Button -->
-                    <br>
-                    <br>
+                        <!-- End Turn Button -->
+                        <br>
+                        <br>
+                    </div>
                 </div>
             </div>
         </span>
-        <span class="col-lg-1"></span>
+        <span class="col-1"></span>
         </span>
     </span>
     <script>

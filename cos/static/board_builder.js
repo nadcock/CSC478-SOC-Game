@@ -35,8 +35,6 @@ function build_board(data) {
     var buffer = 11;
     var max_row_length = 7;
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
-    var settlementX = 800;
-    var settlementY = 400;
     // var road_width = hex_radius * .78;
     // var road_height = 7;
 
@@ -139,15 +137,15 @@ function build_board(data) {
                         strokeWidth: 0,
                         name: 'settlement_area'
                     });
+
+                    settlement_area_right.ID = settlementTile.settlement_id;
+
                 } else {
                     place_settlement(hexagon.x() + hex_apothem + (buffer / 2),
                         hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
                         settlement_color,
                         settlementTile.settlement_id);
                 }
-
-
-                settlement_area_right.ID = settlementTile.settlement_id;
 
                 settlement_layer.add(settlement_area_right);
                 settlements.push(settlement_area_right);
@@ -203,7 +201,9 @@ function build_board(data) {
                         strokeWidth: 0,
                         name: 'settlement_area'
                     });
+
                     settlement_area_bottom.ID = settlementTile.settlement_id;
+
                 } else {
                     place_settlement(hexagon.x(),
                         hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
@@ -368,12 +368,20 @@ function render_board() {
     });
 }
 
-//Places settlement at appropriate location
+/**
+ * Places settlement at appropriate location
+ */
 function initiate_place_settlement(x, y, settlement_ID){
     buy_settlement(settlement_ID, x, y, place_settlement);
 }
 
-//Draws settlement at appropriate location
+/**
+ * Draws settlement at appropriate location
+ * @param x
+ * @param y
+ * @param color
+ * @param id
+ */
 function place_settlement(x, y, color, id) {
           var settlement = new Konva.Shape({
                 x: x,
@@ -399,6 +407,9 @@ function place_settlement(x, y, color, id) {
     settlement_layer.batchDraw();
 }
 
+/**
+ * Updates player tables when new player is detected.
+ */
 function update_ui_for_new_player (){
     //waits for turn
     document.getElementById("is_turn").innerHTML = "false";

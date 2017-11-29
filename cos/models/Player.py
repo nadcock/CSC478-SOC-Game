@@ -68,12 +68,18 @@ class Player(object):
                     self.resources_by_roll[token_digit] = [tile_resource]
 
     def remove_resources_for_settlement(self):
+        """
+            Removes resources for payment of the settlement 
+        """
         self.resources["brick"] -= 1
         self.resources["wool"] -= 1
         self.resources["lumber"] -= 1
         self.resources["grain"] -= 1
 
     def set_next_turn_state(self):
+        """
+            Sets the state machine to the current state
+        """
         if self.turn_state is None:
             self.turn_state = "waiting_for_turn"
             return
@@ -93,6 +99,9 @@ class Player(object):
             return
 
     def get_turn_options(self):
+        """
+            Returns a list of turn options available during the particular turn state
+        """
         turn_options = []
 
         if self.turn_state is None:
@@ -113,6 +122,19 @@ class Player(object):
         return {"turn_options": turn_options}
 
     def perform_turn_option(self, turn_option, game, data):
+        """
+            Performs turn option specified with data provided
+            Parameters
+            ----------
+            turn_option: String
+            game: Game
+            data: JSON object from request
+                if turn_option is "buy_settlement", "settlement_id" is required in data object
+
+            Returns
+            -------
+            Dict object depending on turn_option performed
+        """
         if turn_option == "buy_settlement":
             settlement_to_buy = game.game_board.open_settlements[data["settlement_id"]]
             self.buy_settlement(settlement_to_buy, game.game_board)
@@ -137,6 +159,9 @@ class Player(object):
                     "roll": roll}
 
     def give_resources_for_roll(self, roll, game):
+        """
+            Assigns +1 resources to each/every player based on roll (if they have a nearby settlement)
+        """
         if roll == 7:
             return
         for _, player in game.players.iteritems():
@@ -170,6 +195,9 @@ class Player(object):
                 }
 
     def can_buy_settlement(self):
+        """
+            Determines if player can legally purchase a settlement
+        """
         if self.remaining_settlements > 0 and all(x >= 1 for x in (self.resources["brick"],
                                                                    self.resources["wool"],
                                                                    self.resources["lumber"],

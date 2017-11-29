@@ -283,8 +283,6 @@ function display_road_and_army(){
 
             cell.appendChild(cellText);
             row.appendChild(cell);
-
-
         }
         playerTableBody.appendChild(row);
     }
@@ -295,12 +293,11 @@ function display_road_and_army(){
     playerTable.setAttribute("border", "2");
 }
 
+// Updates the player resource table based on data provided from the backend
 function update_player_resources_table(data) {
     var resource_dict = data.player.resources;
     $.each(resource_dict, function (resource, num) {
-        //console.log($("#" + resource + 'resource').textContent);
         $("#" + resource + 'resource').html(num);
-        console.log("#" + resource + '-resource is now ' +num )
     })
 }
 

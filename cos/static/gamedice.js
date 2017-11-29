@@ -4,10 +4,9 @@
 
 
 /**
- * Landing Page modal: this function checks if start game modal form has a game name. If it has,
- * then the game name is submitted and a new game is started:
- * 1) Game name
-  */
+ *  On-click event handler for roll dice button
+ *  Calls roll_dice() api caller, and displays the results if successful
+ */
 $(document).on("click", "#rollDiceBtn", function(e){
 
     document.getElementById("rollDiceBtn").disabled = true;
@@ -34,13 +33,14 @@ $(document).on("click", "#rollDiceBtn", function(e){
 
 });
 
-
+// hides dice controls on game page, also resets dice to '?'
 function hideDice() {
     document.getElementById("diceControls").style.display = "none";
     document.getElementById("dice1").innerText = "?";
     document.getElementById("dice2").innerText = "?";
 }
 
+// shows dice controls on game page
 function showDice() {
     document.getElementById("diceControls").style.display = "block";
     document.getElementById("rollDiceBtn").innerText = "Roll Dice";

@@ -17,7 +17,5 @@ def includeme(config):
     config.add_route('getPlayer',           api_player_base_url + 'getPlayer')
     config.add_route('getTurnOptions',      api_player_base_url + 'getTurnOptions')
     config.add_route('performTurnOption',   api_player_base_url + 'performTurnOption')
-    config.add_route('buySettlement',       api_player_base_url + 'buySettlement')
     config.add_route('waitForTurn',         api_player_base_url + 'waitForTurn')
-    config.add_route('rollDice',            api_player_base_url + 'rollDice')
-    config.add_route('completeTurn',        api_player_base_url + 'completeTurn')
+
