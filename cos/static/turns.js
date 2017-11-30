@@ -77,6 +77,24 @@ function hideTurnControlsButtons() {
 }
 
 /**
+ * Called to show turn controls for the turn instructions
+ */
+function showTurnControlsInstructionsWithMessage(message) {
+    var instruction_div = document.getElementById("turn_option_instructions");
+    instruction_div.innerHTML = "<p align='left' style=\"padding: 10px\">" + message + "</p>";
+    instruction_div.style.display = "block";
+}
+
+/**
+ * Called to hide turn controls for the turn instructions
+ */
+function hideTurnControlsInstructions() {
+    var instruction_div = document.getElementById("turn_option_instructions");
+    instruction_div.innerHTML = "";
+    instruction_div.style.display = "block";
+}
+
+/**
  * Sets the turn buttons to enabled or disabled based on what turn options
  * were received from the backend
  * @param turn_options
@@ -113,6 +131,9 @@ function addTurnOptionButtons() {
     turn_option_buttons.id = "turn_option_buttons";
     var brk1 = document.createElement("BR");
     var brk2 = document.createElement("BR");
+
+    var turn_option_instructions = document.createElement("DIV");
+    turn_option_instructions.id = "turn_option_instructions";
 
     var roll_dice_div = document.createElement("DIV");
     roll_dice_div.id = "roll_dice_div";
@@ -162,6 +183,7 @@ function addTurnOptionButtons() {
 
     var turn_controls = document.getElementById("turnControls");
     turn_controls.appendChild(turn_option_buttons);
+    turn_controls.appendChild(turn_option_instructions);
 }
 
 
@@ -188,8 +210,19 @@ $(document).on("click", "#roll_dice", function(e){
  * Event handler for clicking buy settlement button
  */
 $(document).on("click", "#buy_settlement", function(e){
-    hideTurnControlsButtons();
     if (document.getElementById("is_turn").innerHTML == "true") {
+        hideTurnControlsButtons();
+        showTurnControlsInstructionsWithMessage("Choose a settlement to purchase on the left." +
+            "<div align='center'>" +
+            "<div class='card' align='center' style='width: 200px'>" +
+            "<div class='card-header'>Cost of Settlement</div>" +
+            "<div class='card-block'><ul align='center' style='list-style-type: none; padding: 0; margin: 0;'>" +
+            "<li>1 Brick</li>" +
+            "<li>1 Wool</li>" +
+            "<li>1 Grain</li>" +
+            "<li>1 Lumber</li>" +
+            "</ul></div></div></div>");
+        document.getElementById("turn_option_instructions")
         var settlements = stage.find('.settlement_area');
         settlement_animation = new Konva.Animation(function (frame) {
             settlements.each(function (settlement) {
@@ -202,6 +235,7 @@ $(document).on("click", "#buy_settlement", function(e){
                         initiate_place_settlement(this.x(),this.y(), this.ID);
                     }
                     end_settlement_animation();
+                    hideTurnControlsInstructions();
                     start_turn();
                 });
             });
