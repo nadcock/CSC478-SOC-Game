@@ -22,7 +22,12 @@
 function player_join_driver() {
 
     // Call function to check if player can join game. If true, player gets prompt to join.
-    player_join();
+    if ($("#player_id").text() == 'None') {
+        player_join();
+    } else {
+        wait_for_players_to_join();
+    }
+
 
     // Player inputs player data.
 
@@ -49,8 +54,8 @@ function init_game_driver() {
     display_score();
     display_resources();
     display_players();
-    display_devcards();
-    display_road_and_army();
+    // display_devcards();
+    // display_road_and_army();
 
     // Generate game action center TBD
 

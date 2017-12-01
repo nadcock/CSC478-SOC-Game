@@ -30,6 +30,7 @@ function display_resources() {
         var row = document.createElement("tr");
         for (var j = 0; j < 5; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i == 0) {
@@ -55,18 +56,23 @@ function display_resources() {
                 switch (j) {
                     case 0:
                         cellText = document.createTextNode("" + brick);
+                        cell.id = "brickresource";
                         break;
                     case 1:
                         cellText = document.createTextNode("" + wool);
+                        cell.id = "woolresource";
                         break;
                     case 2:
                         cellText = document.createTextNode("" + ore);
+                        cell.id = "oreresource";
                         break;
                     case 3:
                         cellText = document.createTextNode("" + grain);
+                        cell.id = "grainresource";
                         break;
                     case 4:
                         cellText = document.createTextNode("" + lumber);
+                        cell.id = "lumberresource";
                         break;
                 }
             }
@@ -105,6 +111,7 @@ function display_players() {
         var row = document.createElement("tr");
         for (var j = 0; j < 3; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i > 0) {
@@ -248,6 +255,7 @@ function display_road_and_army(){
         var row = document.createElement("tr");
         for (var j = 0; j < 2; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (j == 0) {
@@ -275,8 +283,6 @@ function display_road_and_army(){
 
             cell.appendChild(cellText);
             row.appendChild(cell);
-
-
         }
         playerTableBody.appendChild(row);
     }
@@ -287,8 +293,16 @@ function display_road_and_army(){
     playerTable.setAttribute("border", "2");
 }
 
+// Updates the player resource table based on data provided from the backend
+function update_player_resources_table(data) {
+    var resource_dict = data.player.resources;
+    $.each(resource_dict, function (resource, num) {
+        $("#" + resource + 'resource').html(num);
+    })
+}
+
 //Call to redraw tables with information from the backend
-function update_tables(data,stage,layer){
+function update_player_table(data){
     var players = data.Players;
     for (i = 0; i < players.length; i++) {
         var elm = document.getElementById("player_name" + i);

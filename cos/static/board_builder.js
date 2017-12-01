@@ -3,7 +3,9 @@
  */
 
 var stage;
-var layer;
+var tile_layer;
+var settlement_layer;
+var settlements = [];
 
 /**
  * This function is responsible for creating the game board and rending it.
@@ -17,7 +19,8 @@ function build_board(data) {
     stage = new Konva.Stage({
       container: 'gameBoard',
       width: 1300,
-      height: 1000
+      height: 1000,
+      id: "game_board_stage"
     });
 
     // Data returned from the backend includes:
@@ -32,15 +35,19 @@ function build_board(data) {
     var buffer = 11;
     var max_row_length = 7;
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
-    var settlementX = 1000;
-    var settlementY = 400;
     // var road_width = hex_radius * .78;
     // var road_height = 7;
 
 
     //tileData = data.Tiles; // An array of tile data returned from the server
 
-    layer = new Konva.Layer();
+    tile_layer = new Konva.Layer({
+        id: "game_board_layer"
+    });
+
+    settlement_layer = new Konva.Layer({
+        id: "settlement_layer"
+    });
 
     // Create game hex board layout on a row-column basis
     // Board structure is a jagged array based on the board_layout
@@ -64,7 +71,7 @@ function build_board(data) {
                 strokeWidth: hex_stroke_width
                 });
 
-            layer.add(hexagon);
+            tile_layer.add(hexagon);
 
             // Check that the hex tile isn't water, then add the Token to it
             if (hexTile.tile_type == "terrain") {
@@ -99,8 +106,8 @@ function build_board(data) {
                     y: tokenText.getHeight() / 2
                 });
 
-                layer.add(token);
-                layer.add(tokenText);
+                tile_layer.add(token);
+                tile_layer.add(tokenText);
             }
 
             // ******************* ADD SETTLEMENT PLACEMENT LOCATION: HEX-->RIGHT *******************
@@ -118,19 +125,30 @@ function build_board(data) {
                     settlementTile = get_hex_tile_data(data, 's', rowNum + 1, (colNum * 2 + 1));
                 }
 
-                var settlement_area_right = new Konva.Circle({
-                    x: hexagon.x() + hex_apothem + (buffer / 2),
-                    y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
-                    radius: 5,
-                    fill: settlementTile.settlement_color,
-                    stroke: 'white',
-                    strokeWidth: 0,
-                    name: 'settlement_area'
-                });
+                var settlement_color = settlementTile.settlement_color;
 
-                settlement_area_right.ID = settlementTile.settlement_id;
+                if (settlement_color == 'grey') {
+                    var settlement_area_right = new Konva.Circle({
+                        x: hexagon.x() + hex_apothem + (buffer / 2),
+                        y: hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
+                        radius: 5,
+                        fill: 'grey',
+                        stroke: 'white',
+                        strokeWidth: 0,
+                        name: 'settlement_area'
+                    });
 
-                layer.add(settlement_area_right);
+                    settlement_area_right.ID = settlementTile.settlement_id;
+
+                } else {
+                    place_settlement(hexagon.x() + hex_apothem + (buffer / 2),
+                        hexagon.y() + (hex_radius / 2) + (buffer / 2) - (hex_stroke_width / 2),
+                        settlement_color,
+                        settlementTile.settlement_id);
+                }
+
+                settlement_layer.add(settlement_area_right);
+                settlements.push(settlement_area_right);
 
                 // ******************* ADD ROAD PLACEMENT #1 *******************
                 /*var road_right_up = new Konva.Rect({
@@ -150,11 +168,11 @@ function build_board(data) {
                 layer.add(road_right_up);*/
             }
 
-            settlement_area_right.on('mouseup', function() {
-                if (settlement_area_right.getFill() == 'red') {
-                    initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
-                }
-            });
+            // settlement_area_right.on('mouseup', function() {
+            //     if (settlement_area_right.getFill() == 'red') {
+            //         initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
+            //     }
+            // });
 
             // ******************* ADD SETTLEMENT PLACEMENT LOCATION: HEX-->BOTTOM *******************
             if ((colNum == 0 && rowNum < ((board_layout.length / 2) - 1))
@@ -171,25 +189,36 @@ function build_board(data) {
                     settlementTile = get_hex_tile_data(data, "s",(rowNum + 1), (2 * colNum));
                 }
 
-                var settlement_area_bottom = new Konva.Circle({
-                    x: hexagon.x(),
-                    y: hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
-                    radius: 5,
-                    fill: settlementTile.settlement_color,
-                    stroke: 'white',
-                    strokeWidth: 0,
-                    name: 'settlement_area'
-                });
+                var settlement_color = settlementTile.settlement_color;
 
-                settlement_area_bottom.ID = settlementTile.settlement_id;
+                if (settlement_color == 'grey') {
+                    var settlement_area_bottom = new Konva.Circle({
+                        x: hexagon.x(),
+                        y: hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
+                        radius: 5,
+                        fill: settlement_color,
+                        stroke: 'white',
+                        strokeWidth: 0,
+                        name: 'settlement_area'
+                    });
 
-                layer.add(settlement_area_bottom);
+                    settlement_area_bottom.ID = settlementTile.settlement_id;
 
-                settlement_area_bottom.on('mouseup', function(){
-                    if(settlement_area_bottom.getFill() == 'red'){
-                        initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
-                    }
-                })
+                } else {
+                    place_settlement(hexagon.x(),
+                        hexagon.y() + hex_radius + (buffer / 2) + (hex_stroke_width / 2),
+                        settlement_color,
+                        settlementTile.settlement_id);
+                }
+
+                settlement_layer.add(settlement_area_bottom);
+                settlements.push(settlement_area_bottom);
+
+                // settlement_area_bottom.on('mouseup', function(){
+                //     if(settlement_area_bottom.getFill() == 'red'){
+                //         initiate_place_settlement(this.x(),this.y(), settlementX, settlementY, stage, layer, this.ID);
+                //     }
+                // })
 
                 // ******************* ADD ROAD PLACEMENT #2 *******************
                 /*var road_right_up = new Konva.Rect({
@@ -210,41 +239,9 @@ function build_board(data) {
         }
     }
 
-    // Draws settlements on board
-    // 5 Settlements are able to be placed
-    // Last settlement drawn is a button to trigger placing settlements
-    for (var i = 0; i < 6; i++) {
-        var settlement = new Konva.Shape({
-                x: settlementX,
-                y: settlementY,
-           sceneFunc: function (context) {
-               context.beginPath();
-               context.moveTo(-7, 4);
-               context.lineTo(-7, -10);
-               context.lineTo(0, -17);
-               context.lineTo(7, -10);
-               context.lineTo(7, 4);
-               context.lineTo(-7, 4);
-               context.closePath();
-
-               context.fillStrokeShape(this);
-               },
-               fill: 'red',
-               stroke: 'black',
-               strokeWidth: 1,
-               name : 'settlement'
-        });
-        if (i==5) {
-            settlement.on('mousedown', function(){
-                mark_settlement_placement(stage,layer,false, settlementX, settlementY);
-            })
-            settlement.id('settlement_button');
-        }
-        layer.add(settlement);
-    }
-
     // Add the layer to the stage
-    stage.add(layer);
+    stage.add(tile_layer);
+    stage.add(settlement_layer);
 }
 
 
@@ -371,71 +368,54 @@ function render_board() {
     });
 }
 
-
-//Redraw settlements with info from backend
-function update_settlement_color(data) {
-    var players = data.Players;
-    var settlements = stage.find('.settlement');
-
-    for (i = 0; i < 6; i++){
-        settlements[i].fill(players[0].Player.player_color);
-        layer.batchDraw();
-    }
+/**
+ * Places settlement at appropriate location
+ */
+function initiate_place_settlement(x, y, settlement_ID){
+    buy_settlement(settlement_ID, x, y, place_settlement);
 }
 
-//Illuminates legal settlement locations for placement
-//Legal locations are anywhere without a settlement placed
-function mark_settlement_placement(stage,layer,placed, settlementX, settlementY) {
-    //check if is player's turn
-    if (document.getElementById("is_turn").innerHTML == "true") {
-        //check for whether there are are remaining settlements
-        var settlements = stage.find('.settlement');
-        var remaining = false;
-        for (i = 0; i < 5; i++) {
-            if (settlements[i].x() == settlementX && settlements[i].y() == settlementY) {
-                remaining = true;
-                break;
-            }
+/**
+ * Draws settlement at appropriate location
+ * @param x
+ * @param y
+ * @param color
+ * @param id
+ */
+function place_settlement(x, y, color, id) {
+          var settlement = new Konva.Shape({
+                x: x,
+                y: y,
+                sceneFunc: function (context) {
+                    context.beginPath();
+                    context.moveTo(-7, 4);
+                    context.lineTo(-7, -10);
+                    context.lineTo(0, -17);
+                    context.lineTo(7, -10);
+                    context.lineTo(7, 4);
+                    context.lineTo(-7, 4);
+                    context.closePath();
 
-        }
-        if (remaining || placed) {
-            var settlement_areas = stage.find('.settlement_area');
-            var color = 'red';
-            if (placed) {
-                color = 'orange';
-            }
-            for (i = 0; i < settlement_areas.length; i++) {
-                settlement_areas.fill(color);
-                layer.batchDraw();
-            }
-        }
-    }
+                    context.fillStrokeShape(this);},
+               fill: color,
+               stroke: 'black',
+               strokeWidth: 1,
+               name : 'settlement'
+        });
+    settlement.ID = id;
+    settlement_layer.add(settlement);
+    settlement_layer.batchDraw();
 }
 
-//Places settlement at appropriate location
-function initiate_place_settlement(x, y, settlementX, settlementY, stage, layer, settlement_ID){
-    buy_settlement(settlement_ID, x, y, settlementX, settlementY, stage, layer, place_settlement);
-}
-
-function place_settlement(x, y, settlementX, settlementY, stage, layer) {
-    var settlements = stage.find('.settlement');
-    for (i = 0; i < 5; i++){
-        if (settlements[i].x() == settlementX && settlements[i].y() == settlementY){
-            settlements[i].x(x);
-            settlements[i].y(y);
-            mark_settlement_placement(stage,layer,true);
-            break;
-        }
-    }
-    layer.batchDraw();
-}
-
+/**
+ * Updates player tables when new player is detected.
+ */
 function update_ui_for_new_player (){
     //waits for turn
     document.getElementById("is_turn").innerHTML = "false";
     wait_for_turn(start_turn);
 
     //updates stats tables
-    get_player_info(update_tables);
-    get_player_info(update_settlement_color);
+    get_players_in_game(update_player_table);
+    // get_players_in_game(update_settlement_color);
 }

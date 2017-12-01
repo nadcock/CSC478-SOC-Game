@@ -121,35 +121,35 @@ class Board(object):
         # first row is horizontal (running between hex bottoms and tops) and consists of 6 roads. The next row is
         # vertical (running between hexes vertically) and consists of 4 roads. The process repeats alternating though
         # each row on the board. Roads can be identified by their id: "r1,1" = "settlement at row 1, column 1"
-        for row in range(0, 11):
-            if row % 2 == 0:
-                alignment = "horizontal"
-                if row == 0 or row == 10:
-                    for column in range(1, 7):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
-                if row == 2 or row == 8:
-                    for column in range(1, 9):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
-                if row == 4 or row == 6:
-                    for column in range(1, 11):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
-            else:
-                alignment = "vertical"
-                if row == 1 or row == 9:
-                    for column in range(1, 5):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
-                if row == 3 or row == 7:
-                    for column in range(1, 6):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
-                if row == 5:
-                    for column in range(1, 6):
-                        road = Road(row=row + 1, column=column, alignment=alignment)
-                        self.roads[road.id] = road
+        # for row in range(0, 11):
+        #     if row % 2 == 0:
+        #         alignment = "horizontal"
+        #         if row == 0 or row == 10:
+        #             for column in range(1, 7):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
+        #         if row == 2 or row == 8:
+        #             for column in range(1, 9):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
+        #         if row == 4 or row == 6:
+        #             for column in range(1, 11):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
+        #     else:
+        #         alignment = "vertical"
+        #         if row == 1 or row == 9:
+        #             for column in range(1, 5):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
+        #         if row == 3 or row == 7:
+        #             for column in range(1, 6):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
+        #         if row == 5:
+        #             for column in range(1, 6):
+        #                 road = Road(row=row + 1, column=column, alignment=alignment)
+        #                 self.roads[road.id] = road
 
     def get_dictionary(self):
         """ returns dictionary representation of object that can be used for json """
@@ -165,10 +165,10 @@ class Board(object):
             settlements.append({key: val.get_dictionary()})
         board_dict["Settlements"] = settlements
 
-        roads = []
-        for key, val in self.roads.iteritems():
-            roads.append({key: val.get_dictionary()})
-        board_dict["Roads"] = roads
+        # roads = []
+        # for key, val in self.roads.iteritems():
+        #     roads.append({key: val.get_dictionary()})
+        # board_dict["Roads"] = roads
 
         return board_dict
 

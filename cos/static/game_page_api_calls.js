@@ -1,64 +1,64 @@
-//Gets information about players from the backend
-function get_player_info (cb_func) {
+
+/**
+ * This function Posts information about newly constructed settlements to backend
+ * @param {function} cbFunc
+ * @param {String} settlement_id
+ * @param {function} x
+ * @param y
+ */
+function buy_settlement (settlement_id, x, y, cbFunc) {
     $.ajax({
-        url: '/api/game/getPlayersInGame',
+        url: '/api/player/performTurnOption',
         type: 'POST',
         dataType: 'json',
-        data: JSON.stringify({"game_id": document.getElementById("game_id").innerHTML}),
+        data: JSON.stringify({"turn_option": "buy_settlement", "settlement_id": settlement_id}),
         contentType: "application/json",
         success: function (data) {
-            cb_func(data);
+            update_player_resources_table(data);
+            cbFunc(x, y, data.player.player_color);
         }
     })
 }
 
-
-//Posts information about newly constructed settlements to backend
-function buy_settlement (settlement_ID, x, y, settlementX, settlementY, stage, layer, cb_func) {
-    $.ajax({
-        url: '/api/player/buySettlement',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify({"game_id": document.getElementById("game_id").innerHTML,
-            "player_id": document.getElementById("player_id").innerHTML, "settlement_id": settlement_ID}),
-        contentType: "application/json",
-        success: function () {
-            cb_func(x, y, settlementX, settlementY, stage, layer);
-        }
-    })
-}
-
-//Called at the end of every turn and when player enters the game.
-//Sets the turn state to true when backend returns that it is player's turn
-//cb_func enters start turn state on front end
-function wait_for_turn(cb_func) {
-    console.log("waiting for turn");
+/**
+ * This function is called at the end of every turn and when player enters the game.
+ * Sets the turn state to true when backend returns that it is player's turn
+ * cbFunc enters start turn state on front end.
+ * @param cbFunc
+ */
+function wait_for_turn(cbFunc) {
     $.ajax({
         url: '/api/player/waitForTurn',
         type: 'POST',
         dataType: 'json',
         contentType: "application/json",
-        success: function () {
-            console.log("turn begun");
-            cb_func();
+        success: function (data) {
+            if (data.my_turn == "True") {
+                displaySnackbar("It is now your turn.");
+                cbFunc();
+            } else {
+                wait_for_turn(cbFunc)
+            }
         }
-    })
+    });
 }
 
-//Called when player chooses to end turn
-//Notifies backend that player has ended turn
-//cb_func enters end turn state on front end
-function complete_turn(cb_func){
+/**
+ * This function is called when player chooses to end turn notifies backend that player
+ * has ended turn cbFunc enters end turn state on front end
+ * @param cbFunc
+ */
+function complete_turn(cbFunc){
     $.ajax({
-        url: '/api/player/completeTurn',
+        url: '/api/player/performTurnOption',
         type: 'POST',
         dataType: 'json',
+        data: JSON.stringify({"turn_option": "end_turn"}),
         contentType: "application/json",
         success: function () {
-            console.log("turn ended");
-            cb_func();
+            cbFunc();
         }
-    })
+    });
 }
 
 
@@ -73,11 +73,8 @@ function get_players_in_game(cbFunc) {
         dataType:   'json',
         contentType :   "application/json",
         success :   function (data) {
-
-            var players = data.Players;
-
-            // Callback function with player count
-            cbFunc(players.length);
+          // Callback function with player count
+            cbFunc(data);
         }
     });
 }
@@ -94,7 +91,6 @@ function get_is_game_full(cbFunc) {
         dataType:   'json',
         contentType :   "application/json",
         success :   function(data) {
-
             cbFunc(data.player_full_status);
         }
     });
@@ -104,26 +100,23 @@ function get_is_game_full(cbFunc) {
 /**
  * This function passes in player information to the backend to add new player
  * to the game. It takes in the following parameters:
- * @param gameID
  * @param playerName
+ * @param playerAge
+ * @param cbFunc
  */
-function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
+function add_player_to_game(playerName, playerAge, cbFunc) {
     $.ajax({
         url     :   '/api/game/addPlayerToGame',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID,
-                                    "player_name":playerName,
+        dataType:   'json',
+        data    :   JSON.stringify({"player_name":playerName,
                                     "player_age":playerAge}),
         contentType :   "application/json",
         success :   function(data) {
-
             var player = data.player;
 
             // Callback function to store player ID
             cbFunc(player.player_id);
-
-            console.log("Player ID added to game: " + player.player_id);
         }
     });
 }
@@ -133,18 +126,39 @@ function add_player_to_game(gameID, playerName, playerAge, cbFunc) {
  * This function waits for players to join game and returns afterward
  * @param cbFunc
  */
-function wait_for_new_players(cbFunc) {
+function wait_for_new_players(current_player_count, cbFunc) {
     $.ajax({
         url     :   '/api/game/waitForNewPlayers',
         type    :   'POST',
-        datatype:   'json',
+        dataType:   'json',
+        data: JSON.stringify({current_player_count: current_player_count}),
         contentType :   "application/json",
         success :   function(data) {
+            if (data.players_added == "True") {
+                // Callback function to do some action
+                cbFunc(data);
+            } else {
+                wait_for_new_players(current_player_count, cbFunc);
+            }
+        }
+    });
+}
 
+
+/**
+ * This function waits for players to join game and returns afterward
+ * @param cbFunc
+ */
+function get_player_info(cbFunc) {
+    $.ajax({
+        url     :   '/api/player/getPlayer',
+        type    :   'POST',
+        dataType:   'json',
+        contentType :   "application/json",
+        success :   function(data) {
             // Callback function to do some action
             cbFunc(data);
-
-            console.log("Player joined game.")
+            update_player_resources_table(data);
         }
     });
 }
@@ -153,18 +167,34 @@ function wait_for_new_players(cbFunc) {
 /**
  * This function calls the start game endpoint to initiate the start of the
  * game.
- * @param gameID
  */
-function start_game(gameID) {
+function start_game() {
     $.ajax({
         url     :   '/api/game/startGame',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID}),
+        dataType:   'json',
         contentType :   "application/json",
         success :   function(data) {
+            //console.log("Game has started.");
+        }
+    });
+}
 
-            console.log("Game has started.")
+
+/**
+ * This function calls the getTurnOptions endpoint to get the available turn
+ * options for the player
+ * game.
+ * @param cbFunc
+ */
+function get_turn_options(cbfunc) {
+    $.ajax({
+        url     :   '/api/player/getTurnOptions',
+        type    :   'POST',
+        dataType:   'json',
+        contentType :   "application/json",
+        success :   function(data) {
+            cbfunc(data);
         }
     });
 }
@@ -172,26 +202,21 @@ function start_game(gameID) {
 
 
 /**
- * This function calls the roll dice endpoint to get two randomly selected dice.
- * @param gameID
- * @param playerID
+ * This function calls the performTurnOptions endpoint to choose the roll dice
+ * option to get two randomly selected dice.
  * @param cbFunc
  */
-function roll_dice(gameID, playerID, cbFunc) {
+function roll_dice(cbFunc) {
     $.ajax({
-        url     :   '/api/player/rollDice',
+        url     :   '/api/player/performTurnOption',
         type    :   'POST',
-        datatype:   'json',
-        data    :   JSON.stringify({"game_id":gameID,
-                                    "player_id":playerID}),
+        dataType:   'json',
+        data    :   JSON.stringify({"turn_option": "roll_dice"}),
         contentType :   "application/json",
         success :   function(data) {
-
-            var roll = data.Roll;
-
+            var roll = data.roll;
+            update_player_resources_table(data);
             cbFunc(roll);
-
-            console.log("Player " + playerID + " rolled: " + roll.dice_one + " " + roll.dice_two);
         }
     });
 }
@@ -202,14 +227,12 @@ function roll_dice(gameID, playerID, cbFunc) {
  * @param cbFunc
  */
 function get_game_board(cbFunc) {
-    console.log("call get_game_board"),
     $.ajax({
         url     :   '/api/game/getGameBoard',
         type    :   'POST',
         datatype:   'json',
         contentType :   "application/json",
         success :   function(data) {
-
             cbFunc(data);
         }
     });
