@@ -261,8 +261,8 @@ function end_settlement_animation() {
 }
 
 function end_game(winner) {
-    if (document.getElementById("gameWinner").innerHTML != "Player has won!")
-        end_turn();
+    if (document.getElementById("gameWinner").innerHTML == "Player has won!")
+        complete_turn();
     document.getElementById("gameWinner").innerHTML = winner + " has won!";
     display_winner();
 }
