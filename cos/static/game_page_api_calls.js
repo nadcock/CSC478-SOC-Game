@@ -16,6 +16,7 @@ function buy_settlement (settlement_id, x, y, cbFunc) {
         success: function (data) {
             update_player_resources_table(data);
             cbFunc(x, y, data.player.player_color);
+            check_for_winner(end_game);
         }
     })
 }
@@ -34,10 +35,30 @@ function wait_for_turn(cbFunc) {
         contentType: "application/json",
         success: function (data) {
             if (data.my_turn == "True") {
-                displaySnackbar("It is now your turn.");
+                displaySnackbar("It is now your turn.")
                 cbFunc();
             } else {
                 wait_for_turn(cbFunc)
+            }
+        }
+    });
+}
+
+/**
+ * This function is called when a settlement is placed or when the turn starts
+ * Returns the name of the winner when the game ends
+ * cbFunc ends game and displays winner
+ * @param cbFunc
+ */
+function check_for_winner(cbFunc) {
+    $.ajax({
+        url: '/api/game/waitForWinner',
+        type: 'POST',
+        dataType: 'json',
+        contentType: "application/json",
+        success: function (data) {
+            if (data.winner != "none") {
+                cbFunc(data.winner);
             }
         }
     });

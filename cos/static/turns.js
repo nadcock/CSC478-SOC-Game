@@ -8,6 +8,7 @@ var settlement_animation;
  * Called when backend confirms it is player's turn
  */
 function start_turn() {
+    check_for_winner(end_game);
     document.getElementById("is_turn").innerHTML = "true";
     render_board();
     get_player_info(function(data) {});
@@ -257,4 +258,17 @@ function end_settlement_animation() {
         settlement.off('mouseup');
     });
     settlement_layer.batchDraw()
+}
+
+function end_game(winner) {
+    if (document.getElementById("gameWinner").innerHTML != "Player has won!")
+        end_turn();
+    document.getElementById("gameWinner").innerHTML = winner + " has won!";
+    display_winner();
+}
+
+function display_winner(){
+    $('#winnerScreen').modal({
+        show: true
+    });
 }

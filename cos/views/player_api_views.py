@@ -49,6 +49,41 @@ def wait_for_turn(request):
     return Response(content_type='json', body=json_return)
 
 
+@view_config(route_name='waitForWinner', renderer='json')
+def wait_for_winner(request):
+    """ This checks if a player has won and if so returns the name of the player, otherwise it returns none
+     It is called after a settlement is placed and at the start of each player's turn
+
+        Parameters
+        ----------
+        request: Request
+            - required JSON parameters: "game_id": String, "player_id": String
+
+        Returns
+        -------
+
+        Json object containing: {"Winner": String}
+    """
+    if 'game_id' in request.session:
+        game_id = request.session['game_id']
+        game = request.registry.games.games[game_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
+
+    if 'player_id' in request.session:
+        player_id = request.session['player_id']
+        if player_id not in game.players:
+            raise HTTPBadRequest(json_body={'error': 'Player found in request but not found in game.'})
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
+
+    winner = game.winner
+
+    return_data = {"winner": winner}
+    json_return = json.dumps(return_data)
+    return Response(content_type='json', body=json_return)
+
+
 @view_config(route_name='getTurnOptions', renderer='json')
 def get_turn_options(request):
     """ This returns a list of the available options that the player is allowed to make during
