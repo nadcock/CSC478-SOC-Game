@@ -46,7 +46,8 @@ function displaySnackbar(message) {
 function end_turn() {
     document.getElementById("is_turn").innerHTML = "false";
     hideTurnControls();
-    wait_for_turn(start_turn);
+    if (document.getElementById("gameWinner").innerHTML == "Player has won!")
+        wait_for_turn(start_turn);
 }
 
 /**
@@ -262,7 +263,9 @@ function end_settlement_animation() {
 
 function end_game(winner) {
     if (document.getElementById("gameWinner").innerHTML == "Player has won!")
-        complete_turn();
+        document.getElementById("gameWinner").innerHTML = winner + " has won!";
+        display_winner();
+        complete_turn(end_turn);
     document.getElementById("gameWinner").innerHTML = winner + " has won!";
     display_winner();
 }
