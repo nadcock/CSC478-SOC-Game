@@ -1,5 +1,22 @@
 [![Waffle.io - Issues in progress](https://badge.waffle.io/nadcock/CSC478-SOC-Game.png?label=in%20progress&title=In%20Progress)](https://waffle.io/nadcock/CSC478-SOC-Game?utm_source=badge)
+
 # CSC478-SOC-Game
+
+## User Setup
+
+    - Install Python 2.7.14
+    - During installation, add python.exe to Path
+    - Open Command Prompt
+    - Nagivate to c:\>
+    - Enter the following command: pip install virtualenv
+    - Download zip of repository from https://github.com/nadcock/CSC478-SOC-Game
+    - Extract files
+    - Navigate to CSC478-SOC-Game-master in command prompt
+    - Enter the following commands: 
+    - virtualenv soc-game
+    - pip install "pyramid==1.9.1"
+    - python setup.py install
+    - pserve development.ini
 
 ## Pycharm Project Setup
     - Install Pycharm
