@@ -32,7 +32,7 @@ def create_game_view(request):
 
     return_data = {'game': new_game.get_dictionary()}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayerFullStatus', renderer='json')
@@ -59,7 +59,7 @@ def get_player_full_status_view(request):
 
     return_data = {'player_full_status': game.get_dictionary(player_count=True, is_full=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='addPlayerToGame', renderer='json')
@@ -118,7 +118,7 @@ def add_player_to_game(request):
     else:
         raise HTTPBadRequest(json_body={'error': "Player not created, game is full"})
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayersInGame', renderer='json')
@@ -158,7 +158,7 @@ def get_players_in_game(request):
     return_data = {'Players': players,
                    'Game': game.get_dictionary(has_started=True, player_count=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='startGame', renderer='json')
@@ -189,7 +189,7 @@ def start_game(request):
 
     return_data = {"success": "True"}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='waitForNewPlayers', renderer='json')
@@ -239,7 +239,7 @@ def wait_for_new_players(request):
                    'Players': players,
                    'Game': game.get_dictionary(has_started=True, player_count=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getGameBoard', renderer='json')
@@ -262,7 +262,7 @@ def get_game_board(request):
         raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
 
     json_return = json.dumps(game.game_board.get_dictionary())
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='setSessionWithGame', renderer='json')
@@ -306,5 +306,5 @@ def set_session_with_game(request):
                                                      "'%s' not found in game '%s'" % (game_id, player_id)})
 
     json_return = json.dumps(response)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 

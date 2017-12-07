@@ -46,7 +46,7 @@ def wait_for_turn(request):
 
     return_data = {"my_turn": my_turn}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getTurnOptions', renderer='json')
@@ -84,7 +84,7 @@ def get_turn_options(request):
     return_data = player.get_turn_options()
     return_data["success"] = "True"
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='performTurnOption', renderer='json')
@@ -127,7 +127,7 @@ def perform_turn_option(request):
 
     return_data = player.perform_turn_option(turn_option=turn_option, game=game, data=json_body)
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayer', renderer='json')
@@ -161,7 +161,7 @@ def get_player(request):
                                                    owned_settlements=True,
                                                    player_resources=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getTradableResources', renderer='json')
@@ -195,4 +195,4 @@ def get_tradable_resources(request):
 
     return_data = player.get_tradable_resources()
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
