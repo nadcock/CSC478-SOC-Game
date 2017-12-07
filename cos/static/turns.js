@@ -78,17 +78,19 @@ function hideTurnControlsButtons() {
 }
 
 /**
- * Called to show turn controls for the turn buttons
+ * Called to show the UI controls for trading
  */
 function showTradeUI() {
     document.getElementById("trade_ui_div").style.display = "block";
 }
 
 /**
- * Called to hide turn controls for the turn buttons
+ * Called to hide the UI controls for trading (also resets drop down)
  */
 function hideTradeUI() {
     document.getElementById("trade_ui_div").style.display = "none";
+    var trade_for_resource_sel = document.getElementById("trade_for_resource_sel");
+    trade_for_resource_sel.innerHTML = "";
 }
 
 /**
@@ -219,6 +221,9 @@ function addTurnOptionButtons() {
     turn_controls.appendChild(turn_option_instructions);
 }
 
+/**
+ * Adds the UI controls for trading resources. It is initially hidden.
+ */
 function add_trade_ui() {
     var trade_div = document.createElement("DIV");
     trade_div.style.display = "none";

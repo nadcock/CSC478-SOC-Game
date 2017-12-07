@@ -85,9 +85,7 @@ class Player(object):
             return
 
         if self.turn_state == "waiting_for_turn":
-            print("setting turn state to rolling")
             self.turn_state = "rolling"
-            print("New turn state is " + self.turn_state)
             return
 
         if self.turn_state == "rolling":
@@ -120,7 +118,6 @@ class Player(object):
                 turn_options.append("trade_resource")
             turn_options.append("end_turn")
 
-        print(turn_options)
         return {"turn_options": turn_options}
 
     def perform_turn_option(self, turn_option, game, data):
@@ -174,15 +171,13 @@ class Player(object):
         if roll == 7:
             return
         for _, player in game.players.iteritems():
-            print("Roll: " + str(roll))
-            print(player.resources_by_roll[roll])
             if player.resources_by_roll[roll] is not None:
                 for resource in player.resources_by_roll[roll]:
                     player.resources[resource] += 1
 
     def can_trade_resources(self):
         """
-            Returns a list of tradable resources for player
+            Returns a boolean as to whether any resources are eligible for trade
         """
         can_trade = False
         for _, value in self.resources.iteritems():
