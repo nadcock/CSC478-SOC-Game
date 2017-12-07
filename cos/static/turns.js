@@ -8,6 +8,7 @@ var settlement_animation;
  * Called when backend confirms it is player's turn
  */
 function start_turn() {
+    hideTradeUI();
     document.getElementById("is_turn").innerHTML = "true";
     render_board();
     get_player_info(function(data) {});
@@ -77,6 +78,20 @@ function hideTurnControlsButtons() {
 }
 
 /**
+ * Called to show turn controls for the turn buttons
+ */
+function showTradeUI() {
+    document.getElementById("trade_ui_div").style.display = "block";
+}
+
+/**
+ * Called to hide turn controls for the turn buttons
+ */
+function hideTradeUI() {
+    document.getElementById("trade_ui_div").style.display = "none";
+}
+
+/**
  * Called to show turn controls for the turn instructions
  */
 function showTurnControlsInstructionsWithMessage(message) {
@@ -102,10 +117,12 @@ function hideTurnControlsInstructions() {
 function enableTurnControls(turn_options) {
     var roll_dice_button = document.getElementById("roll_dice");
     var settlement_button = document.getElementById("buy_settlement");
+    var trade_button = document.getElementById("trade_resource");
     var end_turn_button = document.getElementById("end_turn");
 
     roll_dice_button.disabled = true;
     settlement_button.disabled = true;
+    trade_button.disabled = true;
     end_turn_button.disabled = true;
 
     for (var i = 0; i < turn_options.length; i++) {
@@ -115,6 +132,9 @@ function enableTurnControls(turn_options) {
                 break;
             case "buy_settlement":
                 settlement_button.disabled = false;
+                break;
+            case "trade_resource":
+                trade_button.disabled = false;
                 break;
             case "end_turn":
                 end_turn_button.disabled = false;
@@ -129,8 +149,6 @@ function enableTurnControls(turn_options) {
 function addTurnOptionButtons() {
     var turn_option_buttons = document.createElement("DIV");
     turn_option_buttons.id = "turn_option_buttons";
-    var brk1 = document.createElement("BR");
-    var brk2 = document.createElement("BR");
 
     var turn_option_instructions = document.createElement("DIV");
     turn_option_instructions.id = "turn_option_instructions";
@@ -163,6 +181,20 @@ function addTurnOptionButtons() {
     settlement_button.appendChild(settlement_text);
     settlement_div.appendChild(settlement_button);
 
+    var trade_div = document.createElement("DIV");
+    trade_div.id = "trade_div";
+    trade_div.setAttribute("align", "center");
+    trade_div.setAttribute("style", "padding: 10px");
+    var trade_button = document.createElement("BUTTON");
+    trade_button.id = "trade_resource";
+    trade_button.classList.add("btn");
+    trade_button.classList.add("btn-block");
+    trade_button.classList.add("btn-turn-options");
+
+    var trade_text = document.createTextNode("Trade Resource");
+    trade_button.appendChild(trade_text);
+    trade_div.appendChild(trade_button);
+
     var end_turn_div = document.createElement("DIV");
     end_turn_div.id = "end_turn_div";
     end_turn_div.setAttribute("align", "center");
@@ -179,11 +211,41 @@ function addTurnOptionButtons() {
 
     turn_option_buttons.appendChild(roll_dice_div);
     turn_option_buttons.appendChild(settlement_div);
+    turn_option_buttons.appendChild(trade_div);
     turn_option_buttons.appendChild(end_turn_div);
 
     var turn_controls = document.getElementById("turnControls");
     turn_controls.appendChild(turn_option_buttons);
     turn_controls.appendChild(turn_option_instructions);
+}
+
+function add_trade_ui() {
+    var trade_div = document.createElement("DIV");
+    trade_div.style.display = "none";
+    trade_div.id = "trade_ui_div";
+    trade_div.setAttribute("align", "center");
+    trade_div.setAttribute("style", "padding: 10px");
+    var trade_innerHTML = "<form id='trade-form' action=''>" +
+                           "<div class='form-group'>" +
+                                "<label for='trade_for_resource_sel'>Trade 4 resources:</label>" +
+                                "<select class='form-control' id='trade_for_resource_sel'></select>" +
+                           "</div>" +
+                           "<div class='form-group'>" +
+                                "<label for='requested_resource_sel'>For 1 resources:</label>" +
+                                "<select class='form-control' id='requested_resource_sel'>" +
+                                    "<option value='brick'>Brick</option>" +
+                                    "<option value='wool'>Wool</option>" +
+                                    "<option value='ore'>Ore</option>" +
+                                    "<option value='lumber'>Lumber</option>" +
+                                    "<option value='grain'>Grain</option>" +
+                                "</select><br/>" +
+                           "<button type='button' id='trade_submit_btn' class='btn btn-turn-options'>Perform Trade</button>" +
+                           "</div>" +
+                      "</form>";
+
+    trade_div.innerHTML = trade_innerHTML;
+    var turn_controls = document.getElementById("turnControls");
+    turn_controls.appendChild(trade_div);
 }
 
 
@@ -193,6 +255,45 @@ function addTurnOptionButtons() {
 $(document).on("click", "#end_turn", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
         complete_turn(end_turn);
+    }
+});
+
+/**
+ * Event handler for clicking trade resource button
+ */
+$(document).on("click", "#trade_resource", function(e){
+    if (document.getElementById("is_turn").innerHTML == "true") {
+        hideTurnControlsButtons();
+        cbFunc = function (data) {
+           var tradable_resources = data.tradable_resources;
+           var trade_for_resource_sel = document.getElementById("trade_for_resource_sel");
+           tradable_resources.forEach( function (resource) {
+               var resource_option = document.createElement('option');
+               resource_option.value = resource;
+               resource_option.innerHTML = resource.charAt(0).toUpperCase() + resource.slice(1);
+               trade_for_resource_sel.appendChild(resource_option);
+           });
+           showTradeUI();
+        };
+        get_tradable_resources(cbFunc);
+    }
+});
+
+/**
+ * Event handler for clicking perform trade button
+ */
+$(document).on("click", "#trade_submit_btn", function(e){
+    if (document.getElementById("is_turn").innerHTML == "true") {
+        cbFunc = function (data) {
+           update_player_resources_table(data);
+           hideTradeUI();
+           start_turn();
+        };
+        var to_trade_select = document.getElementById("trade_for_resource_sel");
+        var to_trade = to_trade_select.options[to_trade_select.selectedIndex].value;
+        var for_trade_select = document.getElementById("requested_resource_sel");
+        var for_trade = for_trade_select.options[for_trade_select.selectedIndex].value;
+        perform_trade(to_trade, for_trade, cbFunc);
     }
 });
 

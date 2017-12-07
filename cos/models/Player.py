@@ -116,6 +116,8 @@ class Player(object):
         if self.turn_state == "main_turn":
             if self.can_buy_settlement():
                 turn_options.append("buy_settlement")
+            if self.can_trade_resources():
+                turn_options.append("trade_resource")
             turn_options.append("end_turn")
 
         print(turn_options)
@@ -158,7 +160,14 @@ class Player(object):
                     "player": self.get_dictionary(owned_settlements=True, player_resources=True),
                     "roll": roll}
 
-    def give_resources_for_roll(self, roll, game):
+        if turn_option == "trade_resource":
+            self.resources[data["resource_to_trade"]] -= 4
+            self.resources[data["resource_to_receive"]] += 1
+            return {"success": "True",
+                    "player": self.get_dictionary(player_resources=True)}
+
+    @staticmethod
+    def give_resources_for_roll(roll, game):
         """
             Assigns +1 resources to each/every player based on roll (if they have a nearby settlement)
         """
@@ -170,6 +179,26 @@ class Player(object):
             if player.resources_by_roll[roll] is not None:
                 for resource in player.resources_by_roll[roll]:
                     player.resources[resource] += 1
+
+    def can_trade_resources(self):
+        """
+            Returns a list of tradable resources for player
+        """
+        can_trade = False
+        for _, value in self.resources.iteritems():
+            if value >= 4:
+                can_trade = True
+        return can_trade
+
+    def get_tradable_resources(self):
+        """
+            Returns a list of tradable resources for player
+        """
+        tradable_resources = []
+        for resource, value in self.resources.iteritems():
+            if value >= 4:
+                tradable_resources.append(resource)
+        return {"tradable_resources": tradable_resources}
 
     def roll_dice(self):
         """
