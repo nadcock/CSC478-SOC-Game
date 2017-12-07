@@ -25,7 +25,7 @@ class Player(object):
         self.age = age
         self.current_roll = 0
         self.turn_state = None
-        self.remaining_settlements = 2
+        self.remaining_settlements = 10
         self.resources = {
             "brick":    2,
             "grain":    2,
