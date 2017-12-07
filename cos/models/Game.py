@@ -42,7 +42,7 @@ class Game(object):
         self.turn_order = []
         self.turn_cycle = None
         self.game_started = False
-        self.winner = "none"
+        self.winner = None
 
     def get_player_count(self):
         """ returns number of players currently added to game """

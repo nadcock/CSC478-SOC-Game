@@ -25,7 +25,7 @@ class Player(object):
         self.age = age
         self.current_roll = 0
         self.turn_state = None
-        self.remaining_settlements = 10
+        self.remaining_settlements = 2
         self.resources = {
             "brick":    2,
             "grain":    2,
@@ -141,7 +141,7 @@ class Player(object):
             self.remove_resources_for_settlement()
             self.remaining_settlements -= 1
             if self.remaining_settlements == 0:
-                game.winner = self.name
+                game.winner = self
             return {"success": "True",
                     "remaining_settlement_count": self.remaining_settlements,
                     "player": self.get_dictionary(owned_settlements=True, player_color=True, player_resources=True)}

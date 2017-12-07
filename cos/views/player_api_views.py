@@ -77,7 +77,10 @@ def wait_for_winner(request):
     else:
         raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
 
-    winner = game.winner
+    if game.winner is None:
+        winner = "none"
+    else:
+        winner = game.winner.name
 
     return_data = {"winner": winner}
     json_return = json.dumps(return_data)
