@@ -8,10 +8,10 @@ var settlement_animation;
  * Called when backend confirms it is player's turn
  */
 function start_turn() {
-    check_for_winner(end_game);
-    document.getElementById("is_turn").innerHTML = "true";
     render_board();
     get_player_info(function(data) {});
+    check_for_winner(end_game);
+    document.getElementById("is_turn").innerHTML = "true";
     get_turn_options(function (data) {
         if(data.success == "True"){
             enableTurnControls(data.turn_options);
