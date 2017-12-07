@@ -35,7 +35,7 @@ function wait_for_turn(cbFunc) {
         contentType: "application/json",
         success: function (data) {
             if (data.my_turn == "True") {
-                displaySnackbar("It is now your turn.")
+                displaySnackbar("It is now your turn.");
                 cbFunc();
             } else {
                 wait_for_turn(cbFunc)
