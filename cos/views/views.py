@@ -32,5 +32,8 @@ def game_view(request):
     else:
         player_id = request.session['player_id']
 
+    game = request.registry.games.get_game_by_id(request.session['game_id']).get_dictionary()
+
     return {'game_id': request.session['game_id'],
-            'player_id': player_id}
+            'player_id': player_id,
+            'game_name': game['game_name']}

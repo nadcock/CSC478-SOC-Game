@@ -166,7 +166,6 @@ function wait_for_players_to_join() {
     get_players_in_game(function(data){
 
         var current_player_count = data.Players.length;
-
         update_player_wait_ui(current_player_count);
 
         // Wait for 3 or more players to join

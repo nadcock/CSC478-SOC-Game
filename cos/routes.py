@@ -12,6 +12,7 @@ def includeme(config):
     config.add_route('waitForNewPlayers',   api_game_base_url + 'waitForNewPlayers')
     config.add_route('getGameBoard',        api_game_base_url + 'getGameBoard')
     config.add_route('setSessionWithGame',  api_game_base_url + 'setSessionWithGame')
+    config.add_route('waitForWinner',       api_game_base_url + 'waitForWinner')
 
     api_player_base_url = "api/player/"
     config.add_route('getPlayer',           api_player_base_url + 'getPlayer')
