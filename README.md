@@ -4,7 +4,7 @@
 
 ## User Setup
 
-    - Install Python 2.7.14
+    - Install Python 2.7.14 https://www.python.org/downloads/
     - During installation, add python.exe to Path
     - Open Command Prompt
     - Nagivate to c:\>
