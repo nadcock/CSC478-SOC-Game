@@ -5,7 +5,7 @@
 ## User Setup
 
     - Install Python 2.7.14 https://www.python.org/downloads/
-    - During installation, add python.exe to Path https://raw.githubusercontent.com/nadcock/CSC478-SOC-Game/add_python_to_path.png
+    - During installation, add python.exe to Path https://github.com/nadcock/CSC478-SOC-Game/blob/master/add_python_to_path.png
     - Open Command Prompt
     - Nagivate to c:\>
     - Enter the following command: pip install virtualenv
