@@ -4,6 +4,12 @@
 
 ## User Setup
 
+    System requirements:
+    - Windows 7+ or macOS
+    - Google Chrome Web Browser v. 62+ (other browsers may work but are not supported)
+    - Reliable internet connection
+    
+    Installation Instructions:
     - Install Python 2.7.14 https://www.python.org/downloads/
     - During installation, add python.exe to Path https://github.com/nadcock/CSC478-SOC-Game/blob/master/add_python_to_path.png
     - Open Command Prompt
@@ -17,6 +23,14 @@
     - pip install "pyramid==1.9.1"
     - python setup.py install
     - pserve development.ini
+    
+    Installation issues:
+    - This project is incompatible with Python 3. Additionally, the installation instructions are written for versions of Python  2.7.9 or later. Earlier versions of Python are not bundled with pip and will require additional steps to install.
+    - To run this game locally requires 3 separate browsers. The software uses browser sessions to identify players and consequently each player must be playing from a separate browser. 
+
+    Installation troubleshooting: 
+    - Ensure the correct version of Python is installed (Python 2.7.14)
+    - Ensure the Python path is enabled. On Windows, this can be checked by going to System Properties -> Advanced System Settings -> Environment Variables -> System Variables -> Path. C:\Python27 should be part of that path
 
 ## Pycharm Project Setup
     - Install Pycharm
