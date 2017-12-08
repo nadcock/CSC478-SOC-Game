@@ -46,7 +46,7 @@ def wait_for_turn(request):
 
     return_data = {"my_turn": my_turn}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='waitForWinner', renderer='json')
@@ -122,7 +122,7 @@ def get_turn_options(request):
     return_data = player.get_turn_options()
     return_data["success"] = "True"
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='performTurnOption', renderer='json')
@@ -165,7 +165,7 @@ def perform_turn_option(request):
 
     return_data = player.perform_turn_option(turn_option=turn_option, game=game, data=json_body)
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayer', renderer='json')
@@ -199,4 +199,38 @@ def get_player(request):
                                                    owned_settlements=True,
                                                    player_resources=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
+
+
+@view_config(route_name='getTradableResources', renderer='json')
+def get_tradable_resources(request):
+    """ Returns a list of tradable resources of specified player.
+
+        Parameters
+        ----------
+        request: Request 
+
+        Returns
+        -------
+        Json object containing: {"tradable_resources": [String]}
+    """
+    if 'game_id' in request.session:
+        game_id = request.session['game_id']
+        game = request.registry.games.games[game_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
+
+    if 'player_id' in request.session:
+        player_id = request.session['player_id']
+        if player_id not in game.players:
+            raise HTTPBadRequest(json_body={'error': 'Player found in request but not found in game.'})
+        if game.current_player_id != player_id:
+            raise HTTPBadRequest(json_body={'error': "Requested Player with id "
+                                                     "'%s' cannot do this action when it is not their turn." % player_id})
+        player = game.players[player_id]
+    else:
+        raise HTTPBadRequest(json_body={'error': "Requested player not found. Session may have expired"})
+
+    return_data = player.get_tradable_resources()
+    json_return = json.dumps(return_data)
+    return Response(content_type='application/json', body=json_return)

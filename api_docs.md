@@ -356,8 +356,11 @@
    - **Required Parameters**:
       - ```turn_option: String```
    - Optional Parameters (may be required for some turn options):
-      - If turn_option is "buy_settlement":
+      - If turn_option is "buy_settlement" the following is required:
          - ```settlement_id: String```
+      - If turn_option is "trade_resource" the following is required:
+         - ```resource_to_trade: String```
+         - ```resource_to_receive: String```
    - Returns:
       - success object
          - ```success: Bool``` ("True" or "False")
@@ -387,5 +390,20 @@
                   "owned_settlements": ["s4,5", "s5,7", "s2,7", "s2,6"],
                   "player_color": "white"
    }}
+```
+</p></details>
+<details> 
+    <summary>getTradableResources</summary><p>
+   
+   This returns a list of tradable resources (those which are 4 or greater)
+   
+   - URL: ```/api/player/getTradableResources```
+   - **Required Parameters**: ```None```
+   - Returns
+     - ```tradable_resources: [ String ]```    
+
+   - Example return: 
+```javascript 
+   { "tradable_resources":  ["wool", "lumber"]}
 ```
 </p></details>

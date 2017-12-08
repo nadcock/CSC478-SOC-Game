@@ -65,6 +65,39 @@ function check_for_winner(cbFunc) {
 }
 
 /**
+ * This function is called at the end of every turn and when player enters the game.
+ * Sets the turn state to true when backend returns that it is player's turn
+ * cbFunc enters start turn state on front end.
+ * @param cbFunc
+ */
+function get_tradable_resources(cbFunc) {
+    $.ajax({
+        url: '/api/player/getTradableResources',
+        type: 'POST',
+        dataType: 'json',
+        contentType: "application/json",
+        success: function (data) {
+            cbFunc(data);
+        }
+    });
+}
+
+function perform_trade (to_trade, for_resource, cbFunc) {
+    $.ajax({
+        url: '/api/player/performTurnOption',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify({"turn_option": "trade_resource",
+                              "resource_to_trade": to_trade,
+                              "resource_to_receive": for_resource}),
+        contentType: "application/json",
+        success: function (data) {
+            cbFunc(data);
+        }
+    })
+}
+
+/**
  * This function is called when player chooses to end turn notifies backend that player
  * has ended turn cbFunc enters end turn state on front end
  * @param cbFunc

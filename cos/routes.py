@@ -15,8 +15,9 @@ def includeme(config):
     config.add_route('waitForWinner',       api_game_base_url + 'waitForWinner')
 
     api_player_base_url = "api/player/"
-    config.add_route('getPlayer',           api_player_base_url + 'getPlayer')
-    config.add_route('getTurnOptions',      api_player_base_url + 'getTurnOptions')
-    config.add_route('performTurnOption',   api_player_base_url + 'performTurnOption')
-    config.add_route('waitForTurn',         api_player_base_url + 'waitForTurn')
+    config.add_route('getPlayer',            api_player_base_url + 'getPlayer')
+    config.add_route('getTurnOptions',       api_player_base_url + 'getTurnOptions')
+    config.add_route('performTurnOption',    api_player_base_url + 'performTurnOption')
+    config.add_route('waitForTurn',          api_player_base_url + 'waitForTurn')
+    config.add_route('getTradableResources', api_player_base_url + 'getTradableResources')
 
