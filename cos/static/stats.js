@@ -2,13 +2,13 @@
  * Created by Matthew Polsgrove on 10/17/17.
  */
 
-function display_score() {
-
-    var score = 0;
-
-    document.getElementById("score").innerHTML = "Score: " + score;
-
-}
+// function display_score() {
+//
+//     var score = 0;
+//
+//     document.getElementById("score").innerHTML = "Score: " + score;
+//
+// }
 
 //Displays table of resources
 function display_resources() {
@@ -98,7 +98,6 @@ function display_players() {
     var playerCount = 3;
     var playerName = ["","",""];
     var playerColor = ['black', 'black', 'black'];
-    var playerRoad = ["","",""];
     var playerArmy = ["",""," "];
 
     //Generates table
@@ -109,7 +108,7 @@ function display_players() {
     var playerTableBody = document.createElement("tbody");
     for (var i = 0; i < playerCount+1; i++){
         var row = document.createElement("tr");
-        for (var j = 0; j < 3; j++){
+        for (var j = 0; j < 2; j++){
             var cell = document.createElement("td");
             cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
@@ -122,11 +121,7 @@ function display_players() {
                         cellText = document.createTextNode(playerName[i-1]);
                         break;
                     case 1:
-                        cell.id ="player_road" + (i-1);
-                        cellText = document.createTextNode(playerRoad[i-1]);
-                        break;
-                    case 2:
-                        cell.id = "player_army" + (i-1);
+                        cell.id = "settlement_count" + (i-1);
                         cellText = document.createTextNode(playerArmy[i-1]);
                         break;
                 }
@@ -137,10 +132,7 @@ function display_players() {
                         cellText = document.createTextNode("Player");
                         break;
                     case 1:
-                        cellText = document.createTextNode("Longest Road");
-                        break;
-                    case 2:
-                        cellText = document.createTextNode("Largest Army");
+                        cellText = document.createTextNode("Settlement Count");
                         break;
 
                 }
@@ -306,7 +298,7 @@ function update_player_table(data){
     var players = data.Players;
     for (i = 0; i < players.length; i++) {
         var elm = document.getElementById("player_name" + i);
-        elm.innerText = players[i].Player.player_name;
+        elm.innerHTML = players[i].Player.player_name;
         var color = players[i].Player.player_color;
         if (color == 'white') {
             elm.style.color = 'black';
@@ -314,5 +306,10 @@ function update_player_table(data){
         else {
             elm.style.color = color;
         }
+        var settlement = document.getElementById("settlement_count" + i);
+        var owned_settlements = players[i].Player.owned_settlements;
+        settlement.innerHTML = owned_settlements.length;
     }
 }
+
+

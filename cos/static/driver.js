@@ -51,7 +51,7 @@ function player_join_driver() {
 function init_game_driver() {
 
     // Generate the game stats area
-    display_score();
+    // display_score();
     display_resources();
     display_players();
     // display_devcards();

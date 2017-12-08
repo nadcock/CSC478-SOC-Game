@@ -10,6 +10,7 @@ var settlement_animation;
 function start_turn() {
     hideTradeUI();
     render_board();
+    get_players_in_game(update_player_table);
     get_player_info(function(data) {});
     check_for_winner(end_game);
     document.getElementById("is_turn").innerHTML = "true";
@@ -93,6 +94,8 @@ function hideTradeUI() {
     document.getElementById("trade_ui_div").style.display = "none";
     var trade_for_resource_sel = document.getElementById("trade_for_resource_sel");
     trade_for_resource_sel.innerHTML = "";
+    var for_trade_select = document.getElementById("requested_resource_sel");
+    for_trade_select.selectedIndex = -1;
 }
 
 /**
@@ -238,7 +241,7 @@ function add_trade_ui() {
                                 "<select class='form-control' id='trade_for_resource_sel'></select>" +
                            "</div>" +
                            "<div class='form-group'>" +
-                                "<label for='requested_resource_sel'>For 1 resources:</label>" +
+                                "<label for='requested_resource_sel'>For 1 resource:</label>" +
                                 "<select class='form-control' id='requested_resource_sel'>" +
                                     "<option value='brick'>Brick</option>" +
                                     "<option value='wool'>Wool</option>" +
