@@ -9,9 +9,10 @@ var settlement_animation;
  */
 function start_turn() {
     hideTradeUI();
-    document.getElementById("is_turn").innerHTML = "true";
     render_board();
     get_player_info(function(data) {});
+    check_for_winner(end_game);
+    document.getElementById("is_turn").innerHTML = "true";
     get_turn_options(function (data) {
         if(data.success == "True"){
             enableTurnControls(data.turn_options);
@@ -46,7 +47,8 @@ function displaySnackbar(message) {
 function end_turn() {
     document.getElementById("is_turn").innerHTML = "false";
     hideTurnControls();
-    wait_for_turn(start_turn);
+    if (document.getElementById("gameWinner").innerHTML == "Player has won!")
+        wait_for_turn(start_turn);
 }
 
 /**
@@ -363,4 +365,19 @@ function end_settlement_animation() {
         settlement.off('mouseup');
     });
     settlement_layer.batchDraw()
+}
+
+function end_game(winner) {
+    if (document.getElementById("gameWinner").innerHTML == "Player has won!")
+        document.getElementById("gameWinner").innerHTML = winner + " has won!";
+        display_winner();
+        complete_turn(end_turn);
+    document.getElementById("gameWinner").innerHTML = winner + " has won!";
+    display_winner();
+}
+
+function display_winner(){
+    $('#winnerScreen').modal({
+        show: true
+    });
 }

@@ -42,6 +42,7 @@ class Game(object):
         self.turn_order = []
         self.turn_cycle = None
         self.game_started = False
+        self.winner = None
 
     def get_player_count(self):
         """ returns number of players currently added to game """
@@ -102,7 +103,6 @@ class Game(object):
         buying_player = self.players[player_id]
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
         buying_player.add_settlement(buying_settlement, self.game_board)
-
 
     def set_next_players_turn(self):
         """

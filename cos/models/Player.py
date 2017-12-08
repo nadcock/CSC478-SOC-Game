@@ -139,6 +139,8 @@ class Player(object):
             self.buy_settlement(settlement_to_buy, game.game_board)
             self.remove_resources_for_settlement()
             self.remaining_settlements -= 1
+            if self.remaining_settlements == 0:
+                game.winner = self
             return {"success": "True",
                     "remaining_settlement_count": self.remaining_settlements,
                     "player": self.get_dictionary(owned_settlements=True, player_color=True, player_resources=True)}
@@ -255,3 +257,10 @@ class Player(object):
     @staticmethod
     def roll():
         return random.choice(range(1, 7))
+
+    def get_won(self):
+        print self.remaing_settlements
+        if self.remaining_settlements == 0:
+            return True
+        else:
+            return False

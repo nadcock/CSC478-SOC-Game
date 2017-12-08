@@ -31,7 +31,7 @@
     <span class="row">
         <div class="col-1"></div>
         <div id="game_board" class="col-7">
-            <h1>Catan Board: Game_ID = {{game_id}}</h1>
+            <h1>{{ game_name }}</h1>
             <!-- Stores the game ID for reference later -->
             <div id="game_id" hidden>{{game_id}}</div>
             <div id="player_id" hidden>{{ player_id }}</div>
@@ -137,8 +137,17 @@
             </div>
         </div>
     </div>
-    <!-- Show dialog to wait for players to join -->
-    <!--<script>wait_for_players()</script>-->
+
+  <!-- Lets players know game has been won -->
+    <div class="modal hide fade" id="winnerScreen" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label id="gameWinner">Player has won!</label>
+                </div>
+            </div>
+        </div>
+    </div>
 
      </body>
 </html>

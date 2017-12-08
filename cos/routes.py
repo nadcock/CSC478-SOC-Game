@@ -4,14 +4,15 @@ def includeme(config):
     config.add_route('game', '/game/{game_id}')
 
     api_game_base_url = "api/game/"
-    config.add_route('createGame',           api_game_base_url + 'createGame')
-    config.add_route('getPlayerFullStatus',  api_game_base_url + 'getPlayerFullStatus')
-    config.add_route('getPlayersInGame',     api_game_base_url + 'getPlayersInGame')
-    config.add_route('addPlayerToGame',      api_game_base_url + 'addPlayerToGame')
-    config.add_route('startGame',            api_game_base_url + 'startGame')
-    config.add_route('waitForNewPlayers',    api_game_base_url + 'waitForNewPlayers')
-    config.add_route('getGameBoard',         api_game_base_url + 'getGameBoard')
-    config.add_route('setSessionWithGame',   api_game_base_url + 'setSessionWithGame')
+    config.add_route('createGame',          api_game_base_url + 'createGame')
+    config.add_route('getPlayerFullStatus', api_game_base_url + 'getPlayerFullStatus')
+    config.add_route('getPlayersInGame',    api_game_base_url + 'getPlayersInGame')
+    config.add_route('addPlayerToGame',     api_game_base_url + 'addPlayerToGame')
+    config.add_route('startGame',           api_game_base_url + 'startGame')
+    config.add_route('waitForNewPlayers',   api_game_base_url + 'waitForNewPlayers')
+    config.add_route('getGameBoard',        api_game_base_url + 'getGameBoard')
+    config.add_route('setSessionWithGame',  api_game_base_url + 'setSessionWithGame')
+    config.add_route('waitForWinner',       api_game_base_url + 'waitForWinner')
 
     api_player_base_url = "api/player/"
     config.add_route('getPlayer',            api_player_base_url + 'getPlayer')
