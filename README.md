@@ -11,6 +11,7 @@
     
 ### Installation Instructions:
    * Install Python 2.7.14: https://www.python.org/downloads/
+   
       * During installation, add python.exe to Path <p align="center"> <img src=https://github.com/nadcock/CSC478-SOC-Game/blob/master/add_python_to_path.png> </p>
       * Choose default settings for all other options
    * Open Command Prompt
