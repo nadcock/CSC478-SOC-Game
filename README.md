@@ -11,9 +11,10 @@
     
 ### Installation Instructions:
    * Install Python 2.7.14: https://www.python.org/downloads/
-   
-   * During installation, add python.exe to Path <p align="center"> <img src=https://github.com/nadcock/CSC478-SOC-Game/blob/master/add_python_to_path.png> </p>
+      * During installation, add python.exe to Path <p align="center"> <img src=https://github.com/nadcock/CSC478-SOC-Game/blob/master/add_python_to_path.png> </p>
+      * Choose default settings for all other options
    * Open Command Prompt
+      * Works with standard command prompt
       * Nagivate to c:\>
       * Enter the following command: 
           ```pip install virtualenv```
@@ -23,9 +24,13 @@
       * Navigate to CSC478-SOC-Game-master in command prompt
       * Enter the following commands: 
           1. ```virtualenv soc-game```
+            Setup tools will be installed
           1. ```pip install "pyramid==1.9.1"```
+            Pyramid will be installed. This may take a few minutes
           1. ```python setup.py install```
+            This will install several components and may take a few minutes
           1. ```pserve development.ini```
+            User may need to change the URL from machinename:<port> to localhost:<port> if the machine name does not work
       * Copy the URL provided by the server into a browser window to begin
     
 ### Installation issues:
