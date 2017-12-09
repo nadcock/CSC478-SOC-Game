@@ -57,7 +57,7 @@ function hideDice() {
  * This function implements the following requirement:
  *
  * 3.8.3
- * 
+ *
   */
 
 function showDice() {

@@ -1,5 +1,13 @@
 // Created by David Meyer
 
+/**
+ * This function allows a user to create a new game from the landing page.
+ *
+ * This function implements the following requirement:
+ *
+ * 3.1.2
+ */
+
 window.onload = function() {
 
 // Get the new game modal
