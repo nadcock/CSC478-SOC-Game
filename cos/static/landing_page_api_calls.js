@@ -7,6 +7,7 @@
  * @param gameName
  *
  * This function implements the following requirements:
+ *
  * 3.1.2
  * 3.1.3
  * 3.1.3.1.1
