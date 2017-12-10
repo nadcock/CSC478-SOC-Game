@@ -20,8 +20,12 @@ jQuery.fn.extend({
 
 /**
  * Landing Page modal: this function checks if start game modal form has a game name. If it has,
- * then the game name is submitted and a new game is started:
- * 1) Game name
+ * then the game name is submitted and a new game is started.
+ *
+ * This function implements the following requirement:
+ *
+ * 3.1.3.1.2
+ *
   */
 $(document).on("click", "#startNewGameModalBtn", function(e){
     e.preventDefault();
@@ -45,6 +49,14 @@ $(document).on("click", "#startNewGameModalBtn", function(e){
  * following data is submitted:
  * 1) player name
  * 2) player age
+ *
+ * This function implements the following requirement:
+ *
+ * 3.2.3
+ * 3.2.4
+ * 3.2.9
+ * 3.2.10
+ *
   */
 $(document).on("click", "#joinGameBtn", function(e){
     e.preventDefault();
@@ -88,6 +100,10 @@ $(document).on("click", "#startGameBtn", function(e){
  * 1) check if the game is full. If so, the player will be notified. If not, the player will ask to join.
  * 2) show join player modal
  * 3) submit player info to backend so player can be added to game.
+ *
+ * This function implements the following requirement:
+ * 3.2.8
+ *
  */
 function player_join() {
     // Call Ajax function to get players in game
@@ -108,8 +124,14 @@ function player_join() {
 }
 
 /**
+ * This function supports the wait for additional players function
  *
  * @param playerCount
+ *
+ * This function implements the following requirement:
+ *
+ * 3.2.10
+ *
  */
 function update_player_wait_ui(playerCount) {
     var joinCountStr = "Players joined: " + playerCount;
@@ -122,8 +144,15 @@ function update_player_wait_ui(playerCount) {
 }
 
 /**
+ * This contains the logic to wait for additional players to join the game. This
+ * is passed in a callback function.
  *
  * @param data
+ *
+ * This function implements the following requirement:
+ *
+ * 3.2.10
+ * 3.2.11
  */
 function wait_for_additional_players(data) {
     var current_player_count = data.Game.game_player_count;
@@ -150,6 +179,11 @@ function wait_for_additional_players(data) {
 
 /**
  *  Waits for other players to join the game
+ *
+ *  This function implements the following requirement:
+ *
+ *  3.2.10
+ *  3.2.11
  */
 function wait_for_players_to_join() {
 
