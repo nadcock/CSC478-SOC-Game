@@ -24,14 +24,15 @@
    * Return to Command Prompt
       * Navigate to CSC478-SOC-Game-master in command prompt
       * Enter the following commands: 
-          1. ```virtualenv soc-game```
-            Setup tools will be installed
-          1. ```pip install "pyramid==1.9.1"```
-            Pyramid will be installed. This may take a few minutes
-          1. ```python setup.py install```
-            This will install several components and may take a few minutes
-          1. ```pserve development.ini```
-            A URL will be printed to the console. Copy this into a web browser. Note: User may need to change the URL from machinename:<port> to localhost:<port> if the machine name does not work
+          1. ```virtualenv soc-game```:
+            * Setup tools will be installed
+          1. ```pip install "pyramid==1.9.1"```:
+            * Pyramid will be installed. This may take a few minutes
+          1. ```python setup.py install```:
+            * This will install several components and may take a few minutes
+          1. ```pserve development.ini```:
+            * A URL will be printed to the console. Navigate to this URL in a web browser. 
+            * **Note:** User may need to change the URL from ```machinename:{port}``` to ```localhost:{port}``` if the machine name does not work
       * Copy the URL provided by the server into a browser window to begin
     
 ### Installation issues:
