@@ -6,6 +6,10 @@ var settlement_animation;
 
 /**
  * Called when backend confirms it is player's turn
+ * This implements requirements:
+ * 3.8.4
+ * 3.8.5
+ *
  */
 function start_turn() {
     hideTradeUI();
@@ -27,6 +31,10 @@ function start_turn() {
 
 /**
  * Displays snackbar message at bottom of screen
+ *
+ * This implements requirements:
+ * 3.11.1
+ *
  * @param message
  */
 function displaySnackbar(message) {
@@ -44,6 +52,9 @@ function displaySnackbar(message) {
 
 /**
  * Called when player chooses to end turn
+ *
+ * This implements requirements:
+ * 3.8.1
  */
 function end_turn() {
     document.getElementById("is_turn").innerHTML = "false";
@@ -54,6 +65,9 @@ function end_turn() {
 
 /**
  * Called to show turn controls (including buttons, and dice)
+ *
+ * This implements requirements:
+ * 3.8.3
  */
 function showTurnControls() {
     document.getElementById("turnControls").style.display = "block";
@@ -61,6 +75,9 @@ function showTurnControls() {
 
 /**
  * Called to hide turn controls (including buttons, and dice)
+ *
+ * This implements requirements:
+ * 3.8.4
  */
 function hideTurnControls() {
     document.getElementById("turnControls").style.display = "none";
@@ -68,6 +85,9 @@ function hideTurnControls() {
 
 /**
  * Called to show turn controls for the turn buttons
+ *
+ * This implements requirements:
+ * 3.8.5
  */
 function showTurnControlsButtons() {
     document.getElementById("turn_option_buttons").style.display = "block";
@@ -75,6 +95,10 @@ function showTurnControlsButtons() {
 
 /**
  * Called to hide turn controls for the turn buttons
+ *
+ * This implements requirements:
+ * 3.8.4
+ *
  */
 function hideTurnControlsButtons() {
     document.getElementById("turn_option_buttons").style.display = "none";
@@ -82,6 +106,9 @@ function hideTurnControlsButtons() {
 
 /**
  * Called to show the UI controls for trading
+ *
+ * This implements requirements:
+ * 3.10.4
  */
 function showTradeUI() {
     document.getElementById("trade_ui_div").style.display = "block";
@@ -89,6 +116,9 @@ function showTradeUI() {
 
 /**
  * Called to hide the UI controls for trading (also resets drop down)
+ *
+ * This implements requirements:
+ * 3.8.4
  */
 function hideTradeUI() {
     document.getElementById("trade_ui_div").style.display = "none";
@@ -100,6 +130,9 @@ function hideTradeUI() {
 
 /**
  * Called to show turn controls for the turn instructions
+ *
+ * This implements requirements:
+ * 3.6
  */
 function showTurnControlsInstructionsWithMessage(message) {
     var instruction_div = document.getElementById("turn_option_instructions");
@@ -109,6 +142,10 @@ function showTurnControlsInstructionsWithMessage(message) {
 
 /**
  * Called to hide turn controls for the turn instructions
+ *
+ * This implements requirements:
+ * 3.8.4
+ *
  */
 function hideTurnControlsInstructions() {
     var instruction_div = document.getElementById("turn_option_instructions");
@@ -119,6 +156,11 @@ function hideTurnControlsInstructions() {
 /**
  * Sets the turn buttons to enabled or disabled based on what turn options
  * were received from the backend
+ *
+ * This implements requirements:
+ * 3.8.5
+ * 3.8.6
+ *
  * @param turn_options
  */
 function enableTurnControls(turn_options) {
@@ -152,6 +194,10 @@ function enableTurnControls(turn_options) {
 
 /**
  * Adds the turn buttons to the turn controls div
+ *
+ * This implements requirements:
+ * None, General UI establishment
+ *
  */
 function addTurnOptionButtons() {
     var turn_option_buttons = document.createElement("DIV");
@@ -228,6 +274,9 @@ function addTurnOptionButtons() {
 
 /**
  * Adds the UI controls for trading resources. It is initially hidden.
+ *
+ * This implements requirements:
+ * 3.10.4
  */
 function add_trade_ui() {
     var trade_div = document.createElement("DIV");
@@ -261,6 +310,9 @@ function add_trade_ui() {
 
 /**
  * Event handler for clicking end turn button
+ *
+ * This implements requirements:
+ *
  */
 $(document).on("click", "#end_turn", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
@@ -270,6 +322,10 @@ $(document).on("click", "#end_turn", function(e){
 
 /**
  * Event handler for clicking trade resource button
+ *
+ * This implements requirements:
+ * 3.10.4
+ * 3.10.5
  */
 $(document).on("click", "#trade_resource", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
@@ -291,6 +347,9 @@ $(document).on("click", "#trade_resource", function(e){
 
 /**
  * Event handler for clicking perform trade button
+ *
+ * This implements requirements:
+ * 3.10.6
  */
 $(document).on("click", "#trade_submit_btn", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
@@ -309,6 +368,11 @@ $(document).on("click", "#trade_submit_btn", function(e){
 
 /**
  * Event handler for clicking roll dice button
+ *
+ * This implements requirements:
+ * 3.7.1
+ * 3.7.3
+ * 3.7.4
  */
 $(document).on("click", "#roll_dice", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
@@ -319,6 +383,11 @@ $(document).on("click", "#roll_dice", function(e){
 
 /**
  * Event handler for clicking buy settlement button
+ *
+ * This implements requirements:
+ * 3.6.3
+ * 3.6.4
+ * 3.6.5
  */
 $(document).on("click", "#buy_settlement", function(e){
     if (document.getElementById("is_turn").innerHTML == "true") {
@@ -358,6 +427,10 @@ $(document).on("click", "#buy_settlement", function(e){
 
 /**
  * Turns off pulsating animation for settlements
+ *
+ * This implements requirements:
+ * None, general UI cleanup
+ *
  */
 function end_settlement_animation() {
     settlement_animation.stop();
@@ -370,6 +443,13 @@ function end_settlement_animation() {
     settlement_layer.batchDraw()
 }
 
+/**
+ * Determines if game has been won and then sets the appropriate UI components
+ *
+ * This implements requirements:
+ * 3.9.3
+ * 3.9.4
+ */
 function end_game(winner) {
     if (document.getElementById("gameWinner").innerHTML == "Player has won!")
         document.getElementById("gameWinner").innerHTML = winner + " has won!";
@@ -379,6 +459,12 @@ function end_game(winner) {
     display_winner();
 }
 
+/**
+ * Displays a modal message of the winner
+ *
+ * This implements requirements:
+ * 3.9.4
+ */
 function display_winner(){
     $('#winnerScreen').modal({
         show: true

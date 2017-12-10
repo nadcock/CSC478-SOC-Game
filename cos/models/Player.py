@@ -17,6 +17,16 @@ class Player(object):
 
     """
     def __init__(self, name, color, age):
+        """
+            Initializes player object with name, color, and age
+            
+            This implements requirements:
+            3.2.2
+            3.2.3
+            3.2.4
+            3.2.5
+            3.2.6
+        """
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
         self.name = name
@@ -41,7 +51,14 @@ class Player(object):
     def buy_settlement(self, settlement, game_board):
         """
             Adds a settlement to the Player's list of settlments dictonary 
+            
+            This implements requirements:
+            3.6.2
+            3.6.5.1.1
+            3.6.6
 
+            3.8.2
+            
             Parameters
             ----------
             settlement : Settlement
@@ -70,6 +87,9 @@ class Player(object):
     def remove_resources_for_settlement(self):
         """
             Removes resources for payment of the settlement 
+            
+            This implements requirements:
+            3.6.5.1.1
         """
         self.resources["brick"] -= 1
         self.resources["wool"] -= 1
@@ -79,6 +99,9 @@ class Player(object):
     def set_next_turn_state(self):
         """
             Sets the state machine to the current state
+            
+            This implements requirements:
+            3.8.3
         """
         if self.turn_state is None:
             self.turn_state = "waiting_for_turn"
@@ -99,6 +122,10 @@ class Player(object):
     def get_turn_options(self):
         """
             Returns a list of turn options available during the particular turn state
+            
+            This implements requirements:
+            3.7.4
+            3.8.5
         """
         turn_options = []
 
@@ -123,6 +150,13 @@ class Player(object):
     def perform_turn_option(self, turn_option, game, data):
         """
             Performs turn option specified with data provided
+            
+            This implements requirements:
+            3.6
+            3.7.1
+            3.10.1
+            3.10.6
+            
             Parameters
             ----------
             turn_option: String
@@ -165,21 +199,13 @@ class Player(object):
             return {"success": "True",
                     "player": self.get_dictionary(player_resources=True)}
 
-    @staticmethod
-    def give_resources_for_roll(roll, game):
-        """
-            Assigns +1 resources to each/every player based on roll (if they have a nearby settlement)
-        """
-        if roll == 7:
-            return
-        for _, player in game.players.iteritems():
-            if player.resources_by_roll[roll] is not None:
-                for resource in player.resources_by_roll[roll]:
-                    player.resources[resource] += 1
-
     def can_trade_resources(self):
         """
             Returns a boolean as to whether any resources are eligible for trade
+            
+            This implements requirements:
+            3.10.2	
+            3.10.3	
         """
         can_trade = False
         for _, value in self.resources.iteritems():
@@ -190,6 +216,9 @@ class Player(object):
     def get_tradable_resources(self):
         """
             Returns a list of tradable resources for player
+            
+            This implements requirements:
+            3.10.5
         """
         tradable_resources = []
         for resource, value in self.resources.iteritems():
@@ -200,7 +229,10 @@ class Player(object):
     def roll_dice(self):
         """
             Rolls 2 "dice" and then assigns the total to the current_roll attribute of the player, then returns
-             a tuple of the dice rolls
+            a tuple of the dice rolls
+             
+            This implements requirements:
+            3.7.1
 
             Parameters
             ----------
@@ -223,11 +255,28 @@ class Player(object):
     def can_buy_settlement(self):
         """
             Determines if player can legally purchase a settlement
+            
+            This implements requirements:
+            3.6.6
         """
         if self.remaining_settlements > 0 and all(x >= 1 for x in (self.resources["brick"],
                                                                    self.resources["wool"],
                                                                    self.resources["lumber"],
                                                                    self.resources["grain"])):
+            return True
+        else:
+            return False
+
+    def get_won(self):
+        """
+            Returns true if player has no remaining settlements.
+             
+            This implements requirements:
+            3.6.6
+            3.9.2
+            3.9.3
+        """
+        if self.remaining_settlements == 0:
             return True
         else:
             return False
@@ -258,9 +307,18 @@ class Player(object):
     def roll():
         return random.choice(range(1, 7))
 
-    def get_won(self):
-        print self.remaing_settlements
-        if self.remaining_settlements == 0:
-            return True
-        else:
-            return False
+    @staticmethod
+    def give_resources_for_roll(roll, game):
+        """
+            Assigns +1 resources to each/every player based on roll (if they have a nearby settlement)
+            
+            This implements requirements:
+            3.7.4
+            3.7.4.1.1
+        """
+        if roll == 7:
+            return
+        for _, player in game.players.iteritems():
+            if player.resources_by_roll[roll] is not None:
+                for resource in player.resources_by_roll[roll]:
+                    player.resources[resource] += 1

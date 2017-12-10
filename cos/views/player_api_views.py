@@ -11,6 +11,10 @@ def wait_for_turn(request):
     """ This checks if it is the requested player's turn and if so returns True, otherwise it sleeps until
         it is the players turn, at which point it returns True. If it sleeps longer than 50 seconds, it will
         return False and the frontend must resubmit the request.
+        
+        This implements requirements:
+        3.8.3
+        3.8.4
 
         Parameters
         ----------
@@ -91,6 +95,10 @@ def wait_for_winner(request):
 def get_turn_options(request):
     """ This returns a list of the available options that the player is allowed to make during
     their particular time of their turn
+    
+    This implements requirements:
+    3.8.5
+    3.8.8
 
         Parameters
         ----------
@@ -128,6 +136,12 @@ def get_turn_options(request):
 @view_config(route_name='performTurnOption', renderer='json')
 def perform_turn_option(request):
     """ Performs the turn option passed in request. Some turn options require further data
+    
+        This implements requirements:
+        3.6
+        3.7.1
+        3.10.1
+        3.10.6
 
         Parameters
         ----------
@@ -171,6 +185,8 @@ def perform_turn_option(request):
 @view_config(route_name='getPlayer', renderer='json')
 def get_player(request):
     """ Returns full player object of the player that requested it.
+    
+        This is just a helper endpoint and doesnt implement any specific requirements
 
         Parameters
         ----------
@@ -205,6 +221,9 @@ def get_player(request):
 @view_config(route_name='getTradableResources', renderer='json')
 def get_tradable_resources(request):
     """ Returns a list of tradable resources of specified player.
+    
+        This implements requirements:
+        3.10.5
 
         Parameters
         ----------
