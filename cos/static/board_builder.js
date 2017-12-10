@@ -8,7 +8,7 @@ var settlement_layer;
 var settlements = [];
 
 /**
- * This function is responsible for creating the game board and rending it.
+ * This function is responsible for creating the game board and rendering it.
  * It is recommended this is passed in as a callback function.
  *
  * This implements requirements:
@@ -17,6 +17,25 @@ var settlements = [];
  * 3.4.3
  *
  * @param data (this is the JSON data returned from the server)
+ *
+ * This function implements the following requirements:
+ *
+ * 3.4.1
+ * 3.4.2
+ * 3.4.2.1.1
+ * 3.4.2.1.2
+ * 3.4.2.1.3
+ * 3.4.2.1.4
+ * 3.4.2.1.5
+ * 3.4.2.1.6
+ * 3.4.2.1.7
+ * 3.4.3
+ * 3.4.4
+ * 3.4.6
+ * 3.4.6.1.1
+ * 3.4.6.1.2
+ * 3.5.1
+ * 3.6.3
  */
 function build_board(data) {
 
@@ -257,6 +276,15 @@ function build_board(data) {
  *
  * @param hexTile
  * @returns {string}
+ *
+ * This function implements the following requirements:
+ * 3.3.1.1.1
+ * 3.3.1.1.2
+ * 3.3.1.1.3
+ * 3.3.1.1.4
+ * 3.3.1.1.5
+ * 3.3.1.1.6
+ * 3.3.1.1.7
  */
 function get_tile_fill_color(hexTile) {
 
@@ -321,6 +349,10 @@ function get_tile_fill_color(hexTile) {
  * @param row  (for row)
  * @param col  (for column)
  * @returns {*}
+ *
+ * This function implements the following requirement:
+ * 3.4.3
+ *
  */
 function get_hex_tile_data(data, type, row, col) {
 
@@ -364,6 +396,10 @@ function get_hex_tile_data(data, type, row, col) {
 /**
  * This function initiates the game board render sequence.
  * Output will be a game board rendered onscreen.
+ *
+ * This function implements the following requirement:
+ *
+ * 3.5.1
  */
 function render_board() {
 
@@ -377,6 +413,11 @@ function render_board() {
 
 /**
  * Places settlement at appropriate location
+ *
+ * This function implements the following requirements:
+ *
+ * 3.4.5
+ * 3.6.4
  */
 function initiate_place_settlement(x, y, settlement_ID){
     buy_settlement(settlement_ID, x, y, place_settlement);
@@ -388,6 +429,10 @@ function initiate_place_settlement(x, y, settlement_ID){
  * @param y
  * @param color
  * @param id
+ *
+ * This function implements the following requirements:
+ * 3.6.1
+ * 3.6.2
  */
 function place_settlement(x, y, color, id) {
           var settlement = new Konva.Shape({
@@ -416,6 +461,8 @@ function place_settlement(x, y, color, id) {
 
 /**
  * Updates player tables when new player is detected.
+ *
+ * This function implements requirement 3.5.2
  */
 function update_ui_for_new_player (){
     //waits for turn

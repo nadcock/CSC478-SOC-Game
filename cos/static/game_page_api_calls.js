@@ -5,6 +5,14 @@
  * @param {String} settlement_id
  * @param {function} x
  * @param y
+ *
+ * This function implements the following requirements:
+ *
+ * 3.4.5
+ * 3.6.4
+ * 3.6.5
+ * 3.6.5.1.1
+ * 3.6.5.1.2
  */
 function buy_settlement (settlement_id, x, y, cbFunc) {
     $.ajax({
@@ -26,6 +34,11 @@ function buy_settlement (settlement_id, x, y, cbFunc) {
  * Sets the turn state to true when backend returns that it is player's turn
  * cbFunc enters start turn state on front end.
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.8.1
+ * 3.11.1
  */
 function wait_for_turn(cbFunc) {
     $.ajax({
@@ -49,6 +62,11 @@ function wait_for_turn(cbFunc) {
  * Returns the name of the winner when the game ends
  * cbFunc ends game and displays winner
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.9.2
+ * 3.9.3
  */
 function check_for_winner(cbFunc) {
     $.ajax({
@@ -65,10 +83,14 @@ function check_for_winner(cbFunc) {
 }
 
 /**
- * This function is called at the end of every turn and when player enters the game.
- * Sets the turn state to true when backend returns that it is player's turn
- * cbFunc enters start turn state on front end.
+ * This function is called when a player has the option to trade resources. It confirms that a player
+ * has sufficient resources to trade and adds any tradable resources to the menu
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.10.2
+ * 3.10.5
  */
 function get_tradable_resources(cbFunc) {
     $.ajax({
@@ -82,6 +104,15 @@ function get_tradable_resources(cbFunc) {
     });
 }
 
+/**
+ * This function is called when a player has taken the option to trade. It updates the player with the appropriate
+ * resources on both the front and back end
+ * @param cbFunc
+ *
+ * This function implements the following requirement:
+ *
+ * 3.10.6
+ */
 function perform_trade (to_trade, for_resource, cbFunc) {
     $.ajax({
         url: '/api/player/performTurnOption',
@@ -119,6 +150,11 @@ function complete_turn(cbFunc){
 /**
  * This function returns the count of players in the game. cbFunc is a callback.
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.2.9
+ * 3.2.10
  */
 function get_players_in_game(cbFunc) {
     $.ajax({
@@ -137,6 +173,11 @@ function get_players_in_game(cbFunc) {
 /**
  * This function looks up how many players are in the game and whether it is full
  *@param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.2.7
+ * 3.2.8
  */
 function get_is_game_full(cbFunc) {
     $.ajax({
@@ -157,6 +198,13 @@ function get_is_game_full(cbFunc) {
  * @param playerName
  * @param playerAge
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.2.1
+ * 3.2.2
+ * 3.2.3
+ * 3.2.4
  */
 function add_player_to_game(playerName, playerAge, cbFunc) {
     $.ajax({
@@ -179,6 +227,10 @@ function add_player_to_game(playerName, playerAge, cbFunc) {
 /**
  * This function waits for players to join game and returns afterward
  * @param cbFunc
+ *
+ * This function implements the following requirement:
+ *
+ * 3.2.11
  */
 function wait_for_new_players(current_player_count, cbFunc) {
     $.ajax({
@@ -200,7 +252,7 @@ function wait_for_new_players(current_player_count, cbFunc) {
 
 
 /**
- * This function waits for players to join game and returns afterward
+ * This function returns information about players in the game
  * @param cbFunc
  */
 function get_player_info(cbFunc) {
@@ -221,6 +273,10 @@ function get_player_info(cbFunc) {
 /**
  * This function calls the start game endpoint to initiate the start of the
  * game.
+ *
+ * This function implements the following requirement:
+ *
+ * 3.2.12
  */
 function start_game() {
     $.ajax({
@@ -229,7 +285,6 @@ function start_game() {
         dataType:   'json',
         contentType :   "application/json",
         success :   function(data) {
-            //console.log("Game has started.");
         }
     });
 }
@@ -240,6 +295,12 @@ function start_game() {
  * options for the player
  * game.
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.8.3
+ * 3.8.5
+ * 3.8.6
  */
 function get_turn_options(cbfunc) {
     $.ajax({
@@ -259,6 +320,12 @@ function get_turn_options(cbfunc) {
  * This function calls the performTurnOptions endpoint to choose the roll dice
  * option to get two randomly selected dice.
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.7.1
+ * 3.7.4
+ * 3.7.4.1.1
  */
 function roll_dice(cbFunc) {
     $.ajax({
@@ -279,6 +346,13 @@ function roll_dice(cbFunc) {
 /**
  * This function calls the API that returns the Game Board layout.
  * @param cbFunc
+ *
+ * This function implements the following requirements:
+ *
+ * 3.4.3
+ * 3.4.4
+ * 3.4.6
+ * 3.4.6.1.1
  */
 function get_game_board(cbFunc) {
     $.ajax({
