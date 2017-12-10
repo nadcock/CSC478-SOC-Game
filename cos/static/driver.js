@@ -9,6 +9,9 @@
 /**
  * This function supports a player joining the game and waiting for other players to join.
  *
+ * This implements requirements:
+ * 3.2.2
+ *
  * The sequence Starts as follows:
  * - Checks if player can join.
  * - If YES: prompts player to join.
@@ -40,13 +43,13 @@ function player_join_driver() {
 /**
  * This function initializes the game screen components following all of the players joined.
  *
+ * This implements requirements:
+ * 3.2.12
+ *
  * Screen elements include:
  * - score
  * - resources
  * - player names and color
- * - development cards
- * - road
- * - army
  */
 function init_game_driver() {
 

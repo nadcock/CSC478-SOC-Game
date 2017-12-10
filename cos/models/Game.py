@@ -32,6 +32,11 @@ class Game(object):
                 - no required params
                 - sets private attributes of game_id (random string of alpaha-numeric chars and
                   creates first player object named "Player1" 
+         
+            This implements requirements:
+            3.1.2 
+            3.1.3.1.1
+            3.1.3.1.2
         """
         id_string = ''.join(random.choice('0123456789ABCDEFGHIJKLMNZQRSTUVWXYZ') for i in range(6))
         self.id = id_string
@@ -45,14 +50,23 @@ class Game(object):
         self.winner = None
 
     def get_player_count(self):
-        """ returns number of players currently added to game """
+        """ returns number of players currently added to game 
+            
+            This implements requirements:
+            3.2.7 
+        """
         if self.players:
             return len(self.players)
         else:
             return 0
 
     def is_game_full(self):
-        """ returns True if game has reached the maximum, otherwise returns False """
+        """ returns True if game has reached the maximum, otherwise returns False 
+        
+            This implements requirements:
+            3.2.7 
+            3.2.8
+        """
         if self.get_player_count() < self.PLAYER_MAX:
             return False
         else:
@@ -62,6 +76,13 @@ class Game(object):
         """
             If the players maximum has not been reached, a Player object is created and added to
             the list of players, then that player object is returned. Otherwise, None is returned. 
+            
+            This implements requirements:
+            3.2.3
+            3.2.4
+            3.2.7
+            
+            3.8.1
 
             Parameters
             ----------
@@ -89,6 +110,11 @@ class Game(object):
             If the players maximum has not been reached, a Player object is created and added to
             the list of players, then that player object is returned. Otherwise, None is returned. 
 
+            This implements requirements:
+            3.6.4
+            3.6.5
+            3.6.6
+            
             Parameters
             ----------
             player_id : String
@@ -107,6 +133,9 @@ class Game(object):
     def set_next_players_turn(self):
         """
             Sets current player to next player in turn cycle
+            
+            This implements requirements:
+            3.8.1
 
             Parameters
             ----------
@@ -122,6 +151,12 @@ class Game(object):
         """
             Initializes turn cycle with turn order array and then sets the current player to the
             first item in cycle. Sets game_started flag to True
+            
+            This implements requirements:
+            3.1.3
+            3.2.9
+            3.2.11
+            3.2.12
 
             Parameters
             ----------

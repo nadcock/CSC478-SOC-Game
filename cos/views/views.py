@@ -13,7 +13,11 @@ def my_view(request):
 
 @view_config(route_name='game', renderer='templates/game.jinja2')
 def game_view(request):
-    """ Returns Game Play page based on ID"""
+    """ Returns Game Play page based on ID
+        
+        This implements requirements:
+        3.2.1
+    """
     if "game_id" in request.session:
         if request.matchdict['game_id'] != request.session["game_id"]:
             if request.matchdict['game_id'] in request.registry.games.games:

@@ -7,6 +7,35 @@ from Tile import TerrainTile
 from Road import Road
 
 class Board(object):
+    """ This creates a board object that stores a virtual data object of the board map
+        This implements requirements:
+        3.3.1
+        3.3.1.1.1	
+        3.3.1.1.2	
+        3.3.1.1.3	
+        3.3.1.1.4	
+        3.3.1.1.5	
+        3.3.1.1.6	
+        3.3.1.1.7	
+        
+        3.4.1	
+        3.4.2	
+        3.4.2.1.1	
+        3.4.2.1.2	
+        3.4.2.1.3	
+        3.4.2.1.4	
+        3.4.2.1.5	
+        3.4.2.1.6	
+        3.4.2.1.7	
+        
+        3.4.3	
+        3.4.4	
+        3.4.5	
+        3.4.6	
+        3.4.6.1.1	
+        3.4.6.1.2	
+    """
+
     def __init__(self):
         self.tiles = {}
         self.open_settlements = {}

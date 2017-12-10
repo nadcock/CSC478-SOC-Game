@@ -9,6 +9,11 @@ import json
 @view_config(route_name='createGame', renderer='json')
 def create_game_view(request):
     """ Creates game object
+    
+        This implements requirements:
+        3.1.2 
+        3.1.3.1.1
+        3.1.3.1.2
 
         Parameters
         ----------
@@ -38,7 +43,11 @@ def create_game_view(request):
 @view_config(route_name='getPlayerFullStatus', renderer='json')
 def get_player_full_status_view(request):
     """ Determines how many players are in specified game and if the game is full
-
+        
+        This implements requirements:
+        3.2.7
+        3.2.9
+        
         Parameters
         ----------
         request: Request
@@ -66,6 +75,13 @@ def get_player_full_status_view(request):
 def add_player_to_game(request):
     """ Creates a player and then adds it to the game's list of players
 
+        This implements requirements:
+        3.2.2
+        3.2.3
+        3.2.4
+        3.2.5
+        3.2.6
+        
         Parameters
         ----------
         request: Request 
@@ -124,6 +140,11 @@ def add_player_to_game(request):
 @view_config(route_name='getPlayersInGame', renderer='json')
 def get_players_in_game(request):
     """ Returns a list of all players currently in specified game
+    
+        This implements requirements:
+        3.2.11
+        3.2.12
+        
 
         Parameters
         ----------
@@ -164,6 +185,9 @@ def get_players_in_game(request):
 @view_config(route_name='startGame', renderer='json')
 def start_game(request):
     """ Starts game by setting a turn iterator in game object
+    
+        This implements requirements:
+        3.1.3
 
         Parameters
         ----------
@@ -195,6 +219,13 @@ def start_game(request):
 @view_config(route_name='waitForNewPlayers', renderer='json')
 def wait_for_new_players(request):
     """ This returns a list of players when the player count increases.
+    
+        This implements requirements:
+        3.2.7
+        3.2.8
+        3.2.9
+        3.2.10
+        3.2.11
 
         Parameters
         ----------
@@ -245,6 +276,9 @@ def wait_for_new_players(request):
 @view_config(route_name='getGameBoard', renderer='json')
 def get_game_board(request):
     """ Returns a game board object.
+        
+        This implements requirements:
+        All 3.4 sub-requirements 
 
         Parameters
         ----------
