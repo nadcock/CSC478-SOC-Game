@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <style>
+        .desc-block {padding: 10px;}
+        #main-title {padding-top: 25px;}
+    </style>
+
     <meta charset="UTF-8">
     <title>SOC Help</title>
 </head>
 <body>
-<div >
+<div class="col-lg-8 offset-lg-2">
+<div id="main-title">
     <h1>Welcome to Settlers of Catan!</h1>
 </div>
-<div>
+<div class="desc-block">
     <p>
         Settlers of Catan is a multiplayer board game for 3-4 players. Players place settlements on a board by expending
         resources. The objective of the game is to be the first player to place ten settlements on the board.
     </p>
 </div>
-<div >
+<div>
     <h3>Creating a New Game</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         When you arrive on the landing page for Setters of Catan, you will be presented with a Start New Game button.
         Click that button to create a new game. You will be prompted to enter a game name, then click Start Game to create the game.
@@ -34,7 +46,7 @@
 <div >
     <h3>On Your Turn</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         There are three actions that can be performed on a player’s turn. First, the player must roll the dice.
         Rolling the dice determines who gets resources on that turn. After rolling the dice, a player is given to buy a
@@ -44,7 +56,7 @@
 <div >
     <h3>Rolling the Dice</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         Each player must roll the dice on his or her turn. The dice roll is used to determine which players are awarded
         resources on each turn. Each hexagonal tile on the board is marked with a number. Whenever any player rolls the
@@ -75,7 +87,7 @@
 <div >
     <h3>Building Settlements</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         The first step to building a settlement is to buy one. Settlements cost 1 brick, 1 wool, 1 grain, and 1 lumber.
         If you have enough resources, a settlement can be purchased by clicking on Buy Settlement.
@@ -87,7 +99,7 @@
 <div >
     <h3>Trading Resources</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         If you have 4 or more of a given resource, it can be traded for 1 of a different resource.
         To trade resources, select Trade Resource. This will give you the option to select which resources to trade for with other resource.
@@ -101,11 +113,10 @@
 <div >
     <h3>Winning the Game</h3>
 </div>
-<div>
+<div class="desc-block">
     <p>
         The game ends immediately when any player places his or her tenth settlement. The player who places that settlement is the winner!
     </p>
-</div>
-
+</div></div>
 </body>
 </html>

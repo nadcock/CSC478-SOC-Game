@@ -25,22 +25,55 @@
     <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('cos:static/help_window.js')}}"></script>
+
+    <style>
+        #buttons {
+            padding: 10px;
+        }
+        .btn-game {
+                            color: white;
+                            background-color: transparent;
+                            background-image: none;
+                            border-color: white;
+                            height: 50px;
+                            width: 250px;
+                            font-size: medium;
+                        }
+        .btn-game:hover {
+                            color: #bc2131;
+                            background-color: white;
+                            border-color: white
+                        }
+        .btn-game.focus,
+        .btn-game:focus {
+                            box-shadow: 0 0 0 .2rem rgba(0, 0, 0, 0.5)
+                        }
+        .btn-game.disabled,
+        .btn-game:disabled {
+                            color: #000000;
+                            background-color: transparent
+                        }
+        .btn-game:not([disabled]):not(.disabled).active,
+        .btn-game:not([disabled]):not(.disabled):active
+    </style>
   </head>
 
   <body>
     <div class="starter-template">
         <div class="container">
-            <div class="row">
+            <div align="center">
                 <h1>Settlers of Catan</h1>
             </div>
         <div class="row">
-            <div class="row">
-              <div class="col-md-6">
+            <div align="center" class="row">
+              <div>
                 {{ "Network multiplayer turn based strategy game." }}
                 <p>3-4 Players required</p>
                 <!-- Trigger/Open The Modal -->
-                  <button id="newGameBtn">Start New Game</button><br><br>
-                  <button id="helpButton">Help</button>
+                  <div id="buttons">
+                      <button class="btn-game" id="newGameBtn">Start New Game</button><br><br>
+                      <button class="btn-game" id="helpButton">Help</button>
+                  </div>
               </div>
             </div>
             <div class="row">
