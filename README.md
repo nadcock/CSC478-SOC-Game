@@ -15,10 +15,10 @@
       * During installation, add python.exe to Path <p align="center"> <img src=https://github.com/nadcock/CSC478-SOC-Game/blob/master/Documentation/add_python_to_path.png> </p>
       * Choose default settings for all other options
    * Open Command Prompt
-      * Works with standard command prompt
-      * Nagivate to c:\>
+      * Nagivate to ```C:\>```
       * Enter the following command: 
           ```pip install virtualenv```
+      * **Note:** Works with standard command prompt
    * Download zip of repository from https://github.com/nadcock/CSC478-SOC-Game
    * Extract files
    * Return to Command Prompt
