@@ -41,3 +41,8 @@ def game_view(request):
     return {'game_id': request.session['game_id'],
             'player_id': player_id,
             'game_name': game['game_name']}
+
+
+@view_config(route_name='help', renderer='templates/user_manual.jinja2')
+def help_view(request):
+    return {'help': 'User Manual'}
