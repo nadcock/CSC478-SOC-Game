@@ -39,7 +39,6 @@
             <div id="is_turn" hidden>{{ is_turn }}</div>
             <div id = "container"></div>
             <div id = "gameBoard"></div>
-            <button id="helpButton">Help</button>
 
             <!-- Render game board early -->
             <script>
@@ -91,6 +90,11 @@
         </span>
         <span class="col-1"></span>
         </span>
+        <div class="row">
+            <div class="col-md-1 offset-md-11">
+                <button class="btn-turn-options" id="helpButton">Help</button>
+            </div>
+        </div>
     </span>
     <script>
         addTurnOptionButtons();
