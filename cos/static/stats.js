@@ -10,7 +10,14 @@
 //
 // }
 
-//Displays table of resources
+/**
+ * Displays table of resources
+ *
+ * This function implements the following requirements:
+ *
+ * 3.5.3
+ * 3.5.3.1.1
+ */
 function display_resources() {
 
     //Fetch from backend
@@ -91,7 +98,14 @@ function display_resources() {
     resourceTable.setAttribute("border", "2");
 }
 
-//Displays table of players
+/**
+ * Displays table of players
+ *
+ * This function implements the following requirement:
+ *
+ * 3.5.2
+ */
+
 function display_players() {
 
     //Initial values
@@ -285,7 +299,17 @@ function display_road_and_army(){
     playerTable.setAttribute("border", "2");
 }
 
-// Updates the player resource table based on data provided from the backend
+/** Updates the player resource table based on data provided from the
+ *
+ * @param data
+ *
+ * This function implements the following requirements:
+ *
+ * 3.6.5.1.1
+ * 3.7.4
+ * 3.7.4.1.1
+ * 3.10.6
+ */
 function update_player_resources_table(data) {
     var resource_dict = data.player.resources;
     $.each(resource_dict, function (resource, num) {
@@ -293,7 +317,14 @@ function update_player_resources_table(data) {
     })
 }
 
-//Call to redraw tables with information from the backend
+/**Call to redraw tables with information from the backend
+ *
+ * @param data
+ *
+ * This function implements the following requirements:
+ *
+ * 3.9.1
+ */
 function update_player_table(data){
     var players = data.Players;
     for (i = 0; i < players.length; i++) {
