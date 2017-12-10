@@ -11,6 +11,11 @@ var settlements = [];
  * This function is responsible for creating the game board and rending it.
  * It is recommended this is passed in as a callback function.
  *
+ * This implements requirements:
+ * 3.4.1
+ * 3.4.2
+ * 3.4.3
+ *
  * @param data (this is the JSON data returned from the server)
  */
 function build_board(data) {
@@ -35,6 +40,8 @@ function build_board(data) {
     var buffer = 11;
     var max_row_length = 7;
     var board_layout = [4, 5, 6, 7, 6, 5, 4];
+
+    /* For future development */
     // var road_width = hex_radius * .78;
     // var road_height = 7;
 
