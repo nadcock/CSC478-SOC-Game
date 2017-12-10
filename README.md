@@ -35,7 +35,7 @@
              * **Note:** User may need to change the URL from ```machinename:{port}``` to ```localhost:{port}``` if the machine name does not work
       * Copy the URL provided by the server into a browser window to begin
     
-### Installation issues:
+### Installation Issues:
    * This project is incompatible with Python 3. 
    
       * The installation instructions are written for versions of Python 2.7.9 or later (up to but not including 3)
@@ -72,13 +72,13 @@
    * Select 2.7 as base interpreter
    * Choose OK
 
-### Install required packages
+### Install Required Packages
    * Go to Tools > Run Setup.py Task...
    
    * Type "Develop" and choose menu option that appears
    * Hit "Ok"
 
-### Setup run configuration for project
+### Setup Run Configuration for Project
    * Select "Edit Configurations" from Run menu
    
    * Select "+" button and choose "Pyramid Server"
@@ -87,7 +87,7 @@
    * FOR WINDOWS: Select "Run Browser", enter IP address as 127.0.0.1:6543
    * Hit "OK"
 
-### Run server
+### Run Server
    * Click run button at top of screen
    
    * Click link that appears in console
