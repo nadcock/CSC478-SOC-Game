@@ -2,6 +2,7 @@ def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('game', '/game/{game_id}')
+    config.add_route('help', '/help')
 
     api_game_base_url = "api/game/"
     config.add_route('createGame',          api_game_base_url + 'createGame')
