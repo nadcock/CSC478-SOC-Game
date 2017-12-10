@@ -19,7 +19,7 @@ function build_board(data) {
     stage = new Konva.Stage({
       container: 'gameBoard',
       width: 1300,
-      height: 1000,
+      height: 700,
       id: "game_board_stage"
     });
 

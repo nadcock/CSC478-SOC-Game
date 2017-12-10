@@ -21,6 +21,7 @@
         <script type="text/javascript" src="{{request.static_url('cos:static/turns.js')}}"></script>
 
         <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/help_window.js')}}"></script>
 
   <!-- Game Body -->
   </head>
@@ -38,6 +39,7 @@
             <div id="is_turn" hidden>{{ is_turn }}</div>
             <div id = "container"></div>
             <div id = "gameBoard"></div>
+            <button id="helpButton">Help</button>
 
             <!-- Render game board early -->
             <script>
