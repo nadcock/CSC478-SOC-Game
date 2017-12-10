@@ -50,7 +50,7 @@ $(document).on("click", "#startNewGameModalBtn", function(e){
  * 1) player name
  * 2) player age
  *
- * This function implements the following requirement:
+ * This function implements the following requirements:
  *
  * 3.2.3
  * 3.2.4
@@ -149,7 +149,7 @@ function update_player_wait_ui(playerCount) {
  *
  * @param data
  *
- * This function implements the following requirement:
+ * This function implements the following requirements:
  *
  * 3.2.10
  * 3.2.11
@@ -180,7 +180,7 @@ function wait_for_additional_players(data) {
 /**
  *  Waits for other players to join the game
  *
- *  This function implements the following requirement:
+ *  This function implements the following requirements:
  *
  *  3.2.10
  *  3.2.11
