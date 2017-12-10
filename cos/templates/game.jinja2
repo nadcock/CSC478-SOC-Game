@@ -2,75 +2,98 @@
 <html lang="{{request.locale_name}}">
   <head>
         <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
+        <!-- custom CSS CSS -->
+        <link rel="stylesheet" href="{{request.static_url('cos:static/snackbar.css')}}"/>
+
+
         <!-- Core JavaScript -->
         <script type="text/javascript" src="{{request.static_url('cos:static/konva.min.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/board_builder.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/driver.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/stats.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
-        <script type="text/javascript" src="{{request.static_url('cos:static/landing_page_api_calls.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/gamedice.js')}}"></script>
         <script type="text/javascript" src="{{request.static_url('cos:static/game_page_api_calls.js')}}"></script>
+        <script type="text/javascript" src="{{request.static_url('cos:static/turns.js')}}"></script>
 
+        <script type="text/javascript" src="{{request.static_url('cos:static/player_join.js')}}"></script>
 
   <!-- Game Body -->
   </head>
   <body>
+  <div id="snackbar"></div>
+
     <span class="container">
     <span class="row">
-        <div class="col-lg-8">
-            <h1>Catan Board: Game_ID = {{project}}</h1>
+        <div class="col-1"></div>
+        <div id="game_board" class="col-7">
+            <h1 align="center">{{ game_name }}</h1>
             <!-- Stores the game ID for reference later -->
-            <div id="game_id" hidden>{{project}}</div>
-            <div id="player_id" hidden></div>
+            <div id="game_id" hidden>{{game_id}}</div>
+            <div id="player_id" hidden>{{ player_id }}</div>
+            <div id="is_turn" hidden>{{ is_turn }}</div>
             <div id = "container"></div>
-            <script>build_board()</script>
+            <div id = "gameBoard"></div>
+
+            <!-- Render game board early -->
+            <script>
+                render_board();
+            </script>
+
+            <!-- Begin game join sequence -->
+            <script>player_join_driver()</script>
         </div>
-        <span class="col-lg-4">
-            <!-- Game stats tables -->
-            <h3 id = "score"></h3>
-            <script>display_score()</script>
-            <div id = "resources"></div>
-            <script>display_resources()</script>
-            <div id = "players"></div>
-            <script>display_players()</script>
-            <div id = "devcards"></div>
-            <script>display_devcards()</script>
-            <div id = "road_and_army"></div>
-            <script>display_road_and_army()</script>
-
-            <!-- Dice Controls -->
-            <table id="diceTable" class="tab-content">
-                <th>
-                    <h4>Dice</h4>
-                </th>
-                <tr>
-                    <td>
-                        <div class="card p-3">
-                            <h3 id="dice1" align="center">3</h3>
-                            <span>dice one</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="card p-3">
-                            <h3 id="dice2" align="center">5</h3>
-                            <span>dice two</span>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <tr>
-                <button id="rollDiceBtn" type="button" class="btn" >Roll Dice</button>
-            </tr>
-
+        <span class="col-3">
+            <div class="card" style="padding: 10px">
+                <!-- Game stats tables -->
+{#                <h3 id="playerTurn"></h3>#}
+{#                    <h3 id="score"></h3>#}
+                <div id="resources"></div>
+                <br/>
+                <div id="players"></div>
+        {#            <div id="devcards"></div>#}
+        {#            <div id="road_and_army"></div>#}
+                <br/>
+                <div id="turnControls" class="card" style="display:none">
+                    <!-- Dice Controls -->
+                    <div id="diceControls" align="center" style="display:none; padding-top: 50px;">
+                        <table id="diceTable" class="tab-content">
+                            <tr>
+                                <td style="padding: 5px">
+                                    <div class="card card-outline-primary p-3" style="width: 75px">
+                                        <h3 id="dice1" align="center">?</h3>
+                                    </div>
+                                </td>
+                                <td style="padding: 5px">
+                                    <div class="card card-outline-primary p-3" style="width: 75px">
+                                        <h3 id="dice2" align="center">?</h3>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <tr>
+                            <div style="padding: 10px">
+                                <button id="rollDiceBtn" type="button" class="btn btn-block btn-turn-options" >Roll Dice</button>
+                            </div>
+                        </tr>
+                        <!-- End Turn Button -->
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
         </span>
+        <span class="col-1"></span>
         </span>
     </span>
-
+    <script>
+        addTurnOptionButtons();
+        add_trade_ui()
+    </script>
     <!-- Prompt for player join -->
     <div class="modal fade" id="newGame" role="dialog">
         <div class="modal-dialog" role="document">
@@ -82,7 +105,7 @@
                     <form id="joinForm" name="joinForm" action="">
                         <div class="form-group">
                             <label><b>Player name</b></label><br>
-                            <input id="player_name" type="text" placeholder="your name" name="player_name" required><br>
+                            <input id="player_name" type="text" placeholder="your name" name="player_name" autofocus required><br>
                         </div>
                         <div class="form-group">
                             <label><b>Age</b></label><br>
@@ -91,11 +114,40 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="joinGameBtn" type="button" class="btn">Start Game!</button>
+                    <button id="joinGameBtn" type="button" class="btn">Join Game!</button>
                 </div>
             </div>
         </div>
     </div>
-    <script>player_join()</script>
+
+    <!-- Prompt for wait for players to join -->
+    <div class="modal fade" id="waitForPlayers" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">Waiting for other players to join...</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Waiting for 3 players to join before 'Start Game' activates.</label><br>
+                    <label id="playerJoinCount">Players joined 1</label>
+                </div>
+                <div class="modal-footer">
+                    <button id="startGameBtn" type="button" class="btn" name="startGameBtn">Start Game!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Lets players know game has been won -->
+    <div class="modal hide fade" id="winnerScreen" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label id="gameWinner">Player has won!</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
      </body>
 </html>

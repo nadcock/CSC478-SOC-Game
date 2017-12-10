@@ -42,6 +42,7 @@ class Game(object):
         self.turn_order = []
         self.turn_cycle = None
         self.game_started = False
+        self.winner = None
 
     def get_player_count(self):
         """ returns number of players currently added to game """
@@ -103,26 +104,7 @@ class Game(object):
         buying_settlement = self.game_board.open_settlements.pop(settlement_id)
         buying_player.add_settlement(buying_settlement, self.game_board)
 
-    def roll_dice(self, player_id):
-        """
-            Rolls 2 "dice" and then assigns the total to the current_roll attribute of the player, then returns
-             a tuple of the dice rolls
-
-            Parameters
-            ----------
-            player_id : String
-                id string of player object
-
-            Returns
-            -------
-            (Integer, Integer)
-        """
-        dice_one = self.roll()
-        dice_two = self.roll()
-        self.players[player_id].current_roll = dice_one + dice_two
-        return dice_one, dice_two
-
-    def take_turn(self):
+    def set_next_players_turn(self):
         """
             Sets current player to next player in turn cycle
 
@@ -168,9 +150,6 @@ class Game(object):
             game_dict["game_player_count"] = self.get_player_count()
         return game_dict
 
-    @staticmethod
-    def roll():
-        return random.choice(range(1, 7))
 
 
 class Games(object):

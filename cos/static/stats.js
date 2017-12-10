@@ -1,14 +1,14 @@
 /**
- * Created by mattpolsgrove on 10/17/17.
+ * Created by Matthew Polsgrove on 10/17/17.
  */
 
-function display_score() {
-
-    var score = 0;
-
-    document.getElementById("score").innerHTML = "Score: " + score;
-
-}
+// function display_score() {
+//
+//     var score = 0;
+//
+//     document.getElementById("score").innerHTML = "Score: " + score;
+//
+// }
 
 //Displays table of resources
 function display_resources() {
@@ -30,6 +30,7 @@ function display_resources() {
         var row = document.createElement("tr");
         for (var j = 0; j < 5; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i == 0) {
@@ -55,18 +56,23 @@ function display_resources() {
                 switch (j) {
                     case 0:
                         cellText = document.createTextNode("" + brick);
+                        cell.id = "brickresource";
                         break;
                     case 1:
                         cellText = document.createTextNode("" + wool);
+                        cell.id = "woolresource";
                         break;
                     case 2:
                         cellText = document.createTextNode("" + ore);
+                        cell.id = "oreresource";
                         break;
                     case 3:
                         cellText = document.createTextNode("" + grain);
+                        cell.id = "grainresource";
                         break;
                     case 4:
                         cellText = document.createTextNode("" + lumber);
+                        cell.id = "lumberresource";
                         break;
                 }
             }
@@ -92,7 +98,6 @@ function display_players() {
     var playerCount = 3;
     var playerName = ["","",""];
     var playerColor = ['black', 'black', 'black'];
-    var playerRoad = ["","",""];
     var playerArmy = ["",""," "];
 
     //Generates table
@@ -103,8 +108,9 @@ function display_players() {
     var playerTableBody = document.createElement("tbody");
     for (var i = 0; i < playerCount+1; i++){
         var row = document.createElement("tr");
-        for (var j = 0; j < 3; j++){
+        for (var j = 0; j < 2; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (i > 0) {
@@ -115,11 +121,7 @@ function display_players() {
                         cellText = document.createTextNode(playerName[i-1]);
                         break;
                     case 1:
-                        cell.id ="player_road" + (i-1);
-                        cellText = document.createTextNode(playerRoad[i-1]);
-                        break;
-                    case 2:
-                        cell.id = "player_army" + (i-1);
+                        cell.id = "settlement_count" + (i-1);
                         cellText = document.createTextNode(playerArmy[i-1]);
                         break;
                 }
@@ -130,10 +132,7 @@ function display_players() {
                         cellText = document.createTextNode("Player");
                         break;
                     case 1:
-                        cellText = document.createTextNode("Longest Road");
-                        break;
-                    case 2:
-                        cellText = document.createTextNode("Largest Army");
+                        cellText = document.createTextNode("Settlement Count");
                         break;
 
                 }
@@ -148,9 +147,6 @@ function display_players() {
     }
     var stage;
     var layer;
-
-    //Get player info
-    get_player_info(update_tables,stage,layer);
 
     playerTable.appendChild(playerTableBody);
     body.appendChild(playerTable);
@@ -251,6 +247,7 @@ function display_road_and_army(){
         var row = document.createElement("tr");
         for (var j = 0; j < 2; j++){
             var cell = document.createElement("td");
+            cell.setAttribute("align", "center");
             var cellText = document.createTextNode("ERR");
 
             if (j == 0) {
@@ -278,8 +275,6 @@ function display_road_and_army(){
 
             cell.appendChild(cellText);
             row.appendChild(cell);
-
-
         }
         playerTableBody.appendChild(row);
     }
@@ -290,18 +285,31 @@ function display_road_and_army(){
     playerTable.setAttribute("border", "2");
 }
 
-//Call to redraw tables with information from the backend
-function update_tables(data,stage,layer){
-    var players = data.Players;
-        for (i = 0; i < 3; i++) {
-            var elm = document.getElementById("player_name" + i);
-            elm.innerText = players[i].Player.player_name;
-            var color = players[i].Player.player_color;
-            if (color == 'white') {
-                elm.style.color = 'black';
-            }
-            else {
-                elm.style.color = color;
-            }
-        }
+// Updates the player resource table based on data provided from the backend
+function update_player_resources_table(data) {
+    var resource_dict = data.player.resources;
+    $.each(resource_dict, function (resource, num) {
+        $("#" + resource + 'resource').html(num);
+    })
 }
+
+//Call to redraw tables with information from the backend
+function update_player_table(data){
+    var players = data.Players;
+    for (i = 0; i < players.length; i++) {
+        var elm = document.getElementById("player_name" + i);
+        elm.innerHTML = players[i].Player.player_name;
+        var color = players[i].Player.player_color;
+        if (color == 'white') {
+            elm.style.color = 'black';
+        }
+        else {
+            elm.style.color = color;
+        }
+        var settlement = document.getElementById("settlement_count" + i);
+        var owned_settlements = players[i].Player.owned_settlements;
+        settlement.innerHTML = owned_settlements.length;
+    }
+}
+
+

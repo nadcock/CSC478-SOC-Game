@@ -282,6 +282,34 @@
    }
 ```
 </p></details>
+<details> 
+    <summary>setSessionWithGame</summary><p>
+   
+   This should be called when all players are ready to start the game, once game is started players cannot be added
+   
+   - URL: ```/api/game/setSessionWithGame```
+   - **Required Parameters**: ```game_id: String```
+   - Optional Parameters: ```player_id: String```
+   - Returns
+     - Game object:    
+         - ```player_count: Int```     
+         - ```game_is_full: Bool```    
+      - Player object (if player_id is included in request):    
+         - ```player_id: String``` 
+         - ```player_name: String```
+
+   - Example return: 
+```javascript 
+   { "Game":  {
+                  "player_count": "2", 
+                  "game_is_full": "False"
+     "Player":  {
+                  "player_id": "XF093D", 
+                  "player_name": "Player 3",
+                  "player_color": "orange"
+   }}
+```
+</p></details>
 
 ## Player Methods:
 <details> 
@@ -302,81 +330,80 @@
 ```
 </p></details>
 <details> 
-    <summary>rollDice</summary><p>
+    <summary>getTurnOption</summary><p>
    
-   This is called to roll two dice, both dice and their total are returned
+   This is called to get the turn options available for a player in a particular turn state
    
-   - URL: ```/api/player/rollDice```
+   - URL: ```/api/player/getTurnOption```
    - **Required Parameters**: ```None```
    - Returns
-     - Roll object:
-        - ```dice_one: Int``` 
-        - ```dice_two: Int``` 
-        - ```dice_total: In```
+     - ```"turn_options": [String]```
    - Example return: 
 ```javascript 
-   { "Roll": {
-           "dice_one": "2",
-           "dice_total": "5",
-           "dice_two": "3"
+   { "turn_options": [
+           "roll_dice",
+           "buy_settlement",
+           "end_turn"]
+   }
+```
+</p></details>
+<details> 
+    <summary>performTurnOption</summary><p>
+   
+   This should be called when buying (or assigning) a settlement to a player
+   
+   - URL: ```/api/player/performTurnOption```
+   - **Required Parameters**:
+      - ```turn_option: String```
+   - Optional Parameters (may be required for some turn options):
+      - If turn_option is "buy_settlement" the following is required:
+         - ```settlement_id: String```
+      - If turn_option is "trade_resource" the following is required:
+         - ```resource_to_trade: String```
+         - ```resource_to_receive: String```
+   - Returns:
+      - success object
+         - ```success: Bool``` ("True" or "False")
+      - Other optional return params depend on the turn_option specified in request
+      
+</p></details>
+<details> 
+    <summary>getPlayer</summary><p>
+   
+   This returns the player object of the player that requested it
+   
+   - URL: ```/api/player/getPlayer```
+   - **Required Parameters**: ```None```
+   - Returns
+     - player object:    
+         - ```player_id: String``` 
+         - ```player_name: String```
+         - ```owned_settlements: [ String ]```
+         - ```player_age: Int```
+
+   - Example return: 
+```javascript 
+   { "player":  {
+                  "player_id": "XF093D", 
+                  "player_name": "Nick",
+                  "player_age": "32",
+                  "owned_settlements": ["s4,5", "s5,7", "s2,7", "s2,6"],
+                  "player_color": "white"
    }}
 ```
 </p></details>
 <details> 
-    <summary>buySettlement</summary><p>
+    <summary>getTradableResources</summary><p>
    
-   This should be called when buying (or assigning) a settlement to a player
+   This returns a list of tradable resources (those which are 4 or greater)
    
-   - URL: ```/api/player/buySettlement```
-   - **Required Parameters**:
-      - ```settlement_id: Stringt```
-   - Returns:
-      - success object
-         - ```success: String``` ("success" or "fail")
-      - Settlement object: 
-         - ```settlement_id: String``` 
-         - ```settlement_color: String```
-         - ```settlement_row: Int```
-         - ```settlement_column: Int```
-         - ```nearby_tiles: [ String ]```
-      - player object:    
-         - ```player_id: String``` 
-         - ```player_name: String```
-         - ```owned_settlements: [ String ]```
-   
-   - Example return: 
-```javascript 
-   { "status": "success",
-     "Settlement":  {
-                  "settlement_color": "grey",
-                  "settlement_column": 6,
-                  "settlement_row": 5,
-                  "settlement_id": "s5,6",
-                  "nearby_tiles": ["t5,4", "t6,3", "t6,4"] 
-     }
-     "Player":  {
-                  "player_id": "3FD745", 
-                  "player_name": "Harry",
-                  "owned_settlements": ["s5,6", "s3,7"],
-     }}
-```
-</p></details>
-<details> 
-    <summary>completeTurn</summary><p>
-   
-   This should be called when a player wishes to complete their turn and the turn progresses to the next player
-
-   - URL: ```/api/player/completeTurn```
+   - URL: ```/api/player/getTradableResources```
    - **Required Parameters**: ```None```
    - Returns
-     - ```success: Bool```
-     - ```new_current_player: String```
+     - ```tradable_resources: [ String ]```    
 
    - Example return: 
 ```javascript 
-   { 
-       "success": "True",
-       "new_current_player": "X5EY14" 
-   }
+   { "tradable_resources":  ["wool", "lumber"]}
 ```
 </p></details>

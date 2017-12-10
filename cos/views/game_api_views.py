@@ -32,7 +32,7 @@ def create_game_view(request):
 
     return_data = {'game': new_game.get_dictionary()}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayerFullStatus', renderer='json')
@@ -52,20 +52,14 @@ def get_player_full_status_view(request):
                                     "game_is_full": Bool
                                     }
     """
-    json_body = request.json_body
-    if 'game_id' in json_body:
-        game_id = json_body['game_id']
-        if game_id not in request.registry.games.games:
-            raise HTTPBadRequest(json_body={'error': "The requested 'game_id' is not found in list of current games"})
-        else:
-            request.session['game_id'] = game_id
+    if 'game_id' in request.session:
+        game = request.registry.games.games[request.session['game_id']]
     else:
-        raise HTTPBadRequest(json_body={'error': "'game_id' is a required parameter for this request"})
-    game = request.registry.games.games[game_id]
+        raise HTTPBadRequest(json_body={'error': 'Requested game not found. Session may have expired'})
 
     return_data = {'player_full_status': game.get_dictionary(player_count=True, is_full=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='addPlayerToGame', renderer='json')
@@ -100,6 +94,9 @@ def add_player_to_game(request):
     else:
         raise HTTPBadRequest(json_body={'error': 'Requested game not found. Session may have expired'})
 
+    if 'game_id' in json_body:
+        game = request.registry.games.games[json_body['game_id']]
+
     if game.game_started:
         raise HTTPBadRequest(json_body={'error': 'Game has already started'})
 
@@ -121,10 +118,7 @@ def add_player_to_game(request):
     else:
         raise HTTPBadRequest(json_body={'error': "Player not created, game is full"})
     json_return = json.dumps(return_data)
-    response = Response
-    response.content_type = 'json'
-    response.body = json_return
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getPlayersInGame', renderer='json')
@@ -164,7 +158,7 @@ def get_players_in_game(request):
     return_data = {'Players': players,
                    'Game': game.get_dictionary(has_started=True, player_count=True)}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='startGame', renderer='json')
@@ -195,7 +189,7 @@ def start_game(request):
 
     return_data = {"success": "True"}
     json_return = json.dumps(return_data)
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='waitForNewPlayers', renderer='json')
@@ -212,18 +206,40 @@ def wait_for_new_players(request):
 
         Same object as in get_players_in_game()
     """
+    json_body = request.json_body
     if 'game_id' in request.session:
         game_id = request.session['game_id']
         game = request.registry.games.games[game_id]
     else:
         raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
 
-    player_count = len(game.turn_order)
+    if 'current_player_count' in json_body:
+        player_count = json_body['current_player_count']
+    else:
+        raise HTTPBadRequest(json_body={'error': "Required parameter 'current_player_count' not found in request"})
 
+    timeout = 0
+    players_added = "True"
     while (player_count < 4) and (player_count == len(game.turn_order)) and not game.game_started:
-        time.sleep(5)
+        time.sleep(1)
+        timeout += 1
+        if timeout > 10:
+            players_added = "False"
+            break
 
-    return get_players_in_game(request)
+    players = []
+    if game.players:
+        for _, player in game.players.iteritems():
+            players.append(
+                {'Player': player.get_dictionary(player_age=True, player_color=True, owned_settlements=True)})
+    else:
+        players.append("None")
+
+    return_data = {'players_added': players_added,
+                   'Players': players,
+                   'Game': game.get_dictionary(has_started=True, player_count=True)}
+    json_return = json.dumps(return_data)
+    return Response(content_type='application/json', body=json_return)
 
 
 @view_config(route_name='getGameBoard', renderer='json')
@@ -246,4 +262,49 @@ def get_game_board(request):
         raise HTTPBadRequest(json_body={'error': "Requested game not found. Session may have expired"})
 
     json_return = json.dumps(game.game_board.get_dictionary())
-    return Response(content_type='json', body=json_return)
+    return Response(content_type='application/json', body=json_return)
+
+
+@view_config(route_name='setSessionWithGame', renderer='json')
+def set_session_with_game(request):
+    """ ONLY FOR USE WITH POSTMAN: Sets the session for game, and optionally player
+
+        Parameters
+        ----------
+        request: Request 
+            - required JSON parameters: "game_id": String
+            - optional JSON parameters: "player_id": String
+
+        Returns
+        -------
+        Game object, optional Player object
+    """
+    json_body = request.json_body
+    response = {}
+    if 'game_id' in request.session:
+        raise HTTPBadRequest(json_body={'error': "The session has already been set. Please remove the session in this "
+                                                 "request in order to set a new session."})
+
+    if 'game_id' in json_body:
+        game_id = json_body['game_id']
+        if game_id in request.registry.games.games:
+            request.session['game_id'] = game_id
+            game = request.registry.games.games[game_id]
+            response["Game"] = game.get_dictionary()
+        else:
+            raise HTTPBadRequest(json_body={'error': "specified game id '%s' not found in games list" % game_id})
+    else:
+        raise HTTPBadRequest(json_body={'error': "'game_id' is a required parameter for this call"})
+
+    if "player_id" in json_body:
+        player_id = json_body['player_id']
+        if player_id in game.players:
+            request.session['player_id'] = player_id
+            response["Player"] = game.players[player_id].get_dictionary()
+        else:
+            raise HTTPBadRequest(json_body={'error': "specified player id "
+                                                     "'%s' not found in game '%s'" % (game_id, player_id)})
+
+    json_return = json.dumps(response)
+    return Response(content_type='application/json', body=json_return)
+
